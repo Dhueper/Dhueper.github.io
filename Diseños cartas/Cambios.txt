@@ -1,0 +1,28 @@
+1) Icono despertar Daniel a cambio de una de despertar doble. --
+
+2) Nombre director: Krugman. --
+
+3) Jeringuillas para cartas acción segundo grupo. --
+
+4) Daga cartas accón primer grupo. --
+
+5) Mirar fondo luna. --
+
+6) Reversos cartas. --
+
+7) Quitar los dos iconos de icono_profeta_reverso y sustituirlos por icono_muerte. --
+
+8) Coger dos cartas icono_despertar que tengan en el reverso icono_muerte y sustituir los dos icono_despertar
+ por un icono_muerte_inminente y un icono_resucitar. --
+
+9) Tipo de letra más legible en todas las cartas. --
+
+10) Aumentar tamaño de letra en texto de cartas de evento y reducir espacio entre título y cuerpo. --
+
+11) Igualar tamaño márgenes a ambos lados de cada imagen. --
+
+12) Cambiar nombre: El cataléptico y El profeta. --
+
+13) Sustituir icono_cambio_habitacion --
+
+14) Comprobar papel A4.
