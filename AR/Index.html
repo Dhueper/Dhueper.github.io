@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AR Snake Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- A-Frame and AR.js scripts -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <!-- Babel for JSX support -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      /* Optional: full screen for better AR experience */
+      body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- React Component using Babel for JSX -->
+    <script type="text/babel">
+      const { useRef, useEffect } = React;
+
+      const SnakeARGame = () => {
+        // References for the canvas and game interval
+        const canvasRef = useRef(null);
+        const intervalRef = useRef(null);
+
+        // Constants for the game grid
+        const canvasSize = 400;
+        const cellSize = 20;
+        const gridCount = canvasSize / cellSize; // 20 cells per row/column
+
+        // We'll keep the game state in a ref so that updates don’t force re-renders.
+        const gameState = useRef({
+          snake: [],
+          direction: { x: 1, y: 0 },
+          food: { x: 0, y: 0 },
+          score: 0,
+          gameOver: false,
+        });
+
+        // Initialize the game state
+        const initGame = () => {
+          // Start the snake in the center
+          const startX = Math.floor(gridCount / 2);
+          const startY = Math.floor(gridCount / 2);
+          gameState.current.snake = [
+            { x: startX, y: startY },
+            { x: startX - 1, y: startY },
+            { x: startX - 2, y: startY },
+          ];
+          gameState.current.direction = { x: 1, y: 0 };
+          gameState.current.score = 0;
+          gameState.current.gameOver = false;
+          gameState.current.food = getRandomFood();
+        };
+
+        // Generate a random food position not colliding with the snake
+        const getRandomFood = () => {
+          let newFood;
+          while (true) {
+            newFood = {
+              x: Math.floor(Math.random() * gridCount),
+              y: Math.floor(Math.random() * gridCount),
+            };
+            // Ensure food doesn't appear on the snake
+            if (!gameState.current.snake.some(cell => cell.x === newFood.x && cell.y === newFood.y)) {
+              break;
+            }
+          }
+          return newFood;
+        };
+
+        // Update the game logic
+        const updateGame = () => {
+          if (gameState.current.gameOver) return;
+
+          // Determine new head position based on current direction
+          const head = { ...gameState.current.snake[0] };
+          head.x += gameState.current.direction.x;
+          head.y += gameState.current.direction.y;
+
+          // Check for collision with walls
+          if (head.x < 0 || head.x >= gridCount || head.y < 0 || head.y >= gridCount) {
+            return gameOver();
+          }
+
+          // Check for collision with itself
+          if (gameState.current.snake.some(cell => cell.x === head.x && cell.y === head.y)) {
+            return gameOver();
+          }
+
+          // Add the new head
+          gameState.current.snake.unshift(head);
+
+          // Check if the snake has eaten the food
+          if (head.x === gameState.current.food.x && head.y === gameState.current.food.y) {
+            gameState.current.score += 1;
+            gameState.current.food = getRandomFood();
+          } else {
+            // Remove the tail if no food was eaten
+            gameState.current.snake.pop();
+          }
+
+          // Draw the updated game state on the canvas
+          drawGame();
+        };
+
+        // Render the game onto the canvas
+        const drawGame = () => {
+          const canvas = canvasRef.current;
+          const ctx = canvas.getContext('2d');
+
+          // Clear the canvas
+          ctx.fillStyle = '#f0f0f0';
+          ctx.fillRect(0, 0, canvasSize, canvasSize);
+
+          // Optional: draw a light grid for visual appeal
+          ctx.strokeStyle = '#ddd';
+          for (let i = 0; i <= gridCount; i++) {
+            ctx.beginPath();
+            ctx.moveTo(i * cellSize, 0);
+            ctx.lineTo(i * cellSize, canvasSize);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, i * cellSize);
+            ctx.lineTo(canvasSize, i * cellSize);
+            ctx.stroke();
+          }
+
+          // Draw the snake
+          ctx.fillStyle = '#4caf50';
+          gameState.current.snake.forEach(cell => {
+            ctx.fillRect(cell.x * cellSize, cell.y * cellSize, cellSize, cellSize);
+          });
+
+          // Draw the food
+          ctx.fillStyle = '#f44336';
+          const food = gameState.current.food;
+          ctx.fillRect(food.x * cellSize, food.y * cellSize, cellSize, cellSize);
+
+          // Draw the score
+          ctx.fillStyle = '#000';
+          ctx.font = '16px Arial';
+          ctx.fillText(`Score: ${gameState.current.score}`, 10, 20);
+
+          // If game over, display a message
+          if (gameState.current.gameOver) {
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.fillRect(0, canvasSize / 2 - 30, canvasSize, 60);
+            ctx.fillStyle = '#fff';
+            ctx.font = '24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Game Over', canvasSize / 2, canvasSize / 2 + 10);
+          }
+        };
+
+        // Handle game over by stopping the game loop
+        const gameOver = () => {
+          gameState.current.gameOver = true;
+          clearInterval(intervalRef.current);
+          drawGame();
+        };
+
+        // Listen for arrow key presses to change direction
+        const changeDirection = e => {
+          const { direction } = gameState.current;
+          if (e.key === 'ArrowUp' && direction.y !== 1) {
+            gameState.current.direction = { x: 0, y: -1 };
+          } else if (e.key === 'ArrowDown' && direction.y !== -1) {
+            gameState.current.direction = { x: 0, y: 1 };
+          } else if (e.key === 'ArrowLeft' && direction.x !== 1) {
+            gameState.current.direction = { x: -1, y: 0 };
+          } else if (e.key === 'ArrowRight' && direction.x !== -1) {
+            gameState.current.direction = { x: 1, y: 0 };
+          }
+        };
+
+        // Set up the game loop and event listeners when the component mounts
+        useEffect(() => {
+          initGame();
+          drawGame();
+          intervalRef.current = setInterval(updateGame, 150);
+          window.addEventListener('keydown', changeDirection);
+
+          // Cleanup on unmount
+          return () => {
+            clearInterval(intervalRef.current);
+            window.removeEventListener('keydown', changeDirection);
+          };
+        }, []);
+
+        return (
+          <>
+            {/* AR Scene using A-Frame and AR.js */}
+            <a-scene embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+              {/* The "hiro" marker anchors our game plane */}
+              <a-marker preset="hiro">
+                <a-plane
+                  position="0 0 0"
+                  rotation="-90 0 0"
+                  width="1"
+                  height="1"
+                  material="src: #gameCanvas; transparent: true; side: double;">
+                </a-plane>
+              </a-marker>
+              <a-entity camera></a-entity>
+            </a-scene>
+
+            {/* The hidden canvas where the snake game is rendered.
+                Its content is used as a dynamic texture for the AR plane. */}
+            <canvas
+              id="gameCanvas"
+              ref={canvasRef}
+              width={canvasSize}
+              height={canvasSize}
+              style={{ display: 'none' }}
+            />
+          </>
+        );
+      };
+
+      ReactDOM.render(<SnakeARGame />, document.getElementById('root'));
+    </script>
+  </body>
+</html>
