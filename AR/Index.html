@@ -1,212 +1,188 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <title>AR Snake Game</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- A-Frame and AR.js scripts -->
+    <meta charset="utf-8">
+    <title>Snake AR Game</title>
+    <!-- Carga de A-Frame -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <!-- Carga de AR.js para A-Frame -->
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <!-- React and ReactDOM -->
-    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-    <!-- Babel for JSX support -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-      body, html {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
+      body { margin: 0; overflow: hidden; font-family: sans-serif; }
+      #info, #score {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        color: #FFF;
+        z-index: 1;
+        text-shadow: 1px 1px 2px #000;
       }
+      #info { top: 10px; }
+      #score { top: 40px; }
     </style>
-  </head>
-  <body>
-    <div id="root"></div>
-
-    <script type="text/babel">
-      const { useRef, useEffect } = React;
-
-      const SnakeARGame = () => {
-        const canvasRef = useRef(null);
-        const intervalRef = useRef(null);
-
-        const canvasSize = 400;
-        const cellSize = 20;
-        const gridCount = canvasSize / cellSize;
-
-        const gameState = useRef({
-          snake: [],
-          direction: { x: 1, y: 0 },
-          food: { x: 0, y: 0 },
-          score: 0,
-          gameOver: false,
-        });
-
-        const initGame = () => {
-          const startX = Math.floor(gridCount / 2);
-          const startY = Math.floor(gridCount / 2);
-          gameState.current.snake = [
-            { x: startX, y: startY },
-            { x: startX - 1, y: startY },
-            { x: startX - 2, y: startY },
-          ];
-          gameState.current.direction = { x: 1, y: 0 };
-          gameState.current.score = 0;
-          gameState.current.gameOver = false;
-          gameState.current.food = getRandomFood();
-        };
-
-        const getRandomFood = () => {
-          let newFood;
-          while (true) {
-            newFood = {
-              x: Math.floor(Math.random() * gridCount),
-              y: Math.floor(Math.random() * gridCount),
-            };
-            if (!gameState.current.snake.some(cell => cell.x === newFood.x && cell.y === newFood.y)) {
+    <script>
+      AFRAME.registerComponent('snake', {
+        schema: {
+          segments: { type: 'int', default: 3 },       // Número inicial de segmentos
+          segmentDelay: { type: 'int', default: 10 },    // Retardo entre segmentos
+          speed: { type: 'number', default: 0.3 }         // Velocidad en unidades/segundo
+        },
+        init: function() {
+          // Creamos la serpiente (cabeza y cuerpo) como esferas
+          this.segments = [];
+          for (let i = 0; i < this.data.segments; i++) {
+            let segment = document.createElement('a-sphere');
+            segment.setAttribute('radius', 0.05);
+            segment.setAttribute('color', i === 0 ? '#FFAA00' : '#FF0000');
+            this.el.appendChild(segment);
+            this.segments.push(segment);
+          }
+          // Posición inicial de la cabeza (en el centro del plano dentro del cubo)
+          this.headPos = new THREE.Vector3(0, 0.5, 0.5);
+          // Dirección inicial: hacia "arriba" (eje Z negativo)
+          this.direction = new THREE.Vector3(0, 0, -1);
+          this.speed = this.data.speed;
+          // Historial de posiciones para lograr el efecto "cola"
+          this.history = [];
+          for (let i = 0; i < 200; i++) {
+            this.history.push(this.headPos.clone());
+          }
+          // Límites de movimiento en el plano (coinciden con el tamaño del cubo: 1x1 en XZ)
+          this.boundaries = { minX: -0.5, maxX: 0.5, minZ: -0.5, maxZ: 0.5 };
+          // Puntuación
+          this.score = 0;
+          // Escucha de las teclas para mover la serpiente
+          window.addEventListener('keydown', this.onKeyDown.bind(this));
+          // Generamos la primera comida
+          this.spawnFood();
+          this.updateScoreDisplay();
+        },
+        onKeyDown: function(evt) {
+          // Flechas: 37 izquierda, 38 arriba, 39 derecha, 40 abajo
+          switch(evt.keyCode) {
+            case 37: // izquierda
+              this.direction.set(-1, 0, 0);
               break;
+            case 38: // arriba
+              this.direction.set(0, 0, -1);
+              break;
+            case 39: // derecha
+              this.direction.set(1, 0, 0);
+              break;
+            case 40: // abajo
+              this.direction.set(0, 0, 1);
+              break;
+          }
+        },
+        tick: function(time, deltaTime) {
+          let dt = deltaTime / 1000; // convertir a segundos
+          // Actualiza la posición de la cabeza según la dirección y velocidad
+          let movement = this.direction.clone().multiplyScalar(this.speed * dt);
+          this.headPos.add(movement);
+          this.headPos.y = 0.5; // mantener el movimiento en el plano
+
+          // Si la cabeza sale del cubo, se produce Game Over
+          if (this.headPos.x < this.boundaries.minX || this.headPos.x > this.boundaries.maxX ||
+              this.headPos.z < this.boundaries.minZ || this.headPos.z > this.boundaries.maxZ) {
+            this.gameOver();
+            return;
+          }
+          
+          // Guardamos la posición actual en el historial
+          this.history.unshift(this.headPos.clone());
+          if (this.history.length > 200) { this.history.pop(); }
+          
+          // Actualizamos la posición de cada segmento usando el historial
+          for (let i = 0; i < this.segments.length; i++) {
+            let historyIndex = (i + 1) * this.data.segmentDelay;
+            if (historyIndex < this.history.length) {
+              let pos = this.history[historyIndex];
+              this.segments[i].setAttribute('position', pos);
             }
           }
-          return newFood;
-        };
-
-        const updateGame = () => {
-          if (gameState.current.gameOver) return;
-
-          const head = { ...gameState.current.snake[0] };
-          head.x += gameState.current.direction.x;
-          head.y += gameState.current.direction.y;
-
-          if (head.x < 0 || head.x >= gridCount || head.y < 0 || head.y >= gridCount) {
-            return gameOver();
+          
+          // Comprobamos si la cabeza colisiona con la comida
+          let foodEl = document.getElementById('food');
+          if (foodEl) {
+            let foodPos = foodEl.getAttribute('position');
+            let foodVector = new THREE.Vector3(foodPos.x, foodPos.y, foodPos.z);
+            if (this.headPos.distanceTo(foodVector) < 0.07) {
+              // Al comer, la serpiente crece y se suma puntuación
+              this.grow();
+              this.score += 10;
+              this.updateScoreDisplay();
+              // Eliminamos la comida y generamos otra
+              foodEl.parentNode.removeChild(foodEl);
+              this.spawnFood();
+            }
           }
-
-          if (gameState.current.snake.some(cell => cell.x === head.x && cell.y === head.y)) {
-            return gameOver();
+        },
+        grow: function() {
+          // Añade un nuevo segmento al final de la serpiente
+          let segment = document.createElement('a-sphere');
+          segment.setAttribute('radius', 0.05);
+          segment.setAttribute('color', '#FF0000');
+          this.el.appendChild(segment);
+          this.segments.push(segment);
+        },
+        spawnFood: function() {
+          // Genera comida en una posición aleatoria dentro del cubo en el plano y=0.5
+          let x = (Math.random() - 0.5) * 1; // valor entre -0.5 y 0.5
+          let z = (Math.random() - 0.5) * 1;
+          let food = document.createElement('a-sphere');
+          food.setAttribute('id', 'food');
+          food.setAttribute('radius', 0.04);
+          food.setAttribute('color', '#00FF00');
+          food.setAttribute('position', { x: x, y: 0.5, z: z });
+          // Añadimos la comida al marcador (dentro del cubo)
+          let marker = this.el.parentNode;
+          marker.appendChild(food);
+        },
+        updateScoreDisplay: function() {
+          let scoreEl = document.getElementById('score');
+          if (scoreEl) {
+            scoreEl.innerText = "Puntuación: " + this.score;
           }
-
-          gameState.current.snake.unshift(head);
-
-          if (head.x === gameState.current.food.x && head.y === gameState.current.food.y) {
-            gameState.current.score += 1;
-            gameState.current.food = getRandomFood();
-          } else {
-            gameState.current.snake.pop();
+        },
+        gameOver: function() {
+          alert("¡Game Over! Tu puntuación: " + this.score);
+          // Reiniciamos la serpiente: se eliminan los segmentos extra y se restablecen posición, dirección e historial
+          while (this.segments.length > this.data.segments) {
+            let seg = this.segments.pop();
+            this.el.removeChild(seg);
           }
-
-          drawGame();
-        };
-
-        // Force canvas texture update after drawing
-        const updateTexture = () => {
-          const planeEl = document.querySelector('a-plane');
-          if (planeEl && planeEl.getObject3D('mesh')) {
-            planeEl.getObject3D('mesh').material.map.needsUpdate = true;
+          this.headPos.set(0, 0.5, 0.5);
+          this.history = [];
+          for (let i = 0; i < 200; i++) {
+            this.history.push(this.headPos.clone());
           }
-        };
-
-        const drawGame = () => {
-          const canvas = canvasRef.current;
-          const ctx = canvas.getContext('2d');
-
-          ctx.fillStyle = '#f0f0f0';
-          ctx.fillRect(0, 0, canvasSize, canvasSize);
-
-          ctx.strokeStyle = '#ddd';
-          for (let i = 0; i <= gridCount; i++) {
-            ctx.beginPath();
-            ctx.moveTo(i * cellSize, 0);
-            ctx.lineTo(i * cellSize, canvasSize);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(0, i * cellSize);
-            ctx.lineTo(canvasSize, i * cellSize);
-            ctx.stroke();
+          this.direction.set(0, 0, -1);
+          this.score = 0;
+          this.updateScoreDisplay();
+          // Reiniciamos la comida
+          let foodEl = document.getElementById('food');
+          if (foodEl) {
+            foodEl.parentNode.removeChild(foodEl);
           }
-
-          ctx.fillStyle = '#4caf50';
-          gameState.current.snake.forEach(cell => {
-            ctx.fillRect(cell.x * cellSize, cell.y * cellSize, cellSize, cellSize);
-          });
-
-          ctx.fillStyle = '#f44336';
-          const food = gameState.current.food;
-          ctx.fillRect(food.x * cellSize, food.y * cellSize, cellSize, cellSize);
-
-          ctx.fillStyle = '#000';
-          ctx.font = '16px Arial';
-          ctx.fillText(`Score: ${gameState.current.score}`, 10, 20);
-
-          if (gameState.current.gameOver) {
-            ctx.fillStyle = 'rgba(0,0,0,0.5)';
-            ctx.fillRect(0, canvasSize / 2 - 30, canvasSize, 60);
-            ctx.fillStyle = '#fff';
-            ctx.font = '24px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('Game Over', canvasSize / 2, canvasSize / 2 + 10);
-          }
-
-          // Force update of the canvas texture
-          updateTexture();
-        };
-
-        const gameOver = () => {
-          gameState.current.gameOver = true;
-          clearInterval(intervalRef.current);
-          drawGame();
-        };
-
-        const changeDirection = e => {
-          const { direction } = gameState.current;
-          if (e.key === 'ArrowUp' && direction.y !== 1) {
-            gameState.current.direction = { x: 0, y: -1 };
-          } else if (e.key === 'ArrowDown' && direction.y !== -1) {
-            gameState.current.direction = { x: 0, y: 1 };
-          } else if (e.key === 'ArrowLeft' && direction.x !== 1) {
-            gameState.current.direction = { x: -1, y: 0 };
-          } else if (e.key === 'ArrowRight' && direction.x !== -1) {
-            gameState.current.direction = { x: 1, y: 0 };
-          }
-        };
-
-        useEffect(() => {
-          initGame();
-          drawGame();
-          intervalRef.current = setInterval(updateGame, 150);
-          window.addEventListener('keydown', changeDirection);
-
-          return () => {
-            clearInterval(intervalRef.current);
-            window.removeEventListener('keydown', changeDirection);
-          };
-        }, []);
-
-        return (
-          <>
-            <a-scene embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
-              <a-marker preset="hiro">
-                <a-plane
-                  position="0 0 0"
-                  rotation="-90 0 0"
-                  width="1"
-                  height="1"
-                  material="src: #gameCanvas; transparent: true; side: double;">
-                </a-plane>
-              </a-marker>
-              <a-entity camera></a-entity>
-            </a-scene>
-            <canvas
-              id="gameCanvas"
-              ref={canvasRef}
-              width={canvasSize}
-              height={canvasSize}
-              style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}
-            />
-          </>
-        );
-      };
-
-      ReactDOM.render(<SnakeARGame />, document.getElementById('root'));
+          this.spawnFood();
+        }
+      });
     </script>
+  </head>
+  <body>
+    <!-- Instrucciones y marcador de puntuación -->
+    <div id="info">
+      Apunta la cámara hacia el marcador Hiro para jugar Snake en AR. Usa las flechas del teclado para mover la serpiente.
+    </div>
+    <div id="score">Puntuación: 0</div>
+    <a-scene embedded arjs>
+      <a-marker preset="hiro">
+        <!-- Cubo 3D: se ha eliminado la rotación para que el plano de juego (y=0.5) sea intuitivo -->
+        <a-box position="0 0.5 0" width="1" height="1" depth="1" material="color: #4CC3D9; opacity: 0.8;"></a-box>
+        <!-- Entidad que contendrá la serpiente con su comportamiento -->
+        <a-entity snake></a-entity>
+      </a-marker>
+      <a-entity camera></a-entity>
+    </a-scene>
   </body>
 </html>
