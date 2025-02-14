@@ -1,188 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
-    <meta charset="utf-8">
-    <title>Snake AR Game</title>
-    <!-- Carga de A-Frame -->
+    <meta charset="UTF-8" />
+    <title>AR Cubo 3D</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Importar A-Frame -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <!-- Carga de AR.js para A-Frame -->
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <!-- Importar AR.js para A-Frame -->
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.7.2/aframe/build/aframe-ar.js"></script>
     <style>
-      body { margin: 0; overflow: hidden; font-family: sans-serif; }
-      #info, #score {
-        position: absolute;
-        width: 100%;
-        text-align: center;
-        color: #FFF;
-        z-index: 1;
-        text-shadow: 1px 1px 2px #000;
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
       }
-      #info { top: 10px; }
-      #score { top: 40px; }
+      .instructions {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        z-index: 1;
+      }
     </style>
-    <script>
-      AFRAME.registerComponent('snake', {
-        schema: {
-          segments: { type: 'int', default: 3 },       // Número inicial de segmentos
-          segmentDelay: { type: 'int', default: 10 },    // Retardo entre segmentos
-          speed: { type: 'number', default: 0.3 }         // Velocidad en unidades/segundo
-        },
-        init: function() {
-          // Creamos la serpiente (cabeza y cuerpo) como esferas
-          this.segments = [];
-          for (let i = 0; i < this.data.segments; i++) {
-            let segment = document.createElement('a-sphere');
-            segment.setAttribute('radius', 0.05);
-            segment.setAttribute('color', i === 0 ? '#FFAA00' : '#FF0000');
-            this.el.appendChild(segment);
-            this.segments.push(segment);
-          }
-          // Posición inicial de la cabeza (en el centro del plano dentro del cubo)
-          this.headPos = new THREE.Vector3(0, 0.5, 0.5);
-          // Dirección inicial: hacia "arriba" (eje Z negativo)
-          this.direction = new THREE.Vector3(0, 0, -1);
-          this.speed = this.data.speed;
-          // Historial de posiciones para lograr el efecto "cola"
-          this.history = [];
-          for (let i = 0; i < 200; i++) {
-            this.history.push(this.headPos.clone());
-          }
-          // Límites de movimiento en el plano (coinciden con el tamaño del cubo: 1x1 en XZ)
-          this.boundaries = { minX: -0.5, maxX: 0.5, minZ: -0.5, maxZ: 0.5 };
-          // Puntuación
-          this.score = 0;
-          // Escucha de las teclas para mover la serpiente
-          window.addEventListener('keydown', this.onKeyDown.bind(this));
-          // Generamos la primera comida
-          this.spawnFood();
-          this.updateScoreDisplay();
-        },
-        onKeyDown: function(evt) {
-          // Flechas: 37 izquierda, 38 arriba, 39 derecha, 40 abajo
-          switch(evt.keyCode) {
-            case 37: // izquierda
-              this.direction.set(-1, 0, 0);
-              break;
-            case 38: // arriba
-              this.direction.set(0, 0, -1);
-              break;
-            case 39: // derecha
-              this.direction.set(1, 0, 0);
-              break;
-            case 40: // abajo
-              this.direction.set(0, 0, 1);
-              break;
-          }
-        },
-        tick: function(time, deltaTime) {
-          let dt = deltaTime / 1000; // convertir a segundos
-          // Actualiza la posición de la cabeza según la dirección y velocidad
-          let movement = this.direction.clone().multiplyScalar(this.speed * dt);
-          this.headPos.add(movement);
-          this.headPos.y = 0.5; // mantener el movimiento en el plano
-
-          // Si la cabeza sale del cubo, se produce Game Over
-          if (this.headPos.x < this.boundaries.minX || this.headPos.x > this.boundaries.maxX ||
-              this.headPos.z < this.boundaries.minZ || this.headPos.z > this.boundaries.maxZ) {
-            this.gameOver();
-            return;
-          }
-          
-          // Guardamos la posición actual en el historial
-          this.history.unshift(this.headPos.clone());
-          if (this.history.length > 200) { this.history.pop(); }
-          
-          // Actualizamos la posición de cada segmento usando el historial
-          for (let i = 0; i < this.segments.length; i++) {
-            let historyIndex = (i + 1) * this.data.segmentDelay;
-            if (historyIndex < this.history.length) {
-              let pos = this.history[historyIndex];
-              this.segments[i].setAttribute('position', pos);
-            }
-          }
-          
-          // Comprobamos si la cabeza colisiona con la comida
-          let foodEl = document.getElementById('food');
-          if (foodEl) {
-            let foodPos = foodEl.getAttribute('position');
-            let foodVector = new THREE.Vector3(foodPos.x, foodPos.y, foodPos.z);
-            if (this.headPos.distanceTo(foodVector) < 0.07) {
-              // Al comer, la serpiente crece y se suma puntuación
-              this.grow();
-              this.score += 10;
-              this.updateScoreDisplay();
-              // Eliminamos la comida y generamos otra
-              foodEl.parentNode.removeChild(foodEl);
-              this.spawnFood();
-            }
-          }
-        },
-        grow: function() {
-          // Añade un nuevo segmento al final de la serpiente
-          let segment = document.createElement('a-sphere');
-          segment.setAttribute('radius', 0.05);
-          segment.setAttribute('color', '#FF0000');
-          this.el.appendChild(segment);
-          this.segments.push(segment);
-        },
-        spawnFood: function() {
-          // Genera comida en una posición aleatoria dentro del cubo en el plano y=0.5
-          let x = (Math.random() - 0.5) * 1; // valor entre -0.5 y 0.5
-          let z = (Math.random() - 0.5) * 1;
-          let food = document.createElement('a-sphere');
-          food.setAttribute('id', 'food');
-          food.setAttribute('radius', 0.04);
-          food.setAttribute('color', '#00FF00');
-          food.setAttribute('position', { x: x, y: 0.5, z: z });
-          // Añadimos la comida al marcador (dentro del cubo)
-          let marker = this.el.parentNode;
-          marker.appendChild(food);
-        },
-        updateScoreDisplay: function() {
-          let scoreEl = document.getElementById('score');
-          if (scoreEl) {
-            scoreEl.innerText = "Puntuación: " + this.score;
-          }
-        },
-        gameOver: function() {
-          alert("¡Game Over! Tu puntuación: " + this.score);
-          // Reiniciamos la serpiente: se eliminan los segmentos extra y se restablecen posición, dirección e historial
-          while (this.segments.length > this.data.segments) {
-            let seg = this.segments.pop();
-            this.el.removeChild(seg);
-          }
-          this.headPos.set(0, 0.5, 0.5);
-          this.history = [];
-          for (let i = 0; i < 200; i++) {
-            this.history.push(this.headPos.clone());
-          }
-          this.direction.set(0, 0, -1);
-          this.score = 0;
-          this.updateScoreDisplay();
-          // Reiniciamos la comida
-          let foodEl = document.getElementById('food');
-          if (foodEl) {
-            foodEl.parentNode.removeChild(foodEl);
-          }
-          this.spawnFood();
-        }
-      });
-    </script>
   </head>
   <body>
-    <!-- Instrucciones y marcador de puntuación -->
-    <div id="info">
-      Apunta la cámara hacia el marcador Hiro para jugar Snake en AR. Usa las flechas del teclado para mover la serpiente.
+    <div class="instructions">
+      Apunta la cámara al marcador Hiro y arrastra para rotar el cubo
     </div>
-    <div id="score">Puntuación: 0</div>
-    <a-scene embedded arjs>
+    <a-scene embedded arjs="sourceType: webcam;">
+      <!-- Marcador Hiro -->
       <a-marker preset="hiro">
-        <!-- Cubo 3D: se ha eliminado la rotación para que el plano de juego (y=0.5) sea intuitivo -->
-        <a-box position="0 0.5 0" width="1" height="1" depth="1" material="color: #4CC3D9; opacity: 0.8;"></a-box>
-        <!-- Entidad que contendrá la serpiente con su comportamiento -->
-        <a-entity snake></a-entity>
+        <!-- Cubo 3D con componente para rotar al arrastrar -->
+        <a-box position="0 0.5 0" material="color: #4CC3D9; opacity: 0.8;" rotation="0 45 0" rotate-on-drag></a-box>
       </a-marker>
       <a-entity camera></a-entity>
     </a-scene>
+
+    <script>
+      // Componente personalizado para permitir la rotación del cubo mediante gestos táctiles
+      AFRAME.registerComponent('rotate-on-drag', {
+        schema: {
+          speed: { default: 0.5 }
+        },
+        init: function () {
+          this.dragging = false;
+          this.previousX = 0;
+          // Evento cuando se inicia el toque
+          this.el.addEventListener('touchstart', (evt) => {
+            this.dragging = true;
+            this.previousX = evt.touches[0].clientX;
+          });
+          // Evento mientras se mueve el dedo
+          this.el.addEventListener('touchmove', (evt) => {
+            if (!this.dragging) return;
+            let deltaX = evt.touches[0].clientX - this.previousX;
+            let currentRotation = this.el.getAttribute('rotation');
+            currentRotation.y += deltaX * this.data.speed;
+            this.el.setAttribute('rotation', currentRotation);
+            this.previousX = evt.touches[0].clientX;
+          });
+          // Evento al finalizar el toque
+          this.el.addEventListener('touchend', () => {
+            this.dragging = false;
+          });
+        }
+      });
+    </script>
   </body>
 </html>
