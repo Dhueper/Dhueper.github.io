@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <title>AR Cubo 3D</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <!-- Importar A-Frame -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <!-- Importar AR.js para A-Frame -->
@@ -25,6 +28,10 @@
         border-radius: 5px;
         z-index: 1;
       }
+      /* Ajustar el estilo del video para que no se acerque demasiado en móviles */
+      video {
+        object-fit: contain !important;
+      }
     </style>
   </head>
   <body>
@@ -35,39 +42,44 @@
       <!-- Marcador Hiro -->
       <a-marker preset="hiro">
         <!-- Cubo 3D con componente para rotar al arrastrar -->
-        <a-box position="0 0.5 0" material="color: #4CC3D9; opacity: 0.8;" rotation="0 45 0" rotate-on-drag></a-box>
+        <a-box
+          position="0 0.5 0"
+          material="color: #4CC3D9; opacity: 0.8;"
+          rotation="0 45 0"
+          rotate-on-drag
+        ></a-box>
       </a-marker>
       <a-entity camera></a-entity>
     </a-scene>
 
     <script>
       // Componente personalizado para permitir la rotación del cubo mediante gestos táctiles
-      AFRAME.registerComponent('rotate-on-drag', {
+      AFRAME.registerComponent("rotate-on-drag", {
         schema: {
-          speed: { default: 0.5 }
+          speed: { default: 0.5 },
         },
         init: function () {
           this.dragging = false;
           this.previousX = 0;
-          // Evento cuando se inicia el toque
-          this.el.addEventListener('touchstart', (evt) => {
+          // Inicia el toque
+          this.el.addEventListener("touchstart", (evt) => {
             this.dragging = true;
             this.previousX = evt.touches[0].clientX;
           });
-          // Evento mientras se mueve el dedo
-          this.el.addEventListener('touchmove', (evt) => {
+          // Durante el movimiento
+          this.el.addEventListener("touchmove", (evt) => {
             if (!this.dragging) return;
             let deltaX = evt.touches[0].clientX - this.previousX;
-            let currentRotation = this.el.getAttribute('rotation');
+            let currentRotation = this.el.getAttribute("rotation");
             currentRotation.y += deltaX * this.data.speed;
-            this.el.setAttribute('rotation', currentRotation);
+            this.el.setAttribute("rotation", currentRotation);
             this.previousX = evt.touches[0].clientX;
           });
-          // Evento al finalizar el toque
-          this.el.addEventListener('touchend', () => {
+          // Finaliza el toque
+          this.el.addEventListener("touchend", () => {
             this.dragging = false;
           });
-        }
+        },
       });
     </script>
   </body>
