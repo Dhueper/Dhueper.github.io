@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Manicomio de Bethlem</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        nav {
+            background-color: #34495e;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 1.2em;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #e74c3c;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+        .accordion {
+            background-color: #ecf0f1;
+            color: #333;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            transition: background-color 0.3s;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+        .accordion:hover, .accordion.active {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .panel {
+            padding: 0 18px;
+            background-color: #fff;
+            display: none;
+            overflow: hidden;
+            border-left: 4px solid #e74c3c;
+            margin-bottom: 10px;
+            border-radius: 0 5px 5px 0;
+        }
+        .sub-accordion {
+            background-color: #dfe4ea;
+            color: #333;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            transition: background-color 0.3s;
+            font-size: 1em;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .sub-accordion:hover, .sub-accordion.active {
+            background-color: #3498db;
+            color: white;
+        }
+        .sub-panel {
+            padding: 10px 15px;
+            background-color: #f9f9f9;
+            display: none;
+            overflow: hidden;
+            border-left: 3px solid #3498db;
+            margin-bottom: 10px;
+            border-radius: 0 5px 5px 0;
+        }
+        .icon {
+            margin-right: 10px;
+        }
+		#night-turns li, #night-turns-custom li {
+			padding: 8px;
+			background-color: #f9f9f9;
+			margin-bottom: 5px;
+			border-radius: 5px;
+			transition: opacity 0.3s;
+		}
+		#night-turns li.disabled, #night-turns-custom li.disabled {
+			opacity: 0.4;
+			text-decoration: line-through;
+		}
+		#night-turns input[type="checkbox"], #night-turns-custom input[type="checkbox"] {
+			margin-right: 10px;
+		}
+		.bipolar-effect {
+			color: #3498db;
+			background-color: #ecf0f1;
+			padding: 10px;
+			border-radius: 5px;
+			margin: 10px 0;
+		}
+		.bipolar-awakening {
+			color: #9b59b6;
+			background-color: #f5f5f5;
+			padding: 10px;
+			border-radius: 5px;
+			margin: 10px 0;
+		}
+		.hypnosis-list {
+			list-style-type: square;
+			margin: 10px 0 10px 20px;
+			padding: 0;
+		}
+		.hypnosis-list li {
+			margin-bottom: 5px;
+		}
+		.faq-item {
+			margin-bottom: 20px;
+		}
+		.faq-question {
+			color: #2c3e50;
+			margin-bottom: 10px;
+		}
+		.faq-answer {
+			background-color: #f9f9f9;
+			padding: 10px;
+			border-left: 4px solid #e74c3c;
+			border-radius: 0 5px 5px 0;
+		}
+		.extra-power {
+			color: #27ae60;
+			background-color: #e9f5e9;
+			padding: 10px;
+			border-radius: 5px;
+			margin: 10px 0;
+		}
+		.card-image {
+			max-width: 200px;
+			display: block;
+			margin: 0 auto 10px auto;
+			border-radius: 5px;
+		}
+		.auxiliary-cards {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 20px;
+			justify-content: center;
+		}
+		.card-item {
+			text-align: center;
+			flex: 0 1 150px; /* Ancho flexible, máximo 150px por carta */
+		}
+		.card-label {
+			margin: 5px 0 0 0;
+			font-size: 0.9em;
+			color: #333;
+		}
+		.game-setup {
+			margin: 20px 0;
+			text-align: center;
+		}
+		.game-setup select, .game-setup input {
+			padding: 5px;
+			margin: 0 10px;
+		}
+		.player-card {
+			background: #f9f9f9;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			max-width: 800px;
+			margin: 0 auto;
+			text-align: center;
+		}
+		.player-card h3, .player-card h4 {
+			color: #2c3e50;
+			margin: 0 0 15px 0;
+		}
+		.card-selection {
+			display: flex;
+			justify-content: center;
+			gap: 10px;
+			margin-bottom: 20px;
+		}
+		.card-slot {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		.card-slot select {
+			padding: 5px;
+			width: 150px;
+		}
+		.card-slot input[type="checkbox"] {
+			margin-top: 5px;
+		}
+		.personality-objective {
+			display: flex;
+			justify-content: space-around;
+			gap: 20px;
+		}
+		.personality, .objective {
+			flex: 1;
+		}
+		.personality select, .objective select {
+			width: 100%;
+			padding: 5px;
+			margin-bottom: 10px;
+		}
+		.objective-display {
+			padding: 10px;
+			background: #ecf0f1;
+			border-radius: 5px;
+			font-style: italic;
+			min-height: 50px;
+		}
+		.card-images, .personality-image {
+			display: flex;
+			justify-content: center;
+			gap: 10px;
+			margin-bottom: 20px;
+		}
+
+		.card-images .card-wrapper, .personality-image .card-wrapper {
+			width: 100px;
+			height: 100px;
+			overflow: hidden;
+			border-radius: 5px;
+			border: 1px solid #ccc; /* Opcional: marco visible */
+		}
+
+		.card-images img, .personality-image img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover; /* Recorta para llenar el cuadrado */
+			display: block;
+		}
+
+		.card-images img.dead, .personality-image img.dead {
+			opacity: 0.4;
+			filter: grayscale(100%);
+		}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>El Manicomio de Bethlem</h1>
+        <p>Un juego de intriga y estrategia en un manicomio caótico</p>
+    </header>
+    <nav>
+		<a href="#contenidos">Contenidos</a>
+		<a href="#objetivo">Objetivo</a>
+		<a href="#preparacion">Preparación</a>
+		<a href="#partida">Partida</a>
+		<a href="#modos">Modos</a>
+		<a href="#cartas">Cartas</a>
+		<a href="#faq">Preguntas Frecuentes</a>
+		<a href="#game-state">Estado de la Partida</a>
+	</nav>
+    <div class="container">
+        <!-- Sección Contenidos -->
+        <div id="contenidos" class="section">
+            <h2><i class="fas fa-box-open icon"></i>Contenidos</h2>
+            <p>El juego incluye las siguientes cartas:</p>
+            <ul>
+                <li>7 cartas de personaje principal</li>
+                <li>7 cartas de personaje secundario</li>
+                <li>7 cartas de acción principal</li>
+                <li>7 cartas de acción secundaria</li>
+                <li>8 cartas de personalidad</li>
+                <li>14 cartas de evento</li>
+                <li>24 cartas auxiliares</li>
+            </ul>
+        </div>
+
+        <!-- Sección Objetivo del Juego -->
+		<div id="objetivo" class="section">
+			<h2><i class="fas fa-bullseye icon"></i>Objetivo del Juego</h2>
+			<p>El objetivo depende del modo de juego y de las cartas asignadas:</p>
+			<button class="accordion"><i class="fas fa-users icon"></i>Bandos Principales (Modo Normal)</button>
+			<div class="panel">
+				<ul>
+					<li><strong>Amotinados (Daniel, Nathaniel, Richard Dadd):</strong> Acabar con todas las cartas del resto de jugadores.</li>
+					<li><strong>Internos (Ali “la muda”, Larry Owls “el sonámbulo”, Mary Firth):</strong> Acabar con las cartas de los amotinados.</li>
+					<li><strong>El Director (Krugman):</strong> Mantener el equilibrio. Si vive, acabar con todos los personajes principales; si muere, con los secundarios.</li>
+				</ul>
+			</div>
+			<button class="accordion"><i class="fas fa-user-secret icon"></i>Bandos Secundarios (Modo Normal)</button>
+			<div class="panel">
+				<ul>
+					<li><strong>Richard Dadd:</strong> Finge ayudar a los amotinados, pero su objetivo es ser el último en pie.</li>
+					<li><strong>Pacto de Sangre:</strong> Dos jugadores vinculados deben ser los únicos supervivientes.</li>
+					<li><strong>Pacto de Sangre de Odio (Bipolar):</strong> Dos jugadores deben matarse mutuamente; gana quien elimine al otro.</li>
+				</ul>
+			</div>
+			<button class="accordion"><i class="fas fa-bullseye icon"></i>Cartas de Objetivo (Modo con Cartas Personalizadas)</button>
+			<div class="panel">
+				<p>En el modo con cartas personalizadas, los objetivos son independientes de las cartas principales y se asignan mediante cartas de objetivo:</p>
+				<ul>
+					<li><strong>Internos:</strong> Buscan desvelar a todos los amotinados (y al renegado si hay).</li>
+					<li><strong>Amotinados:</strong> Buscan acabar con todas las cartas del tablero del resto de jugadores. Los jugadores que pertenezcan a este bando pueden levantarse a matar cada noche en el turno de los amotinados.</li>
+					<li><strong>Renegado:</strong> Finge que ayuda a los amotinados durante la partida y puede levantarse con ellos a matar cada noche, pero su verdadero objetivo es ser el último jugador en pie. Para ganar, debe acabar con todas las cartas del resto de jugadores antes de que gane otro bando.</li>
+					<li><strong>Traidor:</strong> Al principio de la partida debe elegir un bando: internos o amotinados. Si la primera noche se levanta con los amotinados a matar, será un amotinado; en caso contrario, será un interno. Sin embargo, para ganar debe conseguir que pierda su propio bando; es decir, si va con los amotinados debe tratar de que ganen los internos y si va con los internos debe tratar de que ganen los amotinados.</li>
+					<li><strong>Inquisidor:</strong> Su objetivo es conocer la verdad que se esconde tras las paredes del manicomio. Para ello debe lograr descubrir los secretos de los jugadores:
+						<ul>
+							<li>Qué jugadores tienen a las Siamesas.</li>
+							<li>Qué jugadores tienen a los Compañeros de celda.</li>
+							<li>Qué jugador tiene la carta de Pacto de sangre.</li>
+							<li>Cuál es el objetivo de cada jugador.</li>
+						</ul>
+						Si logra descubrir todos los secretos, puede revelarlos y gana la partida.
+					</li>
+				</ul>
+				<h3>Distribución por Número de Jugadores (sin narrador externo)</h3>
+				<ul>
+					<li><strong>4 jugadores:</strong> Internos (2), Amotinados (2)</li>
+					<li><strong>5 jugadores:</strong> Internos (2), Amotinados (2), Traidor (1)</li>
+					<li><strong>6 jugadores:</strong> Internos (3), Amotinados (2), Renegado (1)</li>
+					<li><strong>7 jugadores:</strong> Internos (3), Amotinados (2), Renegado (1), Inquisidor (1)</li>
+				</ul>
+			</div>
+		</div>
+
+        <!-- Sección Preparación del Juego -->
+        <div id="preparacion" class="section">
+            <h2><i class="fas fa-cogs icon"></i>Preparación del Juego</h2>
+            <p>Instrucciones para preparar la partida:</p>
+            <ul>
+                <li>Seleccionar un narrador (con carta "Cuentacuentos") o jugar sin él.</li>
+                <li>Repartir a cada jugador: 1 P1, 1 P2, 1 A1, 1 A2 (4 vidas) y 1 carta de personalidad.</li>
+                <li>Colocar las cartas boca abajo en orden (posiciones 1-4).</li>
+                <li>Preparar mazos de eventos y auxiliares en el centro.</li>
+            </ul>
+        </div>
+
+        <!-- Sección La Partida -->
+		<div id="partida" class="section">
+			<h2><i class="fas fa-play icon"></i>La Partida</h2>
+			<p>La partida se divide en rondas con dos fases:</p>
+			<button class="accordion"><i class="fas fa-moon icon"></i>La Noche</button>
+			<div class="panel">
+				<p>Los jugadores cierran los ojos y actúan en turnos guiados por el narrador. Los amotinados atacan.</p>
+			</div>
+			<button class="accordion"><i class="fas fa-sun icon"></i>El Día</button>
+			<div class="panel">
+				<p>Se desvelan muertes, se habla y se lincha a un jugador por votación.</p>
+			</div>
+			<button class="accordion"><i class="fas fa-list-ol icon"></i>Turnos de la Noche</button>
+			<div class="panel">
+				<p>Guía para el narrador (modo normal): Al comenzar la noche, todos cierran los ojos y el narrador indica los turnos en este orden. Usa las casillas para desactivar turnos que ya no apliquen.</p>
+				<button id="reset-turns" style="margin: 10px 0; padding: 5px 10px; background-color: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Restablecer Lista</button>
+				<ul id="night-turns" style="list-style: none; padding: 0;">
+					<li>
+						<label><input type="checkbox" checked data-turn="1"> 1) Preguntas al narrador <span style="color: #e74c3c;">(solo con Cuentacuentos, no primera ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="2"> 2) Pacto de sangre <span style="color: #e74c3c;">(solo primera ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="3"> 3) Siamesas <span style="color: #e74c3c;">(solo primera ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="4"> 4) Compañeros de celda <span style="color: #e74c3c;">(solo primera ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="5"> 5) Eventos noche</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="6"> 6) Melancolía <span style="color: #e74c3c;">(no primera ronda, despierta a todos para ver carta afectada)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="7"> 7) El director <span style="color: #e74c3c;">(no primera ronda, anuncia poder)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="8"> 8) Larry Owls “el sonámbulo”</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="9"> 9) El archivo</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="10"> 10) Mary Firth</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="11"> 11) La parca</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="12"> 12) John Flick</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="13"> 13) Profeta</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="14"> 14) Muerte dulce</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="15"> 15) Arthur</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="16"> 16) Amotinados</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="17"> 17) Amotinados 2: Daniel</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="18"> 18) Arthur 2</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="19"> 19) Terapia electroshock</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="20"> 20) Terapia opio y barbitúricos</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="21"> 21) Terapia lobotomía</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="22"> 22) Muerte dulce 2</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="23"> 23) Cataléptico</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="24"> 24) Juego de azar</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="25"> 25) Paciencia</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="26"> 26) Neuroticismo <span style="color: #e74c3c;">(primera ronda elige jugador, luego rondas pares)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="27"> 27) Ansiedad social</label>
+					</li>
+				</ul>
+			</div>
+			<button class="accordion"><i class="fas fa-list-ol icon"></i>Turnos de la Noche (Modo Personalizado)</button>
+			<div class="panel">
+				<p>Guía para el narrador (modo con cartas personalizadas): Al comenzar la noche, todos cierran los ojos y el narrador indica los turnos en este orden. Usa las casillas para desactivar turnos que ya no apliquen.</p>
+				<button id="reset-turns-custom" style="margin: 10px 0; padding: 5px 10px; background-color: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Restablecer Lista</button>
+				<ul id="night-turns-custom" style="list-style: none; padding: 0;">
+					<li>
+						<label><input type="checkbox" checked data-turn="1"> 1) Preguntas al narrador <span style="color: #e74c3c;">(solo con Cuentacuentos, no primera ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="2"> 2) Pacto de sangre <span style="color: #e74c3c;">(solo primera ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="3"> 3) Siamesas <span style="color: #e74c3c;">(solo primera ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="4"> 4) Compañeros de celda <span style="color: #e74c3c;">(solo primera ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="5"> 5) El último superviviente <span style="color: #e74c3c;">(solo primera ronda, debe anunciar quién es a todos)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="6"> 6) Eventos noche</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="7"> 7) El Arquitecto <span style="color: #e74c3c;">(primera ronda crea vínculo con otra carta)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="8"> 8) La Maestra Budú</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="9"> 9) Melancolía <span style="color: #e74c3c;">(no primera ronda, despierta a todos para ver carta afectada)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="10"> 10) Gas de la risa <span style="color: #e74c3c;">(despierta a todos para ver carta afectada)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="11"> 11) La Ludópata</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="12"> 12) El Otaku</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="13"> 13) El Cyborg</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="14"> 14) La Chef</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="15"> 15) La Médium <span style="color: #e74c3c;">(despierta a todos para ver poder robado; si es anterior, actúa al dormir)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="16"> 16) El Saltamundos</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="17"> 17) El archivo</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="18"> 18) La parca</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="19"> 19) John Flick</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="20"> 20) Profeta</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="21"> 21) Muerte dulce</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="22"> 22) Arthur</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="23"> 23) Amotinados</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="24"> 24) Arthur 2</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="25"> 25) Terapia electroshock</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="26"> 26) Terapia opio y barbitúricos</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="27"> 27) Terapia lobotomía</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="28"> 28) Muerte dulce 2</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="29"> 29) Cataléptico</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="30"> 30) Juego de azar</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="31"> 31) Paciencia</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="32"> 32) Neuroticismo <span style="color: #e74c3c;">(primera ronda elige jugador, luego rondas pares)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="33"> 33) Ansiedad social</label>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+
+        <!-- Sección Modos de Juego -->
+		<div id="modos" class="section">
+			<h2><i class="fas fa-gamepad icon"></i>Modos de Juego</h2>
+			<button class="accordion">Modo Normal</button>
+			<div class="panel">
+				<p>Para 4-8 jugadores. Ajustar cartas según el número de jugadores.</p>
+			</div>
+			<button class="accordion">Modo 3 Jugadores</button>
+			<div class="panel">
+				<p>Solo amotinados vs. internos. Un jugador tiene doble de cartas.</p>
+			</div>
+			<button class="accordion">Modo 2 Jugadores</button>
+			<div class="panel">
+				<p>Amotinados vs. internos, ambos con doble de cartas.</p>
+			</div>
+			<button class="accordion">Modo con Cartas Personalizadas</button>
+			<div class="panel">
+				<p>Como alternativa a las cartas de personaje principal, se pueden utilizar cartas personalizadas para cada jugador en un modo de juego alternativo. En este modo, el objetivo de cada jugador es independiente de su carta principal, por lo que una misma carta tendrá distintos objetivos en diferentes partidas. Al principio de la partida, tras repartir las cartas, se reparte una carta de objetivo a cada jugador, que será la que marcará sus decisiones a lo largo de la partida. Como en el modo normal de juego, el pacto de sangre se impone a cualquier objetivo que tenga el jugador.</p>
+				<p>La carta de objetivo se revelará a la vista de todos cuando muera la carta principal de cada jugador. En el caso de que un jugador no tenga ninguna carta principal (por efecto del Cirujano, Wakerfield o Ciborg), deberá revelar su objetivo cuando muera la mejor de las cartas que tenga en su poder. En caso de tener varias cartas del mismo grupo (personaje principal, personaje secundario, acción principal y acción secundaria), se revelará el objetivo cuando muera alguna de las cartas del mejor grupo disponible.</p>
+				<p>Consulta los objetivos específicos y su distribución en la sección "Objetivo del Juego".</p>
+			</div>
+		</div>
+
+        <!-- Sección Cartas -->
+		<div id="cartas" class="section">
+			<h2><i class="fas fa-address-card icon"></i>Cartas</h2>
+			<button class="accordion"><i class="fas fa-user icon"></i>Cartas de Personaje</button>
+			<div class="panel">
+				<button class="sub-accordion">Grupo Principal</button>
+				<div class="sub-panel">
+					<button class="sub-accordion">Daniel 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Daniel.jpg" alt="Daniel" class="card-image">
+						<p>Era un hombre violento que al llegar al manicomio se convirtió en el líder del motín. Como líder, tras atacar cada noche con los amotinados puedes volver a hacerlo en solitario. En caso de que cayeras en el intento, Richard Dadd ocuparía tu lugar atacando por separado después del ataque grupal.</p>
+						<h3>Despertar</h3>
+						<p>En tu turno, y una sola vez, puedes seleccionar a un jugador y marcarle con la carta auxiliar de despertar de Daniel. Desde ese momento, el objetivo del jugador cambia y debe tratar de que los amotinados ganen la partida. Sin embargo, los internos no necesitan acabar con el nuevo amotinado para poder ganar.</p>
+					</div>
+					<button class="sub-accordion">Nathaniel 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Nathaniel.jpg" alt="Nathaniel" class="card-image">
+						<p>Bedel que llevado por el ansia de poder y promesas de recompensa en el exterior colabora con los amotinados. Sigues el plan de Daniel para destruirlos a todos y atacas con los amotinados cada noche.</p>
+						<h3>Despertar</h3>
+						<p>En el turno de los amotinados, y una sola vez, tras comunicar a tus compañeros que tienes el despertar, puedes matar a la mitad de las cartas del tablero que continúen con vida y no pertenezcan a un jugador que tenga una carta de amotinado.</p>
+					</div>
+					<button class="sub-accordion">Richard Dadd 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Richard Dadd.jpg" alt="Richard Dadd" class="card-image">
+						<p>Ingresó en el manicomio convencido de que su padre es el diablo. En esta institución encontró su propio infierno. Finges que ayudas a los amotinados y atacas con ellos cada noche, pero tu verdadero plan es ser el único superviviente. Si Daniel cae, ocuparías su lugar atacando por separado después del ataque grupal.</p>
+						<h3>Despertar</h3>
+						<p>A la vista de todos, debes desvelar que eres Richard Dadd, enseñando a todos tu carta. Desde ese momento, únicamente podrás morir por ataques indirectos (infecto de rabia, compañeros de celda, juego de azar…) o por acción del leproso.</p>
+					</div>
+					<button class="sub-accordion">Ali, “la muda” 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Ali la muda.jpg" alt="Ali la muda" class="card-image">
+						<p>Tienes un sueño ligero y si quieres puedes levantarte a espiar a los amotinados cada noche, pero si te descubren irán a por ti. Además, puedes levantarte una sola vez en el turno de un personaje principal o secundario (a elegir uno, excepto Siamesas) para descubrir su identidad, aunque no puedes dejarte ver.</p>
+						<h3>Despertar</h3>
+						<p>Puedes levantarte a espiar en todos los turnos de la noche, incluso estar despierta como si fueras el narrador. Además, el jugador que mate esta carta perderá el voto en los linchamientos el resto de la partida. Si esta carta muere por la acción de varios jugadores (varios amotinados la atacan o varias personas la linchan), entonces puedes decidir cuál de las personas que te han atacado perderá su voto.</p>
+					</div>
+					<button class="sub-accordion">Larry Owls, “el sonámbulo” 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Larry Owls el sonámbulo.jpg" alt="Larry Owls el sonámbulo" class="card-image">
+						<p>Este personaje deambula cada noche por los pasillos de la institución y por ello es capaz de ver cosas. Cada noche en tu turno puedes ver la identidad de una carta del tablero a tu elección.</p>
+						<h3>Despertar</h3>
+						<p>En tu turno, levanta una carta de un jugador como cada noche. A la mañana siguiente, antes de revelar las muertes, anuncia que tienes el despertar de “el sonámbulo” y muestra ante todos los jugadores la carta que has visto por la noche. Además, si Larry Owls ha muerto por la noche, también lo hará la carta que has enseñado a todos. No puedes repetir jugador hasta que no hayas mostrado una carta de todos los demás jugadores, pero sí puedes repetir cartas que hubieras visto en rondas anteriores.</p>
+					</div>
+					<button class="sub-accordion">Mary Firth 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Mary Firth.png" alt="Mary Firth" class="card-image">
+						<p>Carterista y maestra del disfraz. Durante tu turno elige a un jugador (el narrador le avisará sin decir su nombre y sin despertarle) y, si es un amotinado (Daniel, Nathaniel o Richard Dadd), te lo hará saber, asintiendo o negando con la cabeza, y no podrá levantarse con los amotinados esa noche. Además, podrás elegir si quieres levantarte en su lugar fingiendo ser un amotinado o no. Puedes suplantar una sola vez a cada amotinado.</p>
+						<h3>Despertar</h3>
+						<p>Si aciertas al señalar a un amotinado, además de poder suplantarle esa ronda, dicho amotinado no podrá volver a levantarse para matar el resto de la partida. Solo puedes usarlo una vez, pero puedes señalar a cualquier jugador, incluso si ya le habías señalado previamente. Para usarlo, debes anunciar en voz alta que tienes el despertar de Mary Firth.</p>
+					</div>
+					<button class="sub-accordion">Krugman “El Director” 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/El director.jpg" alt="Krugman El Director" class="card-image">
+						<p>Trata de evitar que reine el caos infiltrándose entre los presos. Para ello, cada noche puedes tomar el poder de una carta que ya esté muerta y emplearlo esa ronda, pero no podrás repetir carta. Usa la carta auxiliar del director para indicar de qué carta vas a coger el poder esa noche. El narrador te anunciará en la ronda correspondiente a la carta muerta para que te despiertes. Si tomas el poder de un amotinado, primero se despertarán los amotinados para matar y, después, se levantará el director para matar él solo. Si esta carta está con vida, debes conseguir que mueran todas las cartas de personajes principales del resto de jugadores para ganar. Si esta carta muere, aún puedes ganar si consigues que mueran todas las cartas de personaje secundario del resto de jugadores.</p>
+						<h3>Despertar</h3>
+						<p>Cada vez que tomes prestado un poder de una carta, podrás usar el despertar correspondiente a dicha carta.</p>
+					</div>
+				</div>
+				<button class="sub-accordion">Grupo Secundario</button>
+				<div class="sub-panel">
+					<button class="sub-accordion">El archivo 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/El archivo.jpg" alt="El archivo" class="card-image">
+						<p>Es uno de los encargados del manicomio y guarda la llave del archivo con las historias clínicas. Cada noche, puedes señalar a uno de los jugadores (el narrador le avisará sin decir su nombre y sin despertarle) y, si es un amotinado, debe indicarte la posición de su carta de amotinado con un número del 1 al 4 (de izquierda a derecha). En caso de fallar, el poder del archivo se pierde.</p>
+						<h3>Despertar</h3>
+						<p>Recuperas tu poder (en caso de que lo hubieras perdido) y no lo volverás a perder. Ahora, cada vez que selecciones a un jugador (sea amotinado o no) debe indicarte la posición de su carta de personaje principal. Además, dicho jugador no puede realizar ninguna acción contra ti a lo largo de toda esa ronda completa (incluido día y noche). Puedes seleccionar una vez a cada jugador desde que actives el despertar. Para usarlo debes anunciar en voz alta que tienes el despertar de El archivo.</p>
+					</div>
+					<button class="sub-accordion">John Flick 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/John Flick.jpg" alt="John Flick" class="card-image">
+						<p>Actúa como un juez entre los presos del manicomio y puede influir en sus decisiones. Cada noche, puedes acusar a una carta para que tenga un voto adicional en el linchamiento al día siguiente. Para ello, emplea la carta auxiliar de John Flick.</p>
+						<h3>Despertar</h3>
+						<p>La carta que señales cada noche, será la que muera en el linchamiento en caso de que el jugador acusado tenga mayoría de votos en contra (no es necesario hacer una segunda votación para decidir qué carta del jugador muere). Además, John Flick se vuelve inmune a muerte por linchamiento el resto de la partida. Sin embargo, deberás anunciar que tienes el despertar para que surja efecto.</p>
+					</div>
+					<button class="sub-accordion">Arthur 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Arthur.png" alt="Arthur" class="card-image">
+						<p>Es un amable gigante con pocas luces, pero con un gran corazón. Te encerraron por tu aspecto grotesco, pero quien goza de tu amistad sabe que no eres ningún monstruo. Cada noche, pon una carta bajo tu protección (solamente el narrador y tú sabréis cuál es), pero no podrás repetir carta dos rondas consecutivas. Tras el turno de los amotinados, dicha carta no muere en el caso de haber sido atacada.</p>
+						<h3>Despertar</h3>
+						<p>Esta carta se vuelve inmune al ataque de los amotinados (protección constante). Además, puedes seguir protegiendo una carta adicional cada noche en tu turno.</p>
+					</div>
+					<button class="sub-accordion">Wakerfield 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Wakerfield.jpg" alt="Wakerfield" class="card-image">
+						<p>Encerrada por su ideología, va contra el sistema y está dispuesta a sacrificarse ante una condena injusta. Si muere una carta del tablero, antes de que sea mostrada a todos puedes decidir si quedarte con ella y que muera Wakerfield en su lugar.</p>
+						<h3>Despertar</h3>
+						<p>Puedes mirar qué cartas son las que van a morir antes de decidir si quieres salvar una y que muera Wakerfield en su lugar. Además, al quedarte con una carta, puedes usar el despertar que tenga dicha carta.</p>
+					</div>
+					<button class="sub-accordion">Siamesas (x2) 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Siamesas.jpeg" alt="Siamesas" class="card-image">
+						<p>Unidas desde su nacimiento, son inseparables y se protegen mutuamente. Las siamesas solo pueden morir si ambas cartas son atacadas simultáneamente (el mismo día o la misma noche). Si solamente una de ellas es atacada, el ataque fracasa y continúa con vida. Los jugadores que tengan las siamesas se conocerán durante la primera noche, pero no sabrán qué carta del otro jugador es la siamesa.</p>
+						<h3>Despertar</h3>
+						<p>Para que una siamesa pueda morir, la carta que se encuentre en la misma posición del jugador que tenga la otra siamesa debe estar muerta. En caso contrario, la siamesa permanece con vida, incluso si ambas siamesas son atacadas simultáneamente.</p>
+					</div>
+					<button class="sub-accordion">La parca 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/La parca.jpg" alt="La parca" class="card-image">
+						<p>La encarnación de la muerte, dedicada a cortar el hilo de la vida de los mortales. Cada noche, selecciona una carta (usando la carta auxiliar de la parca) y todos deberán tratar de acabar con ella, pero no podrás seleccionar la misma carta dos rondas consecutivas. Si desobedecen tus designios dos rondas seguidas, la siguiente noche te levantarás a matar a alguien y nadie más podrá quitar la vida esa noche.</p>
+						<h3>Despertar</h3>
+						<p>Si desobedecen tus designios una sola ronda (en vez de dos), la siguiente noche te levantarás a matar a alguien y nadie más podrá quitar la vida esa noche. Además, tienes un turno adicional al final de cada noche donde podrás comprobar si han obedecido tus designios. Cada noche que te desobedezcan, puedes cambiar la posición de las fichas de muerte que haya en el tablero, pero solo entre las cartas de los jugadores que han sido atacados (no puedes cambiar una muerte de un jugador a otro distinto). Sin embargo, deberás anunciar que tienes el despertar para que surja efecto.</p>
+					</div>
+				</div>
+				<!-- El resto de "Cartas Personalizadas (Modo Alternativo)" se mantiene igual -->
+				<button class="sub-accordion">Cartas Personalizadas (Modo Alternativo)</button>
+				<div class="sub-panel">
+					<p>Estas cartas sustituyen a las cartas de personaje principal en el modo alternativo. Cada carta tiene un poder base que puede usarse con cualquier objetivo, un poder extra que solo se activa si el objetivo no es Amotinados o Renegado (ya que estos tienen el poder de levantarse a matar cada noche), y un despertar único.</p>
+					<button class="sub-accordion">Pablo “El Arquitecto” 🌙</button>
+					<div class="sub-panel">
+						<p>Posee los planos originales y conoce todos los escondrijos del manicomio. Puedes ocultarte de los demás tras una carta a tu elección. Aunque el arquitecto muera, puedes seguir usando tu poder y no tienes que desvelar tu objetivo hasta que no muera también la carta tras la cual te has escondido. Además, en tu turno puedes desencadenar una construcción caótica: selecciona a un jugador, del cual podrás ver su carta de personalidad y usarla en su lugar esa ronda, pero sólo puedes hacerlo una vez por jugador.</p>
+						<p class="extra-power">Poder extra (si no es amotinado): Al seleccionar a un jugador, además de poder usar su carta de personalidad, podrás ver el objetivo de dicho jugador.</p>
+						<h3>Despertar: Laberinto de la mente</h3>
+						<p>Puedes entender la estructura mental de una persona y usarla a tu favor. Cada ronda puedes seleccionar a un jugador y marcarle con la carta auxiliar de Laberinto de la mente. Dicho jugador no podrá actuar de ninguna manera durante toda la ronda (ni usar sus poderes por la noche, ni linchar, ni usar su rasgo de personalidad), pero tampoco podrá ser atacado en toda la ronda. Puedes elegir una vez a cada jugador (incluido tú mismo).</p>
+					</div>
+					<button class="sub-accordion">Noe “Gas de la risa” 🌙</button>
+					<div class="sub-panel">
+						<p>Dicen que cuando nació, en vez de llorar se rio. Consiguió un trabajo en el manicomio y se encarga de controlar a los presos más problemáticos con gas de la risa. Cada noche, puedes decir en voz alta una carta y dicha carta no se levantará por un ataque de risa. Además, el jugador con dicha carta deberá levantar la mano. Sin embargo, no podrás repetir carta.</p>
+						<p class="extra-power">Poder extra (si no es amotinado): Cuando esta carta muera, los amotinados sufrirán un ataque de risa y no podrán levantarse la siguiente ronda. Además, podrás levantarte en su lugar por la noche y matar tantas cartas como amotinados queden vivos (el renegado cuenta como amotinado para este poder).</p>
+						<h3>Despertar: Muerto de risa</h3>
+						<p>Tienes dos comprimidos con alta concentración de gas de la risa, que pueden llegar a matar al sujeto por asfixia. Cada noche, selecciona como siempre una carta para que no se levante. Cuando la carta de “Gas de la risa” sea atacada por primera vez, puedes gastar un comprimido para que muera en tu lugar la carta que habías seleccionado esa ronda. La segunda vez que la carta de “Gas de la risa” sea atacada, morirá finalmente, pero el jugador que tenga la carta que habías seleccionado esa ronda perderá el voto en los linchamientos el resto de la partida. Además, puedes volver a seleccionar cartas que ya hubieras escogido antes de tener el despertar.</p>
+					</div>
+					<button class="sub-accordion">Clara “La Ludópata” 🌙</button>
+					<div class="sub-panel">
+						<p>Su adicción comenzó con los juegos de mesa, pero acabó en el manicomio por jugar a la ruleta rusa. Cada ronda puedes hacer una de las siguientes apuestas (hasta un máximo de 4 veces cada tipo de apuesta por partida):</p>
+						<ul>
+							<li>Apostar por qué jugador irá ganando al final de la ronda: Si aciertas, en tu turno la ronda siguiente puedes levantar una carta de otro jugador para verla.</li>
+							<li>Apostar por qué grupo de cartas sufrirá alguna muerte (personaje principal o secundario y carta de acción principal o secundaria): Si muere una carta del grupo seleccionado, puedes matar una carta en tu turno la ronda siguiente.</li>
+							<li>Apostar por los compañeros de celda: Si muere un compañero de celda, puedes elegir 1 recompensa a elegir entre matar una carta, ver una carta o coger una carta de evento.</li>
+							<li>Apostar por una carta concreta: Si dicha carta muere, puedes elegir 2 recompensas a elegir entre matar una carta, ver una carta o coger un evento.</li>
+							<li>Apostar por las siamesas: Si las siamesas mueren, recibes 3 recompensas (matar una carta, ver una carta y coger un evento) o puedes activar un despertar.</li>
+						</ul>
+						<p>Sin embargo, apostar es peligroso:</p>
+						<ul>
+							<li>Si apuestas por qué jugador irá ganando y al final de la ronda dicho jugador va el último, esta carta se muere.</li>
+							<li>Si apuestas por qué carta o grupo de cartas va a morir y al final de la ronda no ha muerto ninguna carta, esta carta se muere.</li>
+						</ul>
+						<p class="extra-power">Poder extra (si no es amotinado): Ninguno.</p>
+						<h3>Despertar: Última baza</h3>
+						<p>Aunque la partida no esté a tu favor, siempre tienes un as bajo la manga. Cada ronda, puedes realizar dos apuestas en vez de una y ya no tienes límite en el número de apuestas que puedes hacer de cada tipo. Además, esta carta no morirá aunque te equivoques completamente en tus apuestas, pero debes anunciar que tienes el despertar de La ludópata para poder emplear el poder.</p>
+					</div>
+					<button class="sub-accordion">Nerea “La Chef” 🌙</button>
+					<div class="sub-panel">
+						<p>Encargada de alimentar a los internos, para que la desnutrición no sea una causa adicional a su locura. Cada ronda, puedes preparar la comida a un jugador. Ambos jugadores tendréis un pacto temporal durante esa ronda, por lo que os trataréis de ayudar mutuamente (como si estuvierais en el mismo bando). Sólo puedes crear un pacto con cada jugador. Además, al principio de la partida puedes usar el poder de una comida especial:</p>
+						<ul>
+							<li><strong>Brócoli:</strong> En la primera ronda, coloca un brócoli sobre una carta de cada jugador. Cuando a un jugador le toque usar el poder de la carta que tiene el brócoli, tiene dos opciones: no usar su poder esa ronda (y más tarde podrá librarse del brócoli) o usar su poder normalmente, pero mantiene el brócoli sobre la carta. Al final de cada ronda, tras el linchamiento, cada jugador podrá (si quiere) retirar los brócolis que tenga sobre las cartas que NO haya usado esa ronda y colocarlos sobre las cartas del jugador a su izquierda. Además, por cada brócoli que se mantiene en su sitio (por estar sobre una carta que SÍ se ha usado esa ronda) habrá que añadir un brócoli adicional de la reserva al centro de la mesa. Cuando sea el turno de la chef, podrá repartir entre los jugadores los brócolis adicionales que haya en el centro (sólo puede añadir un máximo de 1 brócoli adicional a cada jugador por ronda, a no ser que en el centro de la mesa haya más brócolis que jugadores). Además, la carta de la chef es inmune al brócoli, por lo que siempre podrá retirarlos de su carta aunque use su poder. Si en algún momento de la partida una carta llega a tener 3 brócolis, dicha carta muere y los 3 brócolis que tenía se retiran del juego. Si una carta muere, pero no a causa de los brócolis, los brócolis que tuviera encima se dejan en el centro de la mesa para que los recoloque la chef en su turno.</li>
+						</ul>
+						<p class="extra-power">Poder extra (si no es amotinado): Cuando esta carta muera, puedes (si quieres) destruir todas las cartas de comida en juego para devolverla a la vida (aunque tendrás que mostrar tu objetivo a todos en cualquier caso).</p>
+						<h3>Despertar: Comida rápida</h3>
+						<p>El bajo presupuesto del manicomio no da para comprar comida de calidad y algunos internos del manicomio están sufriendo las consecuencias. Solo hacen falta dos brócolis para matar una carta. Además, cada vez que una carta muera por efecto de los brócolis, la ronda siguiente podrás robar su poder con despertar. Sin embargo, deberás anunciar que tienes el despertar de La chef para que surta efecto.</p>
+					</div>
+					<button class="sub-accordion">David “El Saltamundos” 🌙</button>
+					<div class="sub-panel">
+						<p>Dice tener una conexión con el multiverso de los juegos de mesa y puede extraer su poder de los juegos de otras dimensiones. Al inicio de la partida, selecciona un juego de mesa (Bang o Ciudadelas de momento) y coloca sobre la mesa el mazo de cartas de dicho juego. Cada ronda, en tu turno, puedes coger una carta del mazo que te otorgará un poder especial de un solo uso. Puedes decidir si usarlo esa misma ronda o guardarlo para más adelante.</p>
+						<ul>
+							<li>Si eliges el Bang, no puedes tener en la mano más cartas que vidas, pero puedes usar varias cartas por turno.</li>
+							<li>Si eliges Ciudadelas, no puedes usar más de un poder por ronda (incluso si tienes varias cartas en la mano).</li>
+						</ul>
+						<p class="extra-power">Poder extra (si no es amotinado): Ninguno, pero los mazos de cada juego habrá que personalizarlos en función del objetivo en la partida.</p>
+						<h3>Despertar: Bang</h3>
+						<p>Cada ronda, puedes coger 2 cartas del mazo y quedarte la que prefieras. Además, podrás coger una carta de personaje del Bang que te dará un poder extra el resto de la partida. Por último, a partir de ahora serás el Sherif y podrás repartir aleatoriamente el resto de roles del Bang a los otros jugadores. Cada vez que un jugador acabe con un forajido, podrá robar una carta del mazo del Bang como recompensa. El alguacil no podrá atacarte directamente y ganarás la partida inmediatamente si acabas con todos los forajidos y el renegado (tengas el objetivo que tengas). Sin embargo, también puedes ganar si logras completar tu objetivo original en la partida.</p>
+					</div>
+					<button class="sub-accordion">Ainhoa “La Médium” 🌙</button>
+					<div class="sub-panel">
+						<p>Sus poderes psíquicos le permiten ver los espíritus de los internos del manicomio. Cada ronda puedes emplear el poder de una carta muerta de un jugador, pero no puedes repetir jugador.</p>
+						<p class="extra-power">Poder extra (si no es amotinado): Cada ronda puedes ver el objetivo de un jugador.</p>
+						<h3>Despertar: Transición realmática</h3>
+						<p>Se ha producido una separación entre tu cuerpo físico y tu cuerpo espiritual, entre los que alternarás cada ronda. Al activar el despertar, podrás elegir si comienzas en tu cuerpo físico o espiritual, pero las siguientes rondas tendrás que ir alternando entre uno y otro obligatoriamente. El cambio de modo se produce después del linchamiento en cada ronda:</p>
+						<ul>
+							<li><strong>Modo espiritual:</strong> No podrás linchar ni realizar ninguna acción durante el día, pero nadie podrá atacarte durante el día. Por la noche, podrás seguir usando tu poder habitual, pero puedes usar el poder de cualquier carta muerta, incluso si pertenece a un jugador que ya habías elegido anteriormente, aunque no puedes repetir carta. Sin embargo, por la noche eres vulnerable y podrán atacarte.</li>
+							<li><strong>Modo físico:</strong> No podrás levantarte por la noche ni usar tu poder habitual, pero nadie podrá atacarte por la noche. Además, antes de que caiga la noche podrás seleccionar a un jugador que tendrá que jugar esa ronda empleando solamente los poderes de sus cartas muertas (en vez de las vivas), pero solo puedes seleccionar una vez a cada jugador. En este modo podrás linchar, pero por el día serás vulnerable y podrán atacarte.</li>
+						</ul>
+						<p>Para usar el despertar, tendrás que anunciarlo en voz alta.</p>
+					</div>
+					<button class="sub-accordion">David “El Cyborg” 🌙☀️</button>
+					<div class="sub-panel">
+						<p>Mitad humano mitad máquina. Sus conocimientos de mecánica le permiten sustituir partes dañadas de su cuerpo por otras biomecánicas. Esta carta es inmortal. Cada vez que sea atacada, el jugador debe cambiarla por otra carta que siga viva de otro jugador y ambas cartas continúan con vida. El poder de esta carta es válido toda la partida y para cualquier jugador que la tenga. Además, cada vez que esta carta muera, el jugador que la tenía originalmente al principio de la partida gana un punto. Dichos puntos pueden guardarse o usarse (en su turno) para:</p>
+						<ul>
+							<li>1 pt: Puedes levantar una carta o el objetivo de un jugador.</li>
+							<li>2 pt: Puedes matar una carta.</li>
+							<li>3 pt: Puedes revivir una carta que estuviera muerta.</li>
+						</ul>
+						<p class="extra-power">Poder extra (si no es amotinado): Ninguno.</p>
+						<h3>Despertar: Máquina de matar</h3>
+						<p>Con las piezas rotas empleadas para reparar su cuerpo, Cyborg puede crear 2 robots asesinos. Cada noche, puedes matar una carta mientras alguno de los robots siga con vida. Además, cada vez que seas atacado, uno de tus robots dará su vida por ti, de manera que para matarte definitivamente tendrán que matar primero a tus robots. Sin embargo, tendrás que anunciar en voz alta que tienes el despertar de Cyborg para poder usarlo.</p>
+					</div>
+					<button class="sub-accordion">Silvia “La Alquimista” 🌙</button>
+					<div class="sub-panel">
+						<p>Realizó experimentos con humanos para encontrar la fórmula de la inmortalidad. Tras sufrir un trágico accidente, consiguió mantenerse con vida usando el resultado de sus experimentos. Esta carta ya está muerta, por lo que, cuando la maten, nada cambia y no tiene que mostrar cuál es su objetivo en la partida hasta que no pierda todas sus cartas.</p>
+						<p class="extra-power">Poder extra (si no es amotinado): Cuando mueran todas sus cartas y tras revelar su objetivo, puede revivir una de sus 4 cartas y activar su despertar (al ser la única carta viva restante).</p>
+						<h3>Despertar: Sacrificio Vital</h3>
+						<p>Puedes sacrificar esta carta para revivir todas las cartas muertas de un jugador. No puede aplicarse a jugadores con las 4 cartas muertas (están fuera de la partida). También puedes usar sobre ti este poder para resucitar tus otras 3 cartas. Al aplicar este despertar, la carta de La Alquimista muere para siempre y no podrá ser resucitada en toda la partida, ni con eventos ni con otros despertares.</p>
+					</div>
+					<button class="sub-accordion">Edwin-kun “El Otaku” 🌙</button>
+					<div class="sub-panel">
+						<p>Una persona adelantada a su tiempo. Iba por la calle vestido de personajes de anime, lo cual no estaba bien visto en el siglo XIV, y acabó en un manicomio. Tienes 3 cartas de haki (referencias a One Piece) de un uso cada una:</p>
+						<ul>
+							<li><strong>Haki de armadura ofensivo:</strong> Puedes matar una carta.</li>
+							<li><strong>Haki de armadura defensivo:</strong> Puedes poner un escudo sobre una carta. La primera vez que esa carta sea atacada, el escudo absorbe el daño y la carta sigue viva.</li>
+							<li><strong>Haki de observación:</strong> Puedes predecir la muerte de una carta, marcándola. Hasta que dicha carta no muera, la carta de El Otaku no puede morir.</li>
+						</ul>
+						<p class="extra-power">Poder extra (si no es amotinado): Justo antes de usar una carta de haki, puedes levantar una carta de un jugador para verla.</p>
+						<h3>Despertar: Haki del Rey</h3>
+						<p>Mientras esta carta esté viva, solo pueden levantarse por la noche los personajes principales. Todas las demás cartas no podrán levantarse. Además, recuperas el poder de tus otros hakis que ya hayas gastado. Para usarlo, coloca sobre la mesa la carta auxiliar del Haki del rey.</p>
+					</div>
+					<button class="sub-accordion">Bea “La Maestra Budú” 🌙</button>
+					<div class="sub-panel">
+						<p>Lleva años perfeccionando la técnica del budú como instrumento de tortura. Cada turno, puedes hacer budú a una carta que absorberá todo el mal que le hagan a ese jugador ese turno (incluye muertes, acusación de John Flick, la guadaña de la parca, ataque por linchamiento, melancolía…).</p>
+						<p class="extra-power">Poder extra (si no es amotinado): Cuando esta carta muera, todos los efectos negativos que haya sufrido el jugador con la carta de “La Maestra Budú” esta ronda (en esta o en otras cartas) pueden aplicarse sobre otras cartas del tablero.</p>
+						<h3>Despertar: Maldición final</h3>
+						<p>Mientras este despertar esté activo, cualquier jugador que aplique un efecto negativo sobre esta carta también deberá aplicarlo sobre una de sus propias cartas. Los efectos negativos incluyen la acusación de John Flick, la marca de La Parca, cualquier intento de matar la carta, etc. Si los amotinados intentan matar esta carta por la noche, tendrán que decidir por unanimidad qué amotinado perderá también una carta por la maldición. Si no hay consenso sobre qué carta de los amotinados debe morir, la Maestra Budú no podrá ser atacada y seguirá con vida. Si esta carta muere por linchamiento, los jugadores que la han linchado deberán hacer un segundo linchamiento y lincharse entre ellos para decidir qué carta sufre el efecto de la maldición. Para que este despertar surta efecto, debes anunciar en voz alta que tienes el despertar de la Maestra Budú.</p>
+					</div>
+					<button class="sub-accordion">Aitor “El Último Superviviente” 🌙</button>
+					<div class="sub-panel">
+						<p>La leyenda cuenta que este personaje mítico recorre cada noche los pasillos del manicomio, pero nadie ha sido capaz de verle la cara. Si esta carta llega a morir en las primeras 3 rondas, se acaba la partida y el jugador que la tenga gana al instante.</p>
+						<p class="extra-power">Poder extra (si no es amotinado): No lo necesita.</p>
+						<h3>Despertar: Instinto de Supervivencia</h3>
+						<p>Esta carta es inmortal las siguientes 3 rondas a la activación de su despertar, pero debes mostrar esta carta a todos los jugadores.</p>
+					</div>
+				</div>
+			</div>
+			<button class="accordion"><i class="fas fa-bolt icon"></i>Cartas de Acción</button>
+			<div class="panel">
+				<button class="sub-accordion">Grupo Principal</button>
+				<div class="sub-panel">
+					<button class="sub-accordion">Pacto de sangre 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Pacto de sangre.png" alt="Pacto de sangre" class="card-image">
+						<p>Debes activarla en el primer turno de la primera noche para ligar el destino de dos jugadores (también es posible vincularte a ti mismo con alguien). Debes indicar si vas a realizar un pacto de sangre normal o un pacto de odio (en caso de que tengas la personalidad de Bipolaridad) usando la carta auxiliar de pacto de sangre. Los dos deben ser los únicos supervivientes para poder escapar del manicomio, pero si uno pierde todas sus cartas de vida el otro muere irremediablemente. Los jugadores que han vinculado sus destinos no deben saber quién ha realizado el pacto de sangre, por lo que tras señalar a los dos jugadores que van a realizar el pacto, el jugador con Pacto de sangre cierra los ojos de nuevo. A continuación, el narrador llama a los jugadores vinculados para que se conozcan (sin decir en voz alta quienes son los que deben levantarse).</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: Debes activarla en el primer turno de la primera noche para ligar el destino de dos jugadores. Ambos jugadores sienten un intenso odio mutuamente. Si uno de los dos consigue acabar con la última carta de vida del otro, automáticamente gana la partida y se acaba el juego.</p>
+						<h3>Despertar</h3>
+						<p>Esta carta solo podrá morir si alguno de los jugadores que han vinculado sus destinos ha muerto previamente. Si solo queda en juego esta carta y las de los jugadores que comparten el vínculo, también se considera que han ganado la partida.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">Esta carta solo podrá morir si alguno de los jugadores que han vinculado sus destinos ha muerto previamente (no cambia su Despertar).</p>
+					</div>
+					<button class="sub-accordion">Terapia – electroshock 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Terapia - electroshock.jpg" alt="Terapia - electroshock" class="card-image">
+						<p>Un integrante del manicomio ha sido condenado a la silla eléctrica por su comportamiento. Puedes acabar con la vida de una de las cartas de un jugador. Para ello, emplea la carta auxiliar de muerte.</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: Un integrante del manicomio ha sido indultado y se librará de la silla eléctrica por su comportamiento. Puedes salvar la vida de una de las cartas que vayan a morir esa noche.</p>
+						<h3>Despertar</h3>
+						<p>Puedes acabar con la vida de una de las cartas de un jugador de forma inevitable (no puede ser salvada). Para ello, emplea la carta auxiliar de muerte inevitable.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">Puedes salvar la vida a una de las cartas que estén muertas, incluso si murieron hace varias rondas.</p>
+					</div>
+					<button class="sub-accordion">Terapia – opio y barbitúricos 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Terapia - opio y barbitúricos.jpg" alt="Terapia - opio y barbitúricos" class="card-image">
+						<p>Te has colado en la enfermería para robar algunas medicinas y otras sustancias. Puedes salvar la vida a una de las cartas que vayan a morir esa noche. Para ello, retira la carta auxiliar de muerte de una de las cartas.</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: Te has colado en la enfermería para robar algunas medicinas y otras sustancias. Puedes acabar con la vida de una de las cartas de un jugador.</p>
+						<h3>Despertar</h3>
+						<p>Puedes salvar la vida a una de las cartas que estén muertas, incluso si murieron hace varias rondas. Para ello, emplea la carta auxiliar de resucitar.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">Puedes acabar con la vida de una de las cartas de un jugador de forma inevitable (no puede ser salvada).</p>
+					</div>
+					<button class="sub-accordion">Terapia – Lobotomía 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Terapia - Lobotomía.jpg" alt="Terapia - Lobotomía" class="card-image">
+						<p>Una terapia experimental permite suprimir los problemas mentales de los pacientes. Si la aplicas sobre alguno de los amotinados (Daniel, Nathaniel o Richard Dadd), recuperan la cordura y cambian de bando el resto de la partida, por lo que tratarán de acabar con los amotinados, pero pierden el derecho a voto en los linchamientos. Para ello, emplea la carta auxiliar de lobotomía. La carta elegida por lobotomía debe mostrarse a la vista de todos los jugadores.</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: Una fallida terapia experimental permite potenciar la locura del paciente. Si la aplicas sobre una carta de personaje principal de los internos (Ali “la muda”, Larry Owls “el sonámbulo” o Mary Firth), pierde la cordura y cambia de bando el resto de la partida, tratando de ganar con los amotinados, pero pierde el derecho a voto en los linchamientos.</p>
+						<h3>Despertar</h3>
+						<p>El jugador que cambia de bando no pierde el derecho a voto en los linchamientos.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">El jugador que cambia de bando no pierde el derecho a voto en los linchamientos (no cambia su Despertar).</p>
+					</div>
+					<button class="sub-accordion">Infecto de rabia 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Infecto de rabia.jpg" alt="Infecto de rabia" class="card-image">
+						<p>Antes de morir, has contagiado la rabia al amotinado (Daniel, Nathaniel o Richard Dadd) más cercano por tu izquierda, que perderá la vida la próxima ronda por la enfermedad.</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: Antes de morir, has contagiado la rabia al amotinado (Daniel, Nathaniel o Richard Dadd) más cercano por tu derecha, que perderá la vida la próxima ronda por la enfermedad.</p>
+						<h3>Despertar</h3>
+						<p>El amotinado más cercano por tu izquierda perderá la vida inmediatamente.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">El amotinado más cercano por tu derecha perderá la vida inmediatamente.</p>
+					</div>
+					<button class="sub-accordion">Manía persecutoria 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Manía persecutoria.jpg" alt="Manía persecutoria" class="card-image">
+						<p>Antes de morir, tu obsesión por la venganza te permite llevarte contigo a la tumba una carta del tablero a tu elección.</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: Antes de morir, empleas tus últimas fuerzas para ayudar a un amigo. Puedes salvar una carta del tablero que fuera a morir (esta carta tiene prioridad al morir si varias cartas son atacadas a la vez).</p>
+						<h3>Despertar</h3>
+						<p>Puedes llevarte contigo a la tumba dos cartas del tablero a tu elección.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">Al morir, puedes salvar la vida a una de las cartas que estén muertas, incluso si murieron hace varias rondas (esta carta tiene prioridad al morir si varias cartas son atacadas a la vez).</p>
+					</div>
+					<button class="sub-accordion">Profeta 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/El profeta.jpg" alt="Profeta" class="card-image">
+						<p>Tienes poderes sobrenaturales y visiones divinas, pero nadie cree en tus palabras. Para demostrar tu poder, selecciona dos cartas de un mismo jugador, una viva y una muerta. Cuando la carta que aún vive muera, la que está muerta resucitará. Para seleccionar ambas cartas, usa las cartas auxiliares del profeta.</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: Tienes poderes sobrenaturales y visiones divinas, pero nadie cree en tus palabras. Para demostrar tu poder, selecciona dos cartas de un mismo jugador, ambas vivas. Cuando una de las dos muera, la otra también morirá.</p>
+						<h3>Despertar</h3>
+						<p>Las dos cartas que selecciones pueden pertenecer a jugadores diferentes.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">Las dos cartas que selecciones pueden pertenecer a jugadores diferentes (no cambia su Despertar).</p>
+					</div>
+				</div>
+				<button class="sub-accordion">Grupo Secundario</button>
+				<div class="sub-panel">
+					<button class="sub-accordion">El Cataléptico 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/El cataléptico.jpg" alt="El Cataléptico" class="card-image">
+						<p>Padeces una enfermedad conocida como catalepsia, que hace que te den por muerto, aunque aún sigues vivo. La primera vez que maten esta carta durante la noche, devuélvela a la vida en tu turno como si nada hubiera pasado.</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: La primera vez que maten esta carta durante el día, devuélvela a la vida en tu turno como si nada hubiera pasado.</p>
+						<h3>Despertar</h3>
+						<p>La primera vez que maten esta carta durante la noche, devuélvela a la vida y mata una carta a tu elección del tablero.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">La primera vez que maten esta carta durante el día, devuélvela a la vida y mata una carta a tu elección del tablero.</p>
+					</div>
+					<button class="sub-accordion">Amnesia 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Amnesia.png" alt="Amnesia" class="card-image">
+						<p>Tus problemas de memoria te impiden recordar el resultado del último linchamiento, por lo que puedes pedir que se realice un segundo linchamiento en una ronda a tu elección. Sin embargo, debes decir en voz alta al resto de jugadores que tienes la carta de Amnesia (aunque no indicar su posición). Además, si tras el primer linchamiento algún jugador se ha quedado con una única carta, no podrá activar el despertar hasta que haya finalizado el segundo linchamiento.</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: Tus problemas de memoria te impiden recordar el resultado del último linchamiento, por lo que puedes pedir que se cancele un linchamiento antes de que se produzca en una ronda a tu elección.</p>
+						<h3>Despertar</h3>
+						<p>Al pedir que se realice un segundo linchamiento, puedes decidir qué jugador será el que deba perder una carta esa ronda y únicamente se linchará para decidir la carta que muere.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">Puedes pedir que se realice un segundo linchamiento, pero sólo podrá votarse a cartas muertas y la carta que sea elegida por mayoría resucitará.</p>
+					</div>
+					<button class="sub-accordion">Muerte dulce 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Muerte dulce.jpg" alt="Muerte dulce" class="card-image">
+						<p>El pirómano del manicomio se ha dejado encendida la estufa de una habitación y corre peligro de morir intoxicado. En tu turno, elige una carta de cualquier jugador (que solo conoceréis tú y el narrador). Si esa carta no es atacada en los próximos dos turnos la tuya morirá; pero si tu carta es atacada durante esos dos turnos, la carta elegida será la que muera en su lugar.</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: En tu turno, elige una carta de cualquier jugador. Si tu carta no es atacada en los próximos dos turnos la carta elegida morirá; pero si la carta elegida es atacada durante esos dos turnos, la tuya será la que muera en su lugar.</p>
+						<h3>Despertar</h3>
+						<p>Si ni la carta elegida ni esta carta son atacada en los próximos dos turnos, la tuya permanecerá con vida. Además, cuando esta carta muera, podrá llevarse a la tumba la carta que había seleccionado anteriormente.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">Si ni la carta elegida ni esta carta son atacada en los próximos dos turnos, la carta elegida permanecerá con vida. Además, cuando esta carta muera, podrá resucitar la carta que había seleccionado anteriormente.</p>
+					</div>
+					<button class="sub-accordion">Compañeros de celda (x3) 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Compañeros de celda.jpg" alt="Compañeros de celda" class="card-image">
+						<p>Tienes un fuerte vínculo con tus compañeros de celda, a los que conocerás en la primera noche. Cuando muera esta carta, también lo hará la carta que se encuentre en la misma posición sobre el tablero de los otros dos jugadores con los que compartes celda.</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: Cuando muera esta carta, también lo hará la carta que se encuentre en la posición opuesta sobre el tablero de los otros dos jugadores con los que compartes celda.</p>
+						<h3>Despertar</h3>
+						<p>Cuando esta carta muera, puedes resucitar tus cartas que hayan muerto por el efecto de las otras cartas de compañeros de celda.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">Cuando esta carta muera, puedes resucitar tus cartas que hayan muerto por el efecto de las otras cartas de compañeros de celda (no cambia su Despertar).</p>
+					</div>
+					<button class="sub-accordion">Juego de azar 🌙</button>
+					<div class="sub-panel">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Juego de azar.jpg" alt="Juego de azar" class="card-image">
+						<p>Tienes adicción al juego y no temes los riesgos. En tu turno, coloca la carta auxiliar “ficha de juego” sobre una carta de un jugador cualquiera. Cada ronda, el jugador que la posea deberá mover la ficha sobre una carta del jugador que tenga a su izquierda. Cuando esta carta muera, la carta sobre la que se encuentre la ficha también lo hará.</p>
+						<p class="bipolar-effect">Efecto con Bipolaridad: En tu turno, coloca la “ficha de juego” sobre una carta de un jugador cualquiera. Cada ronda, el jugador que la posea deberá mover la ficha sobre una carta del jugador que tenga a su derecha. Cuando esta carta muera, la carta sobre la que se encuentre la ficha también lo hará.</p>
+						<h3>Despertar</h3>
+						<p>Cuando esta carta muera por primera vez, puedes hacer una suposición sobre a qué grupo pertenece la carta sobre la que se encuentra la “ficha de juego” (personaje principal, personaje secundario, acción principal o acción secundario). Si aciertas, esta carta permanecerá con vida y la ficha de juego continuará en movimiento.</p>
+						<h3>Despertar con Bipolaridad</h3>
+						<p class="bipolar-awakening">Cuando esta carta muera, puedes hacer una suposición sobre a qué grupo pertenece la carta sobre la que se encuentra la “ficha de juego” (personaje principal, personaje secundario, acción principal o acción secundario). Si aciertas, esta carta permanecerá con vida y la ficha de juego continuará en movimiento (no cambia su Despertar).</p>
+					</div>
+				</div>
+			</div>
+			<button class="accordion"><i class="fas fa-mask icon"></i>Cartas de Personalidad</button>
+			<div class="panel">
+				<button class="sub-accordion">Responsabilidad ☀️</button>
+				<div class="sub-panel">
+					<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Responsabilidad.jpg" alt="Responsabilidad" class="card-image">
+					<p>Tu capacidad de liderazgo y tu buen juicio te han proporcionado una posición privilegiada entre los presos del manicomio, quienes confían en tu criterio. Por ello, cada día tu voto en el linchamiento vale doble.</p>
+				</div>
+				<button class="sub-accordion">Hostilidad ☀️</button>
+				<div class="sub-panel">
+					<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Hostilidad.jpg" alt="Hostilidad" class="card-image">
+					<p>Tienes un fuerte carácter y te han encargado dirigir el día a día del manicomio con mano dura. Cada día, puedes sancionar a un jugador, impidiéndole votar durante el linchamiento, pero no puedes elegir dos veces a una misma persona hasta que no hayas vetado a todos los demás jugadores. Para ello, emplea la carta auxiliar de hostilidad.</p>
+				</div>
+				<button class="sub-accordion">Melancolía 🌙</button>
+				<div class="sub-panel">
+					<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Melancolia.jpg" alt="Melancolía" class="card-image">
+					<p>El confinamiento te genera depresión y transmites ese sentimiento a los que te rodean. Cada noche puedes elegir una carta del tablero, usando la carta auxiliar de melancolía, y provocarle un ataque de melancolía, impidiéndole actuar durante esa ronda completa. No puedes elegir por segunda vez una carta de un mismo jugador hasta que no hayas vetado una vez a todos los demás jugadores. La primera noche, esta carta no actúa. Si una carta muere estando bajo el efecto de melancolía, todos los efectos que pudiera activar dicha carta al morir quedan anulados. Además, otros poderes pasivos de dicha carta quedan anulados esa ronda (e.g. una siamesa puede morir aunque la otra esté viva si está bajo el efecto de melancolía).</p>
+				</div>
+				<button class="sub-accordion">Ansiedad social 🌙</button>
+				<div class="sub-panel">
+					<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Ansiedad social.jpg" alt="Ansiedad social" class="card-image">
+					<p>Te cuesta soportar la vida en el manicomio y necesitas interactuar con los demás presos para sentirte integrado. Cada ronda, puedes hacer una pregunta de “sí o no” a un jugador, sin preguntarle directamente por la identidad de sus cartas, pero no puedes elegir dos veces a una misma persona hasta que no hayas preguntado a todos los demás jugadores.</p>
+				</div>
+				<button class="sub-accordion">Neuroticismo 🌙</button>
+				<div class="sub-panel">
+					<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Neuroticismo.png" alt="Neuroticismo" class="card-image">
+					<p>Tu capacidad de convicción hace que otros presos te obedezcan. La primera noche, elige a un jugador, el cual seguirá tus instrucciones y votará en el linchamiento según le indiques cada ronda, pero solamente te obedecerá los turnos pares.</p>
+				</div>
+				<button class="sub-accordion">Bipolaridad 🌙☀️</button>
+				<div class="sub-panel">
+					<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Bipolar.jpg" alt="Bipolaridad" class="card-image">
+					<p>Posees una doble personalidad y tu comportamiento es opuesto a lo esperado en algunas ocasiones. Cuando uses una carta de acción, puedes decidir si tendrá el efecto normal o el opuesto (ver lista de efectos opuestos para el bipolar).</p>
+				</div>
+				<button class="sub-accordion">Paciencia 🌙</button>
+				<div class="sub-panel">
+					<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Paciencia.jpg" alt="Paciencia" class="card-image">
+					<p>Suelen subestimarte por actuar pausadamente, pero sabes esperar al momento adecuado para hacer tu jugada. Al final de cada noche, selecciona una de las cartas que hayan sido atacadas, mediante la carta auxiliar de paciencia. Dicha carta morirá, pero no hasta la siguiente ronda. No puedes elegir la misma carta dos rondas consecutivas.</p>
+				</div>
+				<button class="sub-accordion">Cuentacuentos 🌙☀️</button>
+				<div class="sub-panel">
+					<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Cuentacuentos.jpg" alt="Cuentacuentos" class="card-image">
+					<p>Tu habilidad para contar historias te ha convertido en el narrador de los hechos que suceden en el manicomio. No dispondrás de más cartas, pero estarás despierto durante toda la partida para presenciar el desenlace de los acontecimientos. Además, cada jugador podrá hacerte una pregunta sobre el futuro que debes responder.</p>
+				</div>
+			</div>
+			<button class="accordion"><i class="fas fa-calendar icon"></i>Cartas de Evento</button>
+			<div class="panel">
+				<button class="sub-accordion">Provocaste al barbero 🌙</button>
+				<div class="sub-panel">
+					<p>Un preso ha provocado la ira del barbero del manicomio y no escapará a su navaja. Puedes acabar con la vida de una carta a tu elección.</p>
+				</div>
+				<button class="sub-accordion">Confesión 🌙</button>
+				<div class="sub-panel">
+					<p>Te sientes culpable por tus actos y buscas expiar tus pecados. Puedes mostrar ante todos los jugadores la identidad de una carta del tablero a tu elección.</p>
+				</div>
+				<button class="sub-accordion">Milagrero 🌙</button>
+				<div class="sub-panel">
+					<p>Algunos milagros son posibles para este extraño personaje que vive en el manicomio. Puedes restaurar el poder de una carta de acción que ya haya sido usada (salvo Pacto de sangre).</p>
+				</div>
+				<button class="sub-accordion">Indulto de Lord Percy 🌙</button>
+				<div class="sub-panel">
+					<p>Te has agraciado con el honorable Lord Percy y te concederá una petición. Puedes salvar de la muerte a la carta elegida durante el linchamiento, antes de que sea mostrada a todos.</p>
+				</div>
+				<button class="sub-accordion">Cirujano Brian Crowther 🌙</button>
+				<div class="sub-panel">
+					<p>Experto en cirugía plástica, es capaz de cambiar el aspecto de una persona. Puedes intercambiar dos cartas cualesquiera del tablero a tu elección, pero ten cuidado con las consecuencias…. Para ello, emplea las cartas auxiliares de cirujano.</p>
+				</div>
+				<button class="sub-accordion">Historia clínica – Perfil neurótico 🌙</button>
+				<div class="sub-panel">
+					<p>Puedes conocer la identidad de la persona con la personalidad de Neuroticismo y qué jugador sigue sus órdenes. Para ello, al activar el evento el narrador indicará a los jugadores correspondientes que se identifiquen (sin que se enteren el resto de jugadores).</p>
+				</div>
+				<button class="sub-accordion">Historia clínica – Siamesas 🌙</button>
+				<div class="sub-panel">
+					<p>Puedes conocer la identidad de las dos siamesas que se esconden en el manicomio. Para ello, al activar el evento el narrador indicará a los jugadores correspondientes que se identifiquen (sin que se enteren el resto de jugadores).</p>
+				</div>
+				<button class="sub-accordion">Historia clínica – Secretos del hospital 🌙</button>
+				<div class="sub-panel">
+					<p>Puedes conocer quién ha sido el culpable de realizar el ritual del pacto de sangre y quiénes son los jugadores que han vinculado sus destinos. Para ello, al activar el evento el narrador indicará a los jugadores correspondientes que se identifiquen (sin que se enteren el resto de jugadores).</p>
+				</div>
+				<button class="sub-accordion">Cambio de habitación 🌙</button>
+				<div class="sub-panel">
+					<p>Una distracción llama la atención de los guardias y dos presos se intercambian las celdas. Puedes intercambiar la posición de dos cartas de un mismo jugador. Para ello, emplea las cartas auxiliares de cambio de habitación.</p>
+				</div>
+				<button class="sub-accordion">Leproso 🌙</button>
+				<div class="sub-panel">
+					<p>Has contraído la lepra, pero no serás el único que sufra. Selecciona una carta y morirá inevitablemente, sin posibilidad de que sea salvada y sin que pueda emplear su poder al morir (si lo tiene). Para ello, emplea la carta auxiliar de leproso.</p>
+				</div>
+				<button class="sub-accordion">Terapia de hipnosis 🌙</button>
+				<div class="sub-panel">
+					<p>Puedes hipnotizar a un jugador y hacerle creer que tiene el poder de una carta adicional (ver lista de posibles hipnosis), pero solamente durante una noche y no puedes hipnotizarte a ti mismo. El narrador avisará al jugador hipnotizado sin decir su nombre y el hipnotista deberá indicarle en voz alta qué poder podrá usar esa noche. El narrador llamará al jugador hipnotizado para que se levante individualmente justo después de que la carta original con dicho poder haya actuado.</p>
+					<h3>Poderes de Hipnosis Disponibles</h3>
+					<p>A continuación, se nombran los poderes que se pueden ceder a otro jugador durante una ronda a través de esta carta. El poder escogido deberá decirse en voz alta y el narrador llamará al jugador hipnotizado para que actúe justo después del turno de la carta original. La hipnosis no anula los otros poderes del jugador hipnotizado ni el poder de la carta original:</p>
+					<ul class="hypnosis-list">
+						<li>Larry Owls “el sonámbulo”</li>
+						<li>El archivo</li>
+						<li>Arthur</li>
+						<li>Terapia – Electroshock</li>
+						<li>Terapia – Opio y barbitúricos</li>
+						<li>Terapia – Lobotomía</li>
+						<li>Amnesia</li>
+					</ul>
+				</div>
+				<button class="sub-accordion">Síndrome de Nostradamus 🌙</button>
+				<div class="sub-panel">
+					<p>Escribe una profecía con una parte a la vista de todos y otra parte oculta. Si en las próximas dos rondas se cumple la primera parte de la profecía, entonces la segunda parte se hará realidad.</p>
+				</div>
+				<button class="sub-accordion">Despertar 🌙</button>
+				<div class="sub-panel">
+					<p>Puedes aprovechar el poder latente que había en una de tus cartas activando su despertar (ver lista de despertar). Usa una carta auxiliar de despertar.</p>
+				</div>
+				<button class="sub-accordion">Celda de aislamiento 🌙</button>
+				<div class="sub-panel">
+					<p>Un preso ha sido aislado del resto tras una pelea. Selecciona una carta y quedará inactiva durante una ronda, pero tampoco podrá ser atacada. Para ello, emplea la carta auxiliar de celda de aislamiento.</p>
+				</div>
+				<button class="sub-accordion">Visita al psiquiatra 🌙</button>
+				<div class="sub-panel">
+					<p>El psiquiatra del manicomio te hace replantearte tus acciones y ya no tienes claro tu objetivo en la vida. Puedes cambiar el objetivo de dos jugadores a tu elección. Para ello, emplea la carta auxiliar del psiquiatra.</p>
+					<p style="color: #e74c3c;">Nota: Esta carta solo está disponible en el modo con cartas personalizadas.</p>
+				</div>
+				<button class="sub-accordion">La caja de Pandora 🌙</button>
+				<div class="sub-panel">
+					<p>La excesiva curiosidad de un interno ha creado una situación inesperada. Puedes desactivar de forma permanente el despertar de una carta.</p>
+				</div>
+				<button class="sub-accordion">Recuerdos traumáticos 🌙</button>
+				<div class="sub-panel">
+					<p>Recuerdas un trauma de la infancia que cambió tu forma de ser drásticamente. Puedes intercambiar las cartas de rasgos de personalidad de dos jugadores a tu elección.</p>
+				</div>
+			</div>
+			<button class="accordion"><i class="fas fa-tools icon"></i>Cartas Auxiliares</button>
+			<div class="panel">
+				<p>Estas cartas se usan para indicar acciones o efectos durante la partida. No tienen descripción, solo se muestran sus imágenes y nombres:</p>
+				<div class="auxiliary-cards">
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_John_Flick.png" alt="John Flick" class="card-image">
+						<p class="card-label">John Flick</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_cambio_habitacion.png" alt="Cambio habitación" class="card-image">
+						<p class="card-label">Cambio habitación</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_celda_aislamiento.png" alt="Celda aislamiento" class="card-image">
+						<p class="card-label">Celda aislamiento</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_cirujano.png" alt="Cirujano" class="card-image">
+						<p class="card-label">Cirujano</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_despertar.png" alt="Despertar" class="card-image">
+						<p class="card-label">Despertar</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_despertar_Daniel.png" alt="Despertar Daniel" class="card-image">
+						<p class="card-label">Despertar Daniel</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_director.png" alt="Director" class="card-image">
+						<p class="card-label">Director</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_ficha_juego_anverso.png" alt="Ficha juego anverso" class="card-image">
+						<p class="card-label">Ficha juego anverso</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_ficha_juego_reverso.png" alt="Ficha juego reverso" class="card-image">
+						<p class="card-label">Ficha juego reverso</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_hostilidad.png" alt="Hostilidad" class="card-image">
+						<p class="card-label">Hostilidad</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_leproso.png" alt="Leproso" class="card-image">
+						<p class="card-label">Leproso</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_lobotomia_anverso.png" alt="Lobotomía anverso" class="card-image">
+						<p class="card-label">Lobotomía anverso</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_lobotomia_reverso.png" alt="Lobotomía reverso" class="card-image">
+						<p class="card-label">Lobotomía reverso</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_melancolia.png" alt="Melancolía" class="card-image">
+						<p class="card-label">Melancolía</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_muerte.png" alt="Muerte" class="card-image">
+						<p class="card-label">Muerte</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_muerte_inminente.png" alt="Muerte inminente" class="card-image">
+						<p class="card-label">Muerte inminente</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_paciencia.png" alt="Paciencia" class="card-image">
+						<p class="card-label">Paciencia</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_pacto_sangre_anverso.png" alt="Pacto sangre anverso" class="card-image">
+						<p class="card-label">Pacto sangre anverso</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_pacto_sangre_reverso.png" alt="Pacto sangre reverso" class="card-image">
+						<p class="card-label">Pacto sangre reverso</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_parca.png" alt="Parca" class="card-image">
+						<p class="card-label">Parca</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_profeta.png" alt="Profeta" class="card-image">
+						<p class="card-label">Profeta</p>
+					</div>
+					<div class="card-item">
+						<img src="https://dhueper.github.io/Diseños%20cartas/Cartas%20Auxiliares/icono_resucitar.png" alt="Resucitar" class="card-image">
+						<p class="card-label">Resucitar</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Sección Preguntas Frecuentes -->
+		<div id="faq" class="section">
+			<h2><i class="fas fa-question-circle icon"></i>Preguntas Frecuentes</h2>
+			<p>Aquí se responden las dudas más comunes sobre el juego:</p>
+			<button class="accordion"><i class="fas fa-question icon"></i>Preguntas Generales</button>
+			<div class="panel">
+				<div class="faq-item">
+					<p class="faq-question"><strong>1) Si una carta de personaje principal (P1) es pasada por un jugador a otro por el efecto del Cirujano o de Wakerfield, ¿cuál es el nuevo bando de ambos jugadores?</strong></p>
+					<p class="faq-answer">El objetivo principal es, en primer lugar, el pacto de sangre si alguno de los jugadores tiene un vínculo con otro jugador. En caso contrario, si un jugador tiene la carta de Richard Dadd, debe ser el único superviviente independientemente de sus otras cartas. Para el resto de casos: a) si se tiene al menos una carta de amotinado, ese deberá ser el objetivo; b) si no se tiene una carta de amotinado, pero se tiene a Krugman “el director”, debe jugarse para ganar según su propio objetivo; c) si solo se tienen cartas de internos o no se tiene ningún personaje principal, debe jugarse en el bando de los internos, por lo que se ganará cuando todas las cartas de amotinado (Daniel, Nathaniel y Richard Dadd) hayan caído.</p>
+				</div>
+				<div class="faq-item">
+					<p class="faq-question"><strong>2) Si el pacto de sangre es usado sobre Richard Dadd, ¿qué objetivo tiene prioridad?</strong></p>
+					<p class="faq-answer">Si un jugador con la carta de Richard Dadd es seleccionado para formar parte del pacto de sangre, puede decidir si despertarse para ver al jugador con el que comparte vínculo o no. Si se despierta, su objetivo será el marcado por el pacto de sangre. Si no se despierta, el vínculo no se completa y debe jugar como Richard Dadd.</p>
+				</div>
+				<div class="faq-item">
+					<p class="faq-question"><strong>3) ¿Los poderes de las cartas pueden usarse sobre uno mismo?</strong></p>
+					<p class="faq-answer">Sí, cualquier poder de cualquier carta puede usarse sobre uno mismo a no ser que en la propia carta se especifique lo contrario.</p>
+				</div>
+				<div class="faq-item">
+					<p class="faq-question"><strong>4) Si hay cambio de cartas por efecto del cirujano o Wakerfield, ¿puede Mary Firth volver a elegir a un mismo jugador?</strong></p>
+					<p class="faq-answer">No, Mary Firth únicamente puede elegir una vez a cada jugador durante la partida.</p>
+				</div>
+			</div>
+			<button class="accordion"><i class="fas fa-question icon"></i>Preguntas sobre el Modo Personalizado</button>
+			<div class="panel">
+				<div class="faq-item">
+					<p class="faq-question"><strong>1) Si el jugador con la carta de El Arquitecto pierde sus 4 cartas, pero la carta con la que se ha vinculado sigue viva, ¿puede continuar jugando?</strong></p>
+					<p class="faq-answer">No, si un jugador pierde sus 4 cartas está fuera de la partida y los poderes que tuviera activos se anulan inmediatamente.</p>
+				</div>
+				<div class="faq-item">
+					<p class="faq-question"><strong>2) ¿Puede emplearse el poder de Paciencia para mantener con vida una carta que muera por causa de los brócolis?</strong></p>
+					<p class="faq-answer">No, el poder de Paciencia solo puede emplearse sobre cartas que vayan a morir por una calavera (carta auxiliar de muerte).</p>
+				</div>
+				<div class="faq-item">
+					<p class="faq-question"><strong>3) ¿Qué efecto tiene Infecto de rabia en el nuevo modo personalizado?</strong></p>
+					<p class="faq-answer">En este modo de juego, Infecto de rabia hará que se levante el objetivo del primer amotinado por la izquierda, pero no hará que muera ninguna carta.</p>
+				</div>
+				<div class="faq-item">
+					<p class="faq-question"><strong>4) ¿Cuándo atacan solo a una Siamesa (pero no a la otra) o atacan al Cyborg, se considera que esas cartas han muerto momentáneamente (para resucitar justo después) o nunca llegan a morir, a la hora de tener en cuenta el poder de El Profeta o de otros efectos secundarios que se activan tras la muerte?</strong></p>
+					<p class="faq-answer">Si atacan al Cyborg o solamente a una Siamesa, se considera que dichas cartas nunca llegan a morir, por lo que El Profeta u otros efectos que se activan tras la muerte no se activarían ese turno si se han aplicado sobre esas cartas.</p>
+				</div>
+				<div class="faq-item">
+					<p class="faq-question"><strong>5) Si con La Médium robas el poder de La Ludópata y aciertas la apuesta, ¿puedes cobrar la recompensa el turno siguiente, aún sabiendo que La Médium solo puede robar el poder durante una ronda?</strong></p>
+					<p class="faq-answer">Sí, puedes cobrar la apuesta el turno siguiente siempre que la carta de La Médium siga con vida.</p>
+				</div>
+				<div class="faq-item">
+					<p class="faq-question"><strong>6) Si ha habido cambios de cartas entre jugadores, ¿cuál es la carta principal que debe tenerse en cuenta para aplicar el efecto de El Archivo o Lobotomía?</strong></p>
+					<p class="faq-answer">La carta principal de un jugador siempre será su mejor carta (1. Personaje principal, 2. Personaje secundario, 3. Acción principal, 4. Acción secundaria). En caso de empate entre dos o más cartas, se considera principal la que el jugador tuviera al inicio de la partida. En caso de que ninguna se tuviera originalmente, la carta principal será la primera por la izquierda entre las que están empatadas.</p>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Sección Estado de la Partida -->
+		<div id="game-state" class="section">
+			<h2><i class="fas fa-gamepad icon"></i>Estado de la Partida</h2>
+			<p>Registra tus cartas y objetivo para la partida actual.</p>
+			<div class="game-setup">
+				<label for="game-mode">Modo de Juego: </label>
+				<select id="game-mode">
+					<option value="normal">Normal</option>
+					<option value="personalizado">Personalizado</option>
+				</select>
+				<label for="player-name">Tu Nombre: </label>
+				<input type="text" id="player-name" placeholder="Escribe tu nombre">
+			</div>
+			<div class="player-card">
+				<h3>Tus Cartas</h3>
+				<div class="card-selection">
+					<div class="card-slot">
+						<select class="card-select" data-position="0">
+							<option value="">Posición 1</option>
+						</select>
+						<label><input type="checkbox" checked class="card-alive" data-position="0"> Viva</label>
+					</div>
+					<div class="card-slot">
+						<select class="card-select" data-position="1">
+							<option value="">Posición 2</option>
+						</select>
+						<label><input type="checkbox" checked class="card-alive" data-position="1"> Viva</label>
+					</div>
+					<div class="card-slot">
+						<select class="card-select" data-position="2">
+							<option value="">Posición 3</option>
+						</select>
+						<label><input type="checkbox" checked class="card-alive" data-position="2"> Viva</label>
+					</div>
+					<div class="card-slot">
+						<select class="card-select" data-position="3">
+							<option value="">Posición 4</option>
+						</select>
+						<label><input type="checkbox" checked class="card-alive" data-position="3"> Viva</label>
+					</div>
+				</div>
+				<div class="card-images"></div>
+				<div class="personality-objective">
+					<div class="personality">
+						<h4>Personalidad</h4>
+						<select id="personality-select" class="card-select">
+							<option value="">Selecciona Personalidad</option>
+							<option value="Responsabilidad">Responsabilidad</option>
+							<option value="Hostilidad">Hostilidad</option>
+							<option value="Melancolía">Melancolía</option>
+							<option value="Ansiedad social">Ansiedad social</option>
+							<option value="Neuroticismo">Neuroticismo</option>
+							<option value="Bipolaridad">Bipolaridad</option>
+							<option value="Paciencia">Paciencia</option>
+							<option value="Cuentacuentos">Cuentacuentos</option>
+						</select>
+						<div class="personality-image"></div>
+					</div>
+					<div class="objective">
+						<h4>Objetivo</h4>
+						<select class="card-select objective" style="display: none;">
+							<option value="">Selecciona Objetivo</option>
+							<option value="Internos">Internos</option>
+							<option value="Amotinados">Amotinados</option>
+							<option value="Renegado">Renegado</option>
+							<option value="Traidor">Traidor</option>
+							<option value="Inquisidor">Inquisidor</option>
+						</select>
+						<div class="objective-display"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    </div>
+
+    <script>
+	document.addEventListener('DOMContentLoaded', function() {
+		// Navegación entre secciones
+		document.querySelectorAll('nav a').forEach(link => {
+			link.addEventListener('click', function(e) {
+				e.preventDefault();
+				const sectionId = this.getAttribute('href').substring(1);
+				document.querySelectorAll('.section').forEach(section => {
+					section.classList.remove('active');
+				});
+				document.getElementById(sectionId).classList.add('active');
+			});
+		});
+
+		// Acordeones principales
+		document.querySelectorAll('.accordion').forEach(button => {
+			button.addEventListener('click', function() {
+				this.classList.toggle('active');
+				const panel = this.nextElementSibling;
+				panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+			});
+		});
+
+		// Sub-acordeones
+		document.querySelectorAll('.sub-accordion').forEach(button => {
+			button.addEventListener('click', function() {
+				this.classList.toggle('active');
+				const subPanel = this.nextElementSibling;
+				subPanel.style.display = subPanel.style.display === 'block' ? 'none' : 'block';
+			});
+		});
+
+		// Control de turnos de la noche (modo normal)
+		document.querySelectorAll('#night-turns input[type="checkbox"]').forEach(checkbox => {
+			checkbox.addEventListener('change', function() {
+				const li = this.closest('li');
+				li.classList.toggle('disabled', !this.checked);
+			});
+		});
+
+		// Botón de restablecer turnos (modo normal)
+		document.getElementById('reset-turns').addEventListener('click', function() {
+			document.querySelectorAll('#night-turns input[type="checkbox"]').forEach(checkbox => {
+				checkbox.checked = true;
+				checkbox.closest('li').classList.remove('disabled');
+			});
+		});
+
+		// Control de turnos de la noche (modo personalizado)
+		document.querySelectorAll('#night-turns-custom input[type="checkbox"]').forEach(checkbox => {
+			checkbox.addEventListener('change', function() {
+				const li = this.closest('li');
+				li.classList.toggle('disabled', !this.checked);
+			});
+		});
+
+		// Botón de restablecer turnos (modo personalizado)
+		document.getElementById('reset-turns-custom').addEventListener('click', function() {
+			document.querySelectorAll('#night-turns-custom input[type="checkbox"]').forEach(checkbox => {
+				checkbox.checked = true;
+				checkbox.closest('li').classList.remove('disabled');
+			});
+		});
+
+		// Configuración del estado de la partida
+		const cardImages = {
+			"Daniel": "https://dhueper.github.io/Diseños%20cartas/Daniel.jpg",
+			"Nathaniel": "https://dhueper.github.io/Diseños%20cartas/Nathaniel.jpg",
+			"Richard Dadd": "https://dhueper.github.io/Diseños%20cartas/Richard Dadd.jpg",
+			"Ali, “la muda”": "https://dhueper.github.io/Diseños%20cartas/Ali la muda.jpg",
+			"Larry Owls, “el sonámbulo”": "https://dhueper.github.io/Diseños%20cartas/Larry Owls el sonámbulo.jpg",
+			"Mary Firth": "https://dhueper.github.io/Diseños%20cartas/Mary Firth.png",
+			"Krugman “El Director”": "https://dhueper.github.io/Diseños%20cartas/El director.jpg",
+			"El archivo": "https://dhueper.github.io/Diseños%20cartas/El archivo.jpg",
+			"John Flick": "https://dhueper.github.io/Diseños%20cartas/John Flick.jpg",
+			"Arthur": "https://dhueper.github.io/Diseños%20cartas/Arthur.png",
+			"Wakerfield": "https://dhueper.github.io/Diseños%20cartas/Wakerfield.jpg",
+			"Siamesas (x2)": "https://dhueper.github.io/Diseños%20cartas/Siamesas.jpeg",
+			"La parca": "https://dhueper.github.io/Diseños%20cartas/La parca.jpg",
+			"Pacto de sangre": "https://dhueper.github.io/Diseños%20cartas/Pacto de sangre.png",
+			"Terapia – electroshock": "https://dhueper.github.io/Diseños%20cartas/Terapia - electroshock.jpg",
+			"Terapia – opio y barbitúricos": "https://dhueper.github.io/Diseños%20cartas/Terapia - opio y barbitúricos.jpg",
+			"Terapia – Lobotomía": "https://dhueper.github.io/Diseños%20cartas/Terapia - Lobotomía.jpg",
+			"Infecto de rabia": "https://dhueper.github.io/Diseños%20cartas/Infecto de rabia.jpg",
+			"Manía persecutoria": "https://dhueper.github.io/Diseños%20cartas/Manía persecutoria.jpg",
+			"Profeta": "https://dhueper.github.io/Diseños%20cartas/El profeta.jpg",
+			"El Cataléptico": "https://dhueper.github.io/Diseños%20cartas/El cataléptico.jpg",
+			"Amnesia": "https://dhueper.github.io/Diseños%20cartas/Amnesia.png",
+			"Muerte dulce": "https://dhueper.github.io/Diseños%20cartas/Muerte dulce.jpg",
+			"Compañeros de celda (x3)": "https://dhueper.github.io/Diseños%20cartas/Compañeros de celda.jpg",
+			"Juego de azar": "https://dhueper.github.io/Diseños%20cartas/Juego de azar.jpg",
+			"Pablo “El Arquitecto”": "",
+			"Noe “Gas de la risa”": "",
+			"Clara “La Ludópata”": "",
+			"Nerea “La Chef”": "",
+			"David “El Saltamundos”": "",
+			"Ainhoa “La Médium”": "",
+			"David “El Cyborg”": "",
+			"Silvia “La Alquimista”": "",
+			"Edwin-kun “El Otaku”": "",
+			"Bea “La Maestra Budú”": "",
+			"Aitor “El Último Superviviente”": "",
+			"Responsabilidad": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Responsabilidad.jpg",
+			"Hostilidad": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Hostilidad.jpg",
+			"Melancolía": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Melancolia.jpg",
+			"Ansiedad social": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Ansiedad social.jpg",
+			"Neuroticismo": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Neuroticismo.png",
+			"Bipolaridad": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Bipolar.jpg",
+			"Paciencia": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Paciencia.jpg",
+			"Cuentacuentos": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Cuentacuentos.jpg"
+		};
+
+		const objectives = {
+			"normal": {
+				"Daniel": "Acabar con todas las cartas del resto de jugadores (Amotinados).",
+				"Nathaniel": "Acabar con todas las cartas del resto de jugadores (Amotinados).",
+				"Richard Dadd": "Finge ayudar a los amotinados, pero ser el único superviviente.",
+				"Ali, “la muda”": "Acabar con las cartas de los amotinados (Internos).",
+				"Larry Owls, “el sonámbulo”": "Acabar con las cartas de los amotinados (Internos).",
+				"Mary Firth": "Acabar con las cartas de los amotinados (Internos).",
+				"Krugman “El Director”": "Si vive, acabar con todos los personajes principales; si muere, con los secundarios."
+			},
+			"personalizado": {
+				"Internos": "Desvelar a todos los amotinados (y al renegado si hay).",
+				"Amotinados": "Acabar con todas las cartas del resto de jugadores.",
+				"Renegado": "Finge ayudar a los amotinados, pero ser el último en pie.",
+				"Traidor": "Elegir un bando (Internos/Amotinados) y hacer que pierda.",
+				"Inquisidor": "Descubrir los secretos: Siamesas, Compañeros de celda, Pacto de sangre y objetivos de todos."
+			}
+		};
+
+		const modeSelect = document.getElementById('game-mode');
+		const cardSelects = document.querySelectorAll('.card-select:not(#personality-select):not(.objective)');
+		const personalitySelect = document.getElementById('personality-select');
+		const objectiveSelect = document.querySelector('.objective');
+		const imagesDiv = document.querySelector('.card-images');
+		const personalityImageDiv = document.querySelector('.personality-image');
+		const objectiveDiv = document.querySelector('.objective-display');
+		const aliveCheckboxes = document.querySelectorAll('.card-alive');
+
+		console.log("Personality Select inicializado con ID:", personalitySelect);
+
+		// Cargar todas las opciones disponibles
+		function loadCardOptions() {
+			const mode = modeSelect.value;
+			const allCards = {
+				p1: mode === "normal" ? 
+					["Daniel", "Nathaniel", "Richard Dadd", "Ali, “la muda”", "Larry Owls, “el sonámbulo”", "Mary Firth", "Krugman “El Director”"] :
+					["Pablo “El Arquitecto”", "Noe “Gas de la risa”", "Clara “La Ludópata”", "Nerea “La Chef”", "David “El Saltamundos”", 
+					 "Ainhoa “La Médium”", "David “El Cyborg”", "Silvia “La Alquimista”", "Edwin-kun “El Otaku”", "Bea “La Maestra Budú”", 
+					 "Aitor “El Último Superviviente”"],
+				p2: ["El archivo", "John Flick", "Arthur", "Wakerfield", "Siamesas (x2)", "La parca"],
+				a1: ["Pacto de sangre", "Terapia – electroshock", "Terapia – opio y barbitúricos", "Terapia – Lobotomía", "Infecto de rabia", "Manía persecutoria", "Profeta"],
+				a2: ["El Cataléptico", "Amnesia", "Muerte dulce", "Compañeros de celda (x3)", "Juego de azar"]
+			};
+
+			cardSelects.forEach(select => {
+				const position = select.dataset.position;
+				select.innerHTML = `<option value="">Posición ${parseInt(position) + 1}</option>` + 
+					Object.entries(allCards).map(([type, cards]) => 
+						cards.map(card => `<option value="${card}" data-type="${type}">${card}</option>`).join('')
+					).join('');
+			});
+			objectiveSelect.style.display = mode === "personalizado" ? 'block' : 'none';
+		}
+
+		// Inicializar opciones al cargar
+		loadCardOptions();
+
+		modeSelect.addEventListener('change', updateDisplay);
+		cardSelects.forEach(select => {
+			select.addEventListener('change', function() {
+				const selectedTypes = Array.from(cardSelects).map(s => s.selectedOptions[0]?.dataset.type).filter(Boolean);
+				const hasDuplicates = new Set(selectedTypes).size !== selectedTypes.length;
+				if (hasDuplicates) {
+					alert("No puedes seleccionar dos cartas del mismo tipo.");
+					this.value = "";
+				}
+				updateDisplay();
+			});
+		});
+		personalitySelect.addEventListener('change', updateDisplay);
+		objectiveSelect.addEventListener('change', updateDisplay);
+		aliveCheckboxes.forEach(checkbox => {
+			checkbox.addEventListener('change', updateDisplay);
+		});
+
+		function validateCards() {
+			const selectedTypes = Array.from(cardSelects).map(select => select.selectedOptions[0]?.dataset.type).filter(Boolean);
+			const requiredTypes = ["p1", "p2", "a1", "a2"];
+			return requiredTypes.every(type => selectedTypes.includes(type)) && selectedTypes.length === 4;
+		}
+
+		function updateDisplay() {
+			const mode = modeSelect.value;
+			const cards = Array.from(cardSelects).map(select => select.value);
+			const personality = personalitySelect.value;
+			const objective = mode === "personalizado" ? objectiveSelect.value : 
+							  cards.find(card => objectives.normal[card]) || "";
+
+			console.log("Valor actual de personalitySelect en updateDisplay:", personalitySelect.value);
+
+			// Actualización de imágenes de cartas principales
+			imagesDiv.innerHTML = '';
+			cards.forEach((cardName, index) => {
+				if (cardName && cardImages[cardName]) {
+					const wrapper = document.createElement('div');
+					wrapper.className = 'card-wrapper';
+					const img = document.createElement('img');
+					img.src = cardImages[cardName];
+					img.alt = cardName;
+					img.className = document.querySelector(`.card-alive[data-position="${index}"]`).checked ? '' : 'dead';
+					wrapper.appendChild(img);
+					imagesDiv.appendChild(wrapper);
+				}
+			});
+
+			// Actualización de la imagen de personalidad
+			personalityImageDiv.innerHTML = '';
+			if (personality) {
+				console.log("Cargando personalidad:", personality, "URL:", cardImages[personality]);
+				const wrapper = document.createElement('div');
+				wrapper.className = 'card-wrapper';
+				const img = document.createElement('img');
+				img.src = cardImages[personality];
+				img.alt = personality;
+				wrapper.appendChild(img);
+				personalityImageDiv.appendChild(wrapper);
+				personalityImageDiv.style.display = 'block'; // Forzar visibilidad
+			} else {
+				console.log("Personality vacía o no seleccionada:", personality);
+			}
+
+			objectiveDiv.textContent = objective ? `${objective}: ${objectives[mode][objective] || ''}` : 
+											  validateCards() ? "Selecciona todas las cartas para ver tu objetivo" : "Sin objetivo definido";
+
+			const playerState = {
+				mode: mode,
+				name: document.getElementById('player-name').value,
+				cards: cards,
+				alive: Array.from(aliveCheckboxes).map(cb => cb.checked),
+				personality: personality,
+				objective: mode === "personalizado" ? objective : null
+			};
+			localStorage.setItem('playerState', JSON.stringify(playerState));
+		}
+
+		// Cargar estado guardado
+		if (localStorage.getItem('playerState')) {
+			const state = JSON.parse(localStorage.getItem('playerState'));
+			modeSelect.value = state.mode;
+			loadCardOptions();
+			document.getElementById('player-name').value = state.name || "";
+			cardSelects.forEach((select, index) => {
+				select.value = state.cards[index] || "";
+				aliveCheckboxes[index].checked = state.alive[index];
+			});
+			personalitySelect.value = state.personality || "";
+			if (state.mode === "personalizado" && state.objective) objectiveSelect.value = state.objective;
+			updateDisplay();
+		}
+
+		// Mostrar la primera sección por defecto
+		document.getElementById('contenidos').classList.add('active');
+	});
+	</script>
+	
+</body>
+</html>
