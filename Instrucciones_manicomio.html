@@ -635,7 +635,7 @@
 				<button id="reset-turns-custom" style="margin: 10px 0; padding: 5px 10px; background-color: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Restablecer Lista</button>
 				<ul id="night-turns-custom" style="list-style: none; padding: 0;">
 					<li>
-						<label><input type="checkbox" checked data-turn="1"> 1) Preguntas al narrador <span style="color: #e74c3c;">(solo con Cuentacuentos, no primera ronda)</span></label>
+						<label><input type="checkbox" checked data-turn="1"> 1) Preguntas al narrador <span style="color: #e74c3c;">(solo si hay un narrador externo con Cuentacuentos, no primera ronda)</span></label>
 					</li>
 					<li>
 						<label><input type="checkbox" checked data-turn="2"> 2) Pacto de sangre <span style="color: #e74c3c;">(solo primera ronda)</span></label>
@@ -653,16 +653,19 @@
 						<label><input type="checkbox" checked data-turn="6"> 6) Eventos noche</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="7"> 7) El Arquitecto <span style="color: #e74c3c;">(primera ronda crea vínculo con otra carta)</span></label>
+						<label><input type="checkbox" checked data-turn="7"> 7) El Arquitecto <span style="color: #e74c3c;">(la primera ronda debe crear el vínculo con otra carta)</span></label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="8"> 8) La Maestra Budú</label>
+						<label><input type="checkbox" checked data-turn="8"> 8) La Maestra Vudú</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="9"> 9) Melancolía <span style="color: #e74c3c;">(no primera ronda, despierta a todos para ver carta afectada)</span></label>
+						<label><input type="checkbox" checked data-turn="9"> 9) Melancolía <span style="color: #e74c3c;">(no actúa la primera ronda)</span></label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="10"> 10) Gas de la risa <span style="color: #e74c3c;">(despierta a todos para ver carta afectada)</span></label>
+						<label><input type="checkbox" checked data-turn="10"> 10) Gas de la risa</label>
+					</li>
+					<li style="padding-left: 20px;">
+						<label><input type="checkbox" checked> <span style="color: #3498db;">- Se despiertan todos los jugadores para ver qué carta no actuará esa noche por el efecto de Melancolía.</span></label>
 					</li>
 					<li>
 						<label><input type="checkbox" checked data-turn="11"> 11) La Ludópata</label>
@@ -677,7 +680,10 @@
 						<label><input type="checkbox" checked data-turn="14"> 14) La Chef</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="15"> 15) La Médium <span style="color: #e74c3c;">(despierta a todos para ver poder robado; si es anterior, actúa al dormir)</span></label>
+						<label><input type="checkbox" checked data-turn="15"> 15) La Médium</label>
+					</li>
+					<li style="padding-left: 20px;">
+						<label><input type="checkbox" checked> <span style="color: #3498db;">- Se despiertan todos los jugadores para ver qué poder ha robado La Médium. Si ha robado un poder que actúa antes, lo usa en cuanto se vuelvan a dormir los jugadores.</span></label>
 					</li>
 					<li>
 						<label><input type="checkbox" checked data-turn="16"> 16) El Saltamundos</label>
@@ -710,28 +716,34 @@
 						<label><input type="checkbox" checked data-turn="25"> 25) Terapia electroshock</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="26"> 26) Terapia opio y barbitúricos</label>
+						<label><input type="checkbox" checked data-turn="26"> 26) El Relojero</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="27"> 27) Terapia lobotomía</label>
+						<label><input type="checkbox" checked data-turn="27"> 27) Terapia opio y barbitúricos</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="28"> 28) Muerte dulce 2</label>
+						<label><input type="checkbox" checked data-turn="28"> 28) Terapia lobotomía</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="29"> 29) Cataléptico</label>
+						<label><input type="checkbox" checked data-turn="29"> 29) Muerte dulce 2</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="30"> 30) Juego de azar</label>
+						<label><input type="checkbox" checked data-turn="30"> 30) Cataléptico</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="31"> 31) Paciencia</label>
+						<label><input type="checkbox" checked data-turn="31"> 31) La Médico</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="32"> 32) Neuroticismo <span style="color: #e74c3c;">(primera ronda elige jugador, luego rondas pares)</span></label>
+						<label><input type="checkbox" checked data-turn="32"> 32) Juego de azar</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="33"> 33) Ansiedad social</label>
+						<label><input type="checkbox" checked data-turn="33"> 33) Paciencia</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="34"> 34) Neuroticismo <span style="color: #e74c3c;">(primera ronda elige jugador, luego rondas pares)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="35"> 35) Ansiedad social</label>
 					</li>
 				</ul>
 			</div>
@@ -863,17 +875,19 @@
 						<p>Si desobedecen tus designios una sola ronda (en vez de dos), la siguiente noche te levantarás a matar a alguien y nadie más podrá quitar la vida esa noche. Además, tienes un turno adicional al final de cada noche donde podrás comprobar si han obedecido tus designios. Cada noche que te desobedezcan, puedes cambiar la posición de las fichas de muerte que haya en el tablero, pero solo entre las cartas de los jugadores que han sido atacados (no puedes cambiar una muerte de un jugador a otro distinto). Sin embargo, deberás anunciar que tienes el despertar para que surja efecto.</p>
 					</div>
 				</div>
-				<!-- El resto de "Cartas Personalizadas (Modo Alternativo)" se mantiene igual -->
+				<!-- El resto de "Cartas Personalizadas (Modo Alternativo)" -->
 				<button class="sub-accordion">Cartas Personalizadas (Modo Alternativo)</button>
 				<div class="sub-panel">
-					<p>Estas cartas sustituyen a las cartas de personaje principal en el modo alternativo. Cada carta tiene un poder base que puede usarse con cualquier objetivo, un poder extra que solo se activa si el objetivo no es Amotinados o Renegado (ya que estos tienen el poder de levantarse a matar cada noche), y un despertar único.</p>
+					<p>Estas cartas sustituyen a las cartas de personaje principal en el modo alternativo. Cada carta tiene un poder base que puede usarse con cualquier objetivo, un poder adicional que solo se activa si el objetivo no es Amotinados, Renegado o Traidor (si este último elige despertarse con los amotinados), ya que estos tienen el poder de levantarse a matar cada noche, y un despertar único.</p>
+
 					<button class="sub-accordion">Pablo “El Arquitecto” 🌙</button>
 					<div class="sub-panel">
-						<p>Posee los planos originales y conoce todos los escondrijos del manicomio. Puedes ocultarte de los demás tras una carta a tu elección. Aunque el arquitecto muera, puedes seguir usando tu poder y no tienes que desvelar tu objetivo hasta que no muera también la carta tras la cual te has escondido. Además, en tu turno puedes desencadenar una construcción caótica: selecciona a un jugador, del cual podrás ver su carta de personalidad y usarla en su lugar esa ronda, pero sólo puedes hacerlo una vez por jugador.</p>
+						<p>Posee los planos originales y conoce todos los escondrijos del manicomio. Puedes ocultarte de los demás tras una carta a tu elección. Aunque el arquitecto muera, puedes seguir usando tu poder y no tienes que desvelar tu objetivo hasta que no muera también la carta tras la cual te has escondido. Además, en tu turno puedes desencadenar una construcción caótica: selecciona a un jugador y márcalo con la carta auxiliar del Laberinto, del cual podrás ver su carta de personalidad y usarla en su lugar esa ronda, pero sólo puedes hacerlo una vez por jugador.</p>
 						<p class="extra-power">Poder extra (si no es amotinado): Al seleccionar a un jugador, además de poder usar su carta de personalidad, podrás ver el objetivo de dicho jugador.</p>
 						<h3>Despertar: Laberinto de la mente</h3>
-						<p>Puedes entender la estructura mental de una persona y usarla a tu favor. Cada ronda puedes seleccionar a un jugador y marcarle con la carta auxiliar de Laberinto de la mente. Dicho jugador no podrá actuar de ninguna manera durante toda la ronda (ni usar sus poderes por la noche, ni linchar, ni usar su rasgo de personalidad), pero tampoco podrá ser atacado en toda la ronda. Puedes elegir una vez a cada jugador (incluido tú mismo).</p>
+						<p>Puedes entender la estructura mental de una persona y usarla a tu favor. Cada ronda puedes despertarte en un turno por la noche a tu elección, junto con el jugador que posea el poder original, pero no puedes levantarte en los turnos de cartas de Personaje Principal ni de rasgos de Personalidad. El Arquitecto puede obligar a que se use el poder esa noche, incluso si el jugador con el poder original no quiere, pero deberéis decidir sobre quién usar el poder de la carta entre los dos. Si no conseguís poneros de acuerdo, el poder se usa por duplicado (una vez lo usa el jugador con la carta original y otra El Arquitecto), pero ambos estáis despiertos en los dos casos. Las cartas que tengan un poder de un solo uso que aún no se haya gastado, pueden usarlo una vez en presencia de El Arquitecto sin perder su poder para rondas posteriores. Las cartas que ya hayan gastado su poder, lo recuperan por una noche si El Arquitecto se levanta en ese turno. Además, cuando la carta de El Arquitecto muera, te quedas con la carta con la que te hayas despertado por la noche y el jugador que tuviera dicha carta se queda con la carta de El Arquitecto muerta en su lugar.</p>
 					</div>
+
 					<button class="sub-accordion">Noe “Gas de la risa” 🌙</button>
 					<div class="sub-panel">
 						<p>Dicen que cuando nació, en vez de llorar se rio. Consiguió un trabajo en el manicomio y se encarga de controlar a los presos más problemáticos con gas de la risa. Cada noche, puedes decir en voz alta una carta y dicha carta no se levantará por un ataque de risa. Además, el jugador con dicha carta deberá levantar la mano. Sin embargo, no podrás repetir carta.</p>
@@ -881,6 +895,7 @@
 						<h3>Despertar: Muerto de risa</h3>
 						<p>Tienes dos comprimidos con alta concentración de gas de la risa, que pueden llegar a matar al sujeto por asfixia. Cada noche, selecciona como siempre una carta para que no se levante. Cuando la carta de “Gas de la risa” sea atacada por primera vez, puedes gastar un comprimido para que muera en tu lugar la carta que habías seleccionado esa ronda. La segunda vez que la carta de “Gas de la risa” sea atacada, morirá finalmente, pero el jugador que tenga la carta que habías seleccionado esa ronda perderá el voto en los linchamientos el resto de la partida. Además, puedes volver a seleccionar cartas que ya hubieras escogido antes de tener el despertar.</p>
 					</div>
+
 					<button class="sub-accordion">Clara “La Ludópata” 🌙</button>
 					<div class="sub-panel">
 						<p>Su adicción comenzó con los juegos de mesa, pero acabó en el manicomio por jugar a la ruleta rusa. Cada ronda puedes hacer una de las siguientes apuestas (hasta un máximo de 4 veces cada tipo de apuesta por partida):</p>
@@ -900,6 +915,7 @@
 						<h3>Despertar: Última baza</h3>
 						<p>Aunque la partida no esté a tu favor, siempre tienes un as bajo la manga. Cada ronda, puedes realizar dos apuestas en vez de una y ya no tienes límite en el número de apuestas que puedes hacer de cada tipo. Además, esta carta no morirá aunque te equivoques completamente en tus apuestas, pero debes anunciar que tienes el despertar de La ludópata para poder emplear el poder.</p>
 					</div>
+
 					<button class="sub-accordion">Nerea “La Chef” 🌙</button>
 					<div class="sub-panel">
 						<p>Encargada de alimentar a los internos, para que la desnutrición no sea una causa adicional a su locura. Cada ronda, puedes preparar la comida a un jugador. Ambos jugadores tendréis un pacto temporal durante esa ronda, por lo que os trataréis de ayudar mutuamente (como si estuvierais en el mismo bando). Sólo puedes crear un pacto con cada jugador. Además, al principio de la partida puedes usar el poder de una comida especial:</p>
@@ -910,6 +926,7 @@
 						<h3>Despertar: Comida rápida</h3>
 						<p>El bajo presupuesto del manicomio no da para comprar comida de calidad y algunos internos del manicomio están sufriendo las consecuencias. Solo hacen falta dos brócolis para matar una carta. Además, cada vez que una carta muera por efecto de los brócolis, la ronda siguiente podrás robar su poder con despertar. Sin embargo, deberás anunciar que tienes el despertar de La chef para que surta efecto.</p>
 					</div>
+
 					<button class="sub-accordion">David “El Saltamundos” 🌙</button>
 					<div class="sub-panel">
 						<p>Dice tener una conexión con el multiverso de los juegos de mesa y puede extraer su poder de los juegos de otras dimensiones. Al inicio de la partida, selecciona un juego de mesa (Bang o Ciudadelas de momento) y coloca sobre la mesa el mazo de cartas de dicho juego. Cada ronda, en tu turno, puedes coger una carta del mazo que te otorgará un poder especial de un solo uso. Puedes decidir si usarlo esa misma ronda o guardarlo para más adelante.</p>
@@ -921,6 +938,7 @@
 						<h3>Despertar: Bang</h3>
 						<p>Cada ronda, puedes coger 2 cartas del mazo y quedarte la que prefieras. Además, podrás coger una carta de personaje del Bang que te dará un poder extra el resto de la partida. Por último, a partir de ahora serás el Sherif y podrás repartir aleatoriamente el resto de roles del Bang a los otros jugadores. Cada vez que un jugador acabe con un forajido, podrá robar una carta del mazo del Bang como recompensa. El alguacil no podrá atacarte directamente y ganarás la partida inmediatamente si acabas con todos los forajidos y el renegado (tengas el objetivo que tengas). Sin embargo, también puedes ganar si logras completar tu objetivo original en la partida.</p>
 					</div>
+
 					<button class="sub-accordion">Ainhoa “La Médium” 🌙</button>
 					<div class="sub-panel">
 						<p>Sus poderes psíquicos le permiten ver los espíritus de los internos del manicomio. Cada ronda puedes emplear el poder de una carta muerta de un jugador, pero no puedes repetir jugador.</p>
@@ -933,6 +951,7 @@
 						</ul>
 						<p>Para usar el despertar, tendrás que anunciarlo en voz alta.</p>
 					</div>
+
 					<button class="sub-accordion">David “El Cyborg” 🌙☀️</button>
 					<div class="sub-panel">
 						<p>Mitad humano mitad máquina. Sus conocimientos de mecánica le permiten sustituir partes dañadas de su cuerpo por otras biomecánicas. Esta carta es inmortal. Cada vez que sea atacada, el jugador debe cambiarla por otra carta que siga viva de otro jugador y ambas cartas continúan con vida. El poder de esta carta es válido toda la partida y para cualquier jugador que la tenga. Además, cada vez que esta carta muera, el jugador que la tenía originalmente al principio de la partida gana un punto. Dichos puntos pueden guardarse o usarse (en su turno) para:</p>
@@ -945,6 +964,7 @@
 						<h3>Despertar: Máquina de matar</h3>
 						<p>Con las piezas rotas empleadas para reparar su cuerpo, Cyborg puede crear 2 robots asesinos. Cada noche, puedes matar una carta mientras alguno de los robots siga con vida. Además, cada vez que seas atacado, uno de tus robots dará su vida por ti, de manera que para matarte definitivamente tendrán que matar primero a tus robots. Sin embargo, tendrás que anunciar en voz alta que tienes el despertar de Cyborg para poder usarlo.</p>
 					</div>
+
 					<button class="sub-accordion">Silvia “La Alquimista” 🌙</button>
 					<div class="sub-panel">
 						<p>Realizó experimentos con humanos para encontrar la fórmula de la inmortalidad. Tras sufrir un trágico accidente, consiguió mantenerse con vida usando el resultado de sus experimentos. Esta carta ya está muerta, por lo que, cuando la maten, nada cambia y no tiene que mostrar cuál es su objetivo en la partida hasta que no pierda todas sus cartas.</p>
@@ -952,6 +972,7 @@
 						<h3>Despertar: Sacrificio Vital</h3>
 						<p>Puedes sacrificar esta carta para revivir todas las cartas muertas de un jugador. No puede aplicarse a jugadores con las 4 cartas muertas (están fuera de la partida). También puedes usar sobre ti este poder para resucitar tus otras 3 cartas. Al aplicar este despertar, la carta de La Alquimista muere para siempre y no podrá ser resucitada en toda la partida, ni con eventos ni con otros despertares.</p>
 					</div>
+
 					<button class="sub-accordion">Edwin-kun “El Otaku” 🌙</button>
 					<div class="sub-panel">
 						<p>Una persona adelantada a su tiempo. Iba por la calle vestido de personajes de anime, lo cual no estaba bien visto en el siglo XIV, y acabó en un manicomio. Tienes 3 cartas de haki (referencias a One Piece) de un uso cada una:</p>
@@ -964,19 +985,62 @@
 						<h3>Despertar: Haki del Rey</h3>
 						<p>Mientras esta carta esté viva, solo pueden levantarse por la noche los personajes principales. Todas las demás cartas no podrán levantarse. Además, recuperas el poder de tus otros hakis que ya hayas gastado. Para usarlo, coloca sobre la mesa la carta auxiliar del Haki del rey.</p>
 					</div>
-					<button class="sub-accordion">Bea “La Maestra Budú” 🌙</button>
+
+					<button class="sub-accordion">Bea “La Maestra Vudú” 🌙</button>
 					<div class="sub-panel">
-						<p>Lleva años perfeccionando la técnica del budú como instrumento de tortura. Cada turno, puedes hacer budú a una carta que absorberá todo el mal que le hagan a ese jugador ese turno (incluye muertes, acusación de John Flick, la guadaña de la parca, ataque por linchamiento, melancolía…).</p>
-						<p class="extra-power">Poder extra (si no es amotinado): Cuando esta carta muera, todos los efectos negativos que haya sufrido el jugador con la carta de “La Maestra Budú” esta ronda (en esta o en otras cartas) pueden aplicarse sobre otras cartas del tablero.</p>
+						<p>Lleva años perfeccionando la técnica del vudú como instrumento de tortura. Cada turno, puedes hacer vudú a una carta que absorberá todo el mal que le hagan a ese jugador ese turno (incluye muertes, acusación de John Flick, la guadaña de la parca, ataque por linchamiento, melancolía…).</p>
+						<p class="extra-power">Poder extra (si no es amotinado): Cuando esta carta muera, todos los efectos negativos que haya sufrido el jugador con la carta de “La Maestra Vudú” esta ronda (en esta o en otras cartas) pueden aplicarse sobre otras cartas del tablero.</p>
 						<h3>Despertar: Maldición final</h3>
-						<p>Mientras este despertar esté activo, cualquier jugador que aplique un efecto negativo sobre esta carta también deberá aplicarlo sobre una de sus propias cartas. Los efectos negativos incluyen la acusación de John Flick, la marca de La Parca, cualquier intento de matar la carta, etc. Si los amotinados intentan matar esta carta por la noche, tendrán que decidir por unanimidad qué amotinado perderá también una carta por la maldición. Si no hay consenso sobre qué carta de los amotinados debe morir, la Maestra Budú no podrá ser atacada y seguirá con vida. Si esta carta muere por linchamiento, los jugadores que la han linchado deberán hacer un segundo linchamiento y lincharse entre ellos para decidir qué carta sufre el efecto de la maldición. Para que este despertar surta efecto, debes anunciar en voz alta que tienes el despertar de la Maestra Budú.</p>
+						<p>Mientras este despertar esté activo, cualquier jugador que aplique un efecto negativo sobre esta carta también deberá aplicarlo sobre una de sus propias cartas. Los efectos negativos incluyen la acusación de John Flick, la marca de La Parca, cualquier intento de matar la carta, etc.</p>
+						<p>Si los amotinados intentan matar esta carta por la noche, tendrán que decidir por unanimidad qué amotinado perderá también una carta por la maldición. Si no hay consenso sobre qué carta de los amotinados debe morir, la Maestra Vudú no podrá ser atacada y seguirá con vida.</p>
+						<p>Si esta carta muere por linchamiento, los jugadores que la han linchado deberán hacer un segundo linchamiento y lincharse entre ellos para decidir qué carta sufre el efecto de la maldición.</p>
+						<p>Para que este despertar surta efecto, debes anunciar en voz alta que tienes el despertar de la Maestra Vudú.</p>
 					</div>
+
 					<button class="sub-accordion">Aitor “El Último Superviviente” 🌙</button>
 					<div class="sub-panel">
 						<p>La leyenda cuenta que este personaje mítico recorre cada noche los pasillos del manicomio, pero nadie ha sido capaz de verle la cara. Si esta carta llega a morir en las primeras 3 rondas, se acaba la partida y el jugador que la tenga gana al instante.</p>
 						<p class="extra-power">Poder extra (si no es amotinado): No lo necesita.</p>
 						<h3>Despertar: Instinto de Supervivencia</h3>
 						<p>Esta carta es inmortal las siguientes 3 rondas a la activación de su despertar, pero debes mostrar esta carta a todos los jugadores.</p>
+					</div>
+
+					<button class="sub-accordion">Andrés “El Relojero” 🌙</button>
+					<div class="sub-panel">
+						<p>Tiene una obsesión por el momento en que deben suceder las cosas y controla que los hechos del manicomio tengan lugar a su debido tiempo. Al principio de la partida, baraja 4 números del 1 al 4 y colócalos aleatoriamente y boca arriba debajo de tus cuatro cartas. Cuando ataquen a una de tus cartas, antes de revelarla se debe enseñar el número que tenía debajo. Si ya han muerto todas las cartas con un número inferior, dicha carta muere; en caso contrario, se deja el número a la vista y continúa con vida. Por tanto, para acabar por completo con el jugador que tenga El Relojero, hay que matar primero a la carta con el número 1, después al 2, 3 y 4 sucesivamente y en ese orden. Además, cada vez que se desvele un número, el relojero obtendrá un poder adicional (en función del número que se desvele) que podrá usar en su turno por la noche:</p>
+						<ul>
+							<li>1) Puedes levantar una carta o un objetivo de un jugador.</li>
+							<li>2) Puedes matar una carta.</li>
+							<li>3) Puedes eliminar de la mesa un modificador (Flecha de John Flick, guadaña de la parca, calavera de muerte, etc.). No puede usarse con modificadores de eventos ni despertares.</li>
+							<li>4) Puedes mover uno de los números de una de tus cartas que siga con vida a cualquier otra carta viva del tablero, la cual se regirá por las mismas normas que el resto de cartas con números. No puede haber una carta con 2 números simultáneamente.</li>
+						</ul>
+						<p>Aunque la carta de El Relojero muera o sea desactivada por melancolía u otro poder, el efecto de los números sigue activo el resto de la partida, pero ya no podrá levantarse a usar sus poderes adicionales por la noche.</p>
+						<p class="extra-power">Poder extra (si no es amotinado): Ninguno.</p>
+						<h3>Despertar: Control del tiempo</h3>
+						<p>Puedes controlar el tiempo dentro del manicomio, pero las leyes del universo te obligan a actuar dentro de unos límites que limitan tus acciones a 3 poderes de un solo uso cada uno:</p>
+						<ul>
+							<li><strong>Viaje al pasado:</strong> Puedes restablecer el tablero a como estaba la ronda anterior, justo después de los linchamientos. Este poder solamente afecta al estado de las cartas, que estaban vivas o muertas, pero no restaura los eventos o poderes que se hayan gastado en la última ronda ni restaura la posición anterior de los modificadores que hubiera sobre las cartas. Para emplear este poder, debes anunciar en voz alta que quieres un viaje al pasado después de los linchamientos.</li>
+							<li><strong>Detener el tiempo:</strong> Cada ronda puedes seleccionar a un jugador y marcarle con la carta auxiliar de Detener el tiempo. Dicho jugador no podrá actuar de ninguna manera durante la siguiente ronda (ni usar sus poderes por la noche, ni linchar, ni usar su rasgo de personalidad), pero tampoco podrá ser atacado en toda la ronda. Puedes elegir a cualquier jugador (incluido tú mismo).</li>
+							<li><strong>Viaje al futuro:</strong> Puedes ver distintos futuros alternativos de la partida, pero en todos ellos hay una constante común: el número de cartas se va reduciendo ronda tras ronda. En tu turno por la noche, debes acabar con una carta de cada jugador, incluido tú mismo. Sin embargo, ya que no tienes el poder de predecir el desenlace de la partida, no puedes atacar a aquellos jugadores que tengan una sola carta viva.</li>
+						</ul>
+					</div>
+
+					<button class="sub-accordion">María “La Médico” 🌙</button>
+					<div class="sub-panel">
+						<p>Su entrega total al estudio de la medicina le permite ayudar a los integrantes del manicomio en sus últimos momentos. Al final de cada noche, puedes ver una de las cartas que van a morir. Además, tienes 3 poderes adicionales, aunque solamente puedes usar uno cada ronda:</p>
+						<ul>
+							<li><strong>Carro de paradas:</strong> Puedes salvar una de las cartas que van a morir. Solamente puedes usarlo una vez por partida.</li>
+							<li><strong>Coma inducido:</strong> Puedes quitar la calavera de una de las cartas que van a morir y, a cambio, inducirle un coma poniendo sobre ella la carta auxiliar de Coma Inducido. Esa carta seguirá con vida hasta que sea atacada de nuevo, pero pierde todos sus poderes el resto de la partida. Puedes usarlo hasta 3 veces por partida, y puede haber varias cartas en coma simultáneamente en el tablero.</li>
+							<li><strong>Trasplante de órganos:</strong> Solo puedes aplicar este poder sobre la carta que hayas decidido ver de las que van a morir esa noche. Retira la calavera de esa carta y a cambio coloca sobre ella el icono auxiliar de Trasplante de Órganos. Dicha carta seguirá con vida, pero a partir de ese momento será “La Médico” la que se levante por la noche a usar el poder de esa carta en vez de su dueño original. Este poder solamente funciona con cartas que se levanten de noche. Puedes usar este poder tantas veces como quieras, pero solo puede haber un Trasplante de Órganos en el tablero. Si quieres crear un nuevo Trasplante, debes eliminar el anterior y colocar una calavera sobre esa carta en su lugar (ya que sin el Trasplante la carta no puede sobrevivir).</li>
+						</ul>
+						<p class="extra-power">Poder extra (si no es amotinado): Puedes usar el poder de Carro de paradas (salvar carta) hasta 3 veces por partida en vez de solamente 1.</p>
+						<h3>Despertar: Virus mortal</h3>
+						<p>Cansada de que nadie aprecie tu trabajo y el manicomio entero se vuelva en tu contra, decides liberar un virus mortal al que tú eres inmune. Comienza colocando un icono auxiliar de Virus sobre uno de los jugadores. Cada ronda, en el turno de La Médico, puedes hacer dos tareas (puedes usar ambas cada ronda):</p>
+						<ul>
+							<li><strong>Incrementar carga vírica:</strong> Puedes añadir un icono de Virus adicional sobre un jugador que ya esté infectado.</li>
+							<li><strong>Propagación del virus:</strong> Puedes infectar a un jugador que esté sentado al lado de otro que ya esté infectado. Una vez hayas infectado a todos los jugadores menos a ti, puedes sustituir este poder por un segundo uso de Incrementar carga vírica cada ronda.</li>
+						</ul>
+						<p>Cuando un jugador tenga dos iconos de Virus, La Médico puede retirar ambos y a cambio matar una de sus cartas. Si un jugador tiene 4 iconos de Virus, La Médico puede retirarlos y a cambio matar todas sus cartas a la vez. Para matar las cartas, simplemente sustituye los iconos de Virus por los iconos de Muerte (calaveras) en la carta o cartas que vayas a matar esa noche.</p>
 					</div>
 				</div>
 			</div>
@@ -1380,6 +1444,10 @@
 					<p class="faq-question"><strong>6) Si ha habido cambios de cartas entre jugadores, ¿cuál es la carta principal que debe tenerse en cuenta para aplicar el efecto de El Archivo o Lobotomía?</strong></p>
 					<p class="faq-answer">La carta principal de un jugador siempre será su mejor carta (1. Personaje principal, 2. Personaje secundario, 3. Acción principal, 4. Acción secundaria). En caso de empate entre dos o más cartas, se considera principal la que el jugador tuviera al inicio de la partida. En caso de que ninguna se tuviera originalmente, la carta principal será la primera por la izquierda entre las que están empatadas.</p>
 				</div>
+				<div class="faq-item">
+					<p class="faq-question"><strong>7) Debido a cartas que roban poderes, o que permiten usar de nuevo el poder de otras cartas, pueden aparecer varios modificadores iguales en el tablero de juego. ¿Cuál es el número máximo de modificadores iguales (de los que solamente debería haber 1 en circunstancias normales, como la flecha de John Flick, la guadaña de La Parca, las llamas de El Profeta…) que puede haber sobre el tablero simultáneamente?</strong></p>
+					<p class="faq-answer">El número máximo de modificadores iguales que puede haber sobre el tablero simultáneamente es de 2. Si algún poder permite añadir más de 2, no se puede aplicar el poder.</p>
+				</div>
 			</div>
 		</div>
 		
@@ -1549,17 +1617,19 @@
 			"Muerte dulce": "https://dhueper.github.io/Diseños%20cartas/Muerte dulce.jpg",
 			"Compañeros de celda (x3)": "https://dhueper.github.io/Diseños%20cartas/Compañeros de celda.jpg",
 			"Juego de azar": "https://dhueper.github.io/Diseños%20cartas/Juego de azar.jpg",
-			"Pablo “El Arquitecto”": "",
-			"Noe “Gas de la risa”": "",
-			"Clara “La Ludópata”": "",
-			"Nerea “La Chef”": "",
-			"David “El Saltamundos”": "",
-			"Ainhoa “La Médium”": "",
-			"David “El Cyborg”": "",
-			"Silvia “La Alquimista”": "",
-			"Edwin-kun “El Otaku”": "",
-			"Bea “La Maestra Budú”": "",
-			"Aitor “El Último Superviviente”": "",
+			"Pablo “El Arquitecto”": "", // Sin imagen disponible aún
+			"Noe “Gas de la risa”": "", // Sin imagen disponible aún
+			"Clara “La Ludópata”": "", // Sin imagen disponible aún
+			"Nerea “La Chef”": "", // Sin imagen disponible aún
+			"David “El Saltamundos”": "", // Sin imagen disponible aún
+			"Ainhoa “La Médium”": "", // Sin imagen disponible aún
+			"David “El Cyborg”": "", // Sin imagen disponible aún
+			"Silvia “La Alquimista”": "", // Sin imagen disponible aún
+			"Edwin-kun “El Otaku”": "", // Sin imagen disponible aún
+			"Bea “La Maestra Vudú”": "", // Sin imagen disponible aún
+			"Aitor “El Último Superviviente”": "", // Sin imagen disponible aún
+			"Andrés “El Relojero”": "", // Sin imagen disponible aún
+			"María “La Médico”": "", // Sin imagen disponible aún
 			"Responsabilidad": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Responsabilidad.jpg",
 			"Hostilidad": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Hostilidad.jpg",
 			"Melancolía": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Melancolia.jpg",
@@ -1572,20 +1642,20 @@
 
 		const objectives = {
 			"normal": {
-				"Daniel": { title: "Amotinado", description: "Acabar con todas las cartas del resto de jugadores." },
-				"Nathaniel": { title: "Amotinado", description: "Acabar con todas las cartas del resto de jugadores." },
-				"Richard Dadd": { title: "Renegado", description: "Finge ayudar a los amotinados, pero ser el único superviviente." },
-				"Ali, “la muda”": { title: "Interno", description: "Acabar con las cartas de los amotinados." },
-				"Larry Owls, “el sonámbulo”": { title: "Interno", description: "Acabar con las cartas de los amotinados." },
-				"Mary Firth": { title: "Interno", description: "Acabar con las cartas de los amotinados." },
-				"Krugman “El Director”": { title: "Director", description: "Si vive, acabar con todos los personajes principales; si muere, con los secundarios." }
+				"Daniel": { title: "Amotinado", description: "Acaba con todas las cartas del resto de jugadores que no sean amotinados." },
+				"Nathaniel": { title: "Amotinado", description: "Acabar con todas las cartas del resto de jugadores que no sean amotinados." },
+				"Richard Dadd": { title: "Renegado", description: "Finges ayudar a los amotinados, pero buscas ser el único superviviente." },
+				"Ali, “la muda”": { title: "Interno", description: "Acaba con las cartas de los amotinados." },
+				"Larry Owls, “el sonámbulo”": { title: "Interno", description: "Acaba con las cartas de los amotinados." },
+				"Mary Firth": { title: "Interno", description: "Acaba con las cartas de los amotinados." },
+				"Krugman “El Director”": { title: "Director", description: "Si vives, debes acabar con todos los personajes principales; si mueres, con los secundarios." }
 			},
 			"personalizado": {
-				"Amotinado": { title: "Amotinado", description: "Acabar con todas las cartas del resto de jugadores." },
-				"Interno": { title: "Interno", description: "Desvelar a todos los amotinados (y al renegado si hay)." },
-				"Renegado": { title: "Renegado", description: "Finge ayudar a los amotinados, pero ser el último en pie." },
-				"Traidor": { title: "Traidor", description: "Elegir un bando (Internos/Amotinados) y hacer que pierda." },
-				"Inquisidor": { title: "Inquisidor", description: "Descubrir los secretos: Siamesas, Compañeros de celda, Pacto de sangre y objetivos de todos." }
+				"Amotinado": { title: "Amotinado", description: "Acaba con todas las cartas del resto de jugadores que no sean amotinados." },
+				"Interno": { title: "Interno", description: "Desvela a todos los amotinados (y al renegado si lo hay)." },
+				"Renegado": { title: "Renegado", description: "Finges ayudar a los amotinados, pero buscas ser el último en pie." },
+				"Traidor": { title: "Traidor", description: "Elige un bando (Internos/Amotinados) y haz que pierda." },
+				"Inquisidor": { title: "Inquisidor", description: "Descubre los secretos del manicomio: Siamesas, Compañeros de celda, carta de Pacto de sangre y objetivos de todos." }
 			}
 		};
 
@@ -1617,8 +1687,8 @@
 				p1: mode === "normal" ? 
 					["Daniel", "Nathaniel", "Richard Dadd", "Ali, “la muda”", "Larry Owls, “el sonámbulo”", "Mary Firth", "Krugman “El Director”"] :
 					["Pablo “El Arquitecto”", "Noe “Gas de la risa”", "Clara “La Ludópata”", "Nerea “La Chef”", "David “El Saltamundos”", 
-					 "Ainhoa “La Médium”", "David “El Cyborg”", "Silvia “La Alquimista”", "Edwin-kun “El Otaku”", "Bea “La Maestra Budú”", 
-					 "Aitor “El Último Superviviente”"],
+					 "Ainhoa “La Médium”", "David “El Cyborg”", "Silvia “La Alquimista”", "Edwin-kun “El Otaku”", "Bea “La Maestra Vudú”", 
+					 "Aitor “El Último Superviviente”", "Andrés “El Relojero”", "María “La Médico”"],
 				p2: ["El archivo", "John Flick", "Arthur", "Wakerfield", "Siamesas (x2)", "La parca"],
 				a1: ["Pacto de sangre", "Terapia – electroshock", "Terapia – opio y barbitúricos", "Terapia – Lobotomía", "Infecto de rabia", "Manía persecutoria", "Profeta"],
 				a2: ["El Cataléptico", "Amnesia", "Muerte dulce", "Compañeros de celda (x3)", "Juego de azar"]
