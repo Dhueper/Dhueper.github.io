@@ -286,14 +286,16 @@
 			flex-wrap: wrap;
 			justify-content: center;
 			gap: 0.5rem;
-			margin-bottom: 1rem;
+			margin-bottom: 5rem;
 		}
 		.card-images .card-wrapper, .personality-image .card-wrapper {
 			width: 100px;
 			height: 100px;
-			overflow: hidden;
 			border-radius: 5px;
 			border: 1px solid #ccc;
+			display: inline-flex;
+		    flex-direction: column;
+		    align-items: center;
 		}
 		.card-images img, .personality-image img {
 			width: 100%;
@@ -311,6 +313,59 @@
 		.objective select.card-select.visible {
 			display: block !important;
 		}
+
+		.card-groups{
+		  margin-top:.35rem;
+		  display:flex;
+		  flex-wrap:wrap;
+		  gap:.35rem;
+		  justify-content:center;
+		}
+
+		.group-badge{
+		  padding: 3px 8px;
+		  border-radius: 9999px;
+		  border:1px solid transparent;
+		  font-size:.8rem;
+		  font-weight: 600;
+		  line-height:1.2;
+		  background:#F4F4F5; /* gris muy claro como fallback */
+		}
+		
+		.card-placeholder{
+		  min-width: 140px;
+		  min-height: 200px;
+		  display:flex;
+		  align-items:center;
+		  justify-content:center;
+		  padding: .5rem;
+		  text-align:center;
+		  border:1px dashed #D4D4D8;
+		  border-radius: .75rem;
+		  background:#FAFAFA;
+		  font-weight:600;
+		}
+
+
+		/* Paleta aproximada solicitada */
+		.group-muerte{       color:#8B0000; background:#FCE8E8; border-color:#F5B5B5; } /* rojo oscuro */
+		.group-proteccion{   color:#0EA5E9; background:#E0F2FE; border-color:#B6E0FE; } /* azul cielo */
+		.group-adivinacion{  color:#16A34A; background:#DCFCE7; border-color:#A7F3D0; } /* verde hierba */
+		.group-plot{         color:#EA580C; background:#FFF7ED; border-color:#FED7AA; } /* naranja */
+
+		/* Arcos activos: detalles desplegables */
+		.rapid-mode .arcs-list { padding-left: 0; }
+		.rapid-mode .arcs-list li { list-style: none; }
+		.rapid-mode .arc-detail summary{
+		  cursor:pointer;
+		  font-weight:700;
+		}
+		.rapid-mode .arc-power{
+		  margin-top:.4rem;
+		  font-size:.95rem;
+		  opacity:.9;
+		}
+
 
 		/* Media Queries para smartphones (menos de 768px) */
 		@media (max-width: 768px) {
@@ -515,6 +570,35 @@
 					<li><strong>7 jugadores:</strong> Internos (3), Amotinados (2), Renegado (1), Inquisidor (1)</li>
 				</ul>
 			</div>
+			<!-- NUEVO acordeón para el modo rápido -->
+			<button class="accordion"><i class="fas fa-bolt icon"></i>Bandos Principales (Modo Rápido)</button>
+			<div class="panel">
+				<p>En el modo de Partidas Rápidas, el objetivo de cada jugador depende de la carta de Personaje Principal que posea:</p>
+				<ul>
+					<li><strong>Amotinados (Daniel, Nathaniel y Richard Dadd):</strong> Buscan acabar con todas las cartas del tablero del resto de jugadores. <em>Daniel es el líder del equipo.</em></li>
+					<li><strong>Internos (Ali “la muda”, Larry Owls “el sonámbulo” y Mary Firth):</strong> También deben acabar con todas las cartas del tablero del resto de jugadores. <em>Mary Firth es la líder del equipo.</em></li>
+					<li><strong>El Director (Krugman):</strong> Busca mantener el equilibrio en el manicomio. Para ganar debe eliminar a los líderes de los otros dos bandos.</li>
+				</ul>
+				<p><strong>Los Líderes:</strong> Daniel (amotinado), Mary Firth (interna) y Krugman (director) son líderes. En la primera noche, los líderes conocen a los miembros de su equipo. Además:</p>
+				<ul>
+					<li>Los líderes de amotinados e internos <em>pierden su poder original</em>, pero obtienen tres poderes adicionales que pueden usar cada noche:
+						<ol>
+							<li><strong>Vetos:</strong> Pueden vetar un grupo de cartas (muerte, protección, adivinación, plot-twist) del bando rival.</li>
+							<li><strong>Robo de evento:</strong> Pueden robar una carta de evento y usarla esa noche.</li>
+							<li><strong>Robo de personalidad:</strong> Pueden asignar una carta de personalidad a cualquier jugador (incluso ellos mismos). Si su bando ya tiene una personalidad, deben asignarla a otro bando.</li>
+						</ol>
+					</li>
+					<li>El Director mantiene su poder original y solo gana los poderes 2 y 3.</li>
+					<li>El orden en el que actúan los líderes cambia en cada ronda:
+						<ul>
+							<li>1ª ronda: Amotinados → Internos → Director</li>
+							<li>2ª ronda: Internos → Director → Amotinados</li>
+							<li>3ª ronda: Director → Amotinados → Internos</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+
 		</div>
 
         <!-- Sección Preparación del Juego -->
@@ -527,6 +611,18 @@
                 <li>Colocar las cartas boca abajo en orden (posiciones 1-4).</li>
                 <li>Preparar mazos de eventos y auxiliares en el centro.</li>
             </ul>
+			<!-- NUEVO acordeón para la preparación en partidas rápidas -->
+			<button class="accordion"><i class="fas fa-bolt icon"></i>Preparación (Modo Rápido)</button>
+			<div class="panel">
+				<p>En el modo de Partidas Rápidas, la preparación es diferente al modo normal:</p>
+				<ul>
+					<li>A cada jugador se le reparte <strong>1 carta de Personaje Principal</strong>, que permanecerá oculta hasta que muera.</li>
+					<li>Al inicio de cada ronda se barajan las <strong>cartas consumibles</strong> y se reparten <strong>3 a cada jugador</strong>, que mantendrán en la mano.</li>
+					<li>El resto de preparación (mazos de eventos y auxiliares) se coloca como en el modo normal.</li>
+				</ul>
+				<p><em>Recordatorio:</em> Los líderes de cada bando conocen a sus compañeros en la primera noche.</p>
+			</div>
+
         </div>
 
         <!-- Sección La Partida -->
@@ -583,7 +679,7 @@
 						<label><input type="checkbox" checked data-turn="12"> 12) John Flick</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="13"> 13) Profeta</label>
+						<label><input type="checkbox" checked data-turn="13"> 13) El profeta</label>
 					</li>
 					<li>
 						<label><input type="checkbox" checked data-turn="14"> 14) Muerte dulce</label>
@@ -701,7 +797,7 @@
 						<label><input type="checkbox" checked data-turn="20"> 20) John Flick</label>
 					</li>
 					<li>
-						<label><input type="checkbox" checked data-turn="21"> 21) Profeta</label>
+						<label><input type="checkbox" checked data-turn="21"> 21) El profeta</label>
 					</li>
 					<li>
 						<label><input type="checkbox" checked data-turn="22"> 22) Muerte dulce</label>
@@ -750,6 +846,109 @@
 					</li>
 				</ul>
 			</div>
+			<button class="accordion"><i class="fas fa-list-ol icon"></i>Turnos de la Noche (Modo Rápido)</button>
+			<div class="panel">
+				<p>Guía para el narrador (modo normal): Al comenzar la noche, todos cierran los ojos y el narrador indica los turnos en este orden. Usa las casillas para desactivar turnos que ya no apliquen.</p>
+				<button id="reset-turns" style="margin: 10px 0; padding: 5px 10px; background-color: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Restablecer Lista</button>
+				<ul id="night-turns" style="list-style: none; padding: 0;">
+					<li>
+						<label><input type="checkbox" checked data-turn="1"> 1) Preguntas al narrador <span style="color: #e74c3c;">(solo con Cuentacuentos, no primera ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="2"> 2) Los líderes conocen a sus equipos <span style="color: #e74c3c;">(solo primera ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="3"> 3) Arcos </label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="4"> 4) Las Siamesas se conocen <span style="color: #e74c3c;">(solo la primera vuelta de cada ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="5"> 5) Los Compañeros de celda se conocen <span style="color: #e74c3c;">(solo la primera vuelta de cada ronda)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="6"> 6) Terapia - lobotomía <span style="color: #e74c3c;">(solo de noche, comprobar si acertó a un líder)</span> </label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="7"> 7) Líderes y eventos <span style="color: #e74c3c;">(solo de noche)</span></label>
+					</li>
+					<li style="padding-left: 20px;">
+						<label><input type="checkbox" checked> <span style="color: #3498db;">- Se despiertan todos los jugadores para ver qué grupos han vetado los líderes y qué personalidades hay en juego. </span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="8"> 8) Melancolía </label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="9"> 9) El director <span style="color: #e74c3c;">(no primera ronda, anuncia poder)</span></label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="10"> 10) Pacto de sangre</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="11"> 11) Larry Owls “el sonámbulo”</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="12"> 12) Ali “la muda”</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="13"> 13) El archivo</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="14"> 14) El profeta</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="15"> 15) Manía persecutoria</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="16"> 16) Infecto de rabia</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="17"> 17) Arthur</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="18"> 18) La parca</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="19"> 19) Compañeros de celda</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="20"> 20) John Flick</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="21"> 21) Muerte dulce</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="22"> 22) Amotinados</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="23"> 23) Terapia electroshock</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="24"> 24) Terapia opio y barbitúricos</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="25"> 25) Terapia lobotomía</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="26"> 26) Siamesas</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="27"> 27) Cataléptico</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="28"> 28) Juego de azar</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="29"> 29) Paciencia</label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="30"> 30) Neuroticismo </label>
+					</li>
+					<li>
+						<label><input type="checkbox" checked data-turn="31"> 31) Amnesia</label>
+					</li>
+				</ul>
+			</div>
 		</div>
 		
 
@@ -774,6 +973,29 @@
 				<p>La carta de objetivo se revelará a la vista de todos cuando muera la carta principal de cada jugador. En el caso de que un jugador no tenga ninguna carta principal (por efecto del Cirujano, Wakerfield o Ciborg), deberá revelar su objetivo cuando muera la mejor de las cartas que tenga en su poder. En caso de tener varias cartas del mismo grupo (personaje principal, personaje secundario, acción principal y acción secundaria), se revelará el objetivo cuando muera alguna de las cartas del mejor grupo disponible.</p>
 				<p>Consulta los objetivos específicos y su distribución en la sección "Objetivo del Juego".</p>
 			</div>
+			<!-- NUEVO acordeón para el modo rápido -->
+			<button class="accordion"><i class="fas fa-bolt icon"></i>Modo Rápido</button>
+			<div class="panel">
+				<p>El modo de <strong>Partidas Rápidas</strong> está diseñado para partidas más cortas e intensas:</p>
+				<ul>
+					<li>Las partidas duran <strong>3 rondas</strong>. Si nadie gana en ese tiempo, vence el equipo con más vidas de media (ajustado al número de jugadores por equipo).</li>
+					<li>Cada jugador recibe solo <strong>1 carta de Personaje Principal con 3 vidas</strong> y 3 cartas consumibles al inicio de cada ronda.</li>
+					<li>Cada ronda consta de <strong>3 vueltas</strong>: una de noche y dos de día. La secuencia varía según la ronda:
+						<ul>
+							<li>Ronda 1: Noche – Día – Día</li>
+							<li>Ronda 2: Día – Noche – Día</li>
+							<li>Ronda 3: Día – Día – Noche</li>
+						</ul>
+					</li>
+					<li>En las vueltas nocturnas, los jugadores aplican sus poderes en secreto (como en el modo normal).</li>
+					<li>En las vueltas diurnas, las cartas jugadas se revelan a todos los jugadores, lo que aumenta el riesgo de exponer el bando propio.</li>
+					<li>Al final de cada ronda se realiza un <strong>linchamiento</strong>, que resta una vida a un jugador, y se eliminan los jugadores que hayan perdido todas sus vidas.</li>
+					<li><strong>Líderes:</strong> Daniel, Mary Firth y Krugman actúan con reglas especiales explicadas en la sección “Objetivo del Juego”.</li>
+					<li><strong>Cartas consumibles:</strong> Algunas cartas tienen poderes distintos al modo normal. Consulta la sección “Cartas” para ver sus diferencias.</li>
+					<li><strong>Arcos:</strong> Al inicio de cada ronda, los jugadores pueden activar sinergias especiales con combinaciones concretas de 3 cartas consumibles.</li>
+				</ul>
+			</div>
+
 		</div>
 
         <!-- Sección Cartas -->
@@ -789,6 +1011,11 @@
 						<p>Era un hombre violento que al llegar al manicomio se convirtió en el líder del motín. Como líder, tras atacar cada noche con los amotinados puedes volver a hacerlo en solitario. En caso de que cayeras en el intento, Richard Dadd ocuparía tu lugar atacando por separado después del ataque grupal.</p>
 						<h3>Despertar</h3>
 						<p>En tu turno, y una sola vez, puedes seleccionar a un jugador y marcarle con la carta auxiliar de despertar de Daniel. Desde ese momento, el objetivo del jugador cambia y debe tratar de que los amotinados ganen la partida. Sin embargo, los internos no necesitan acabar con el nuevo amotinado para poder ganar.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Daniel es el <em>líder de los amotinados</em>. No puedes levantarte a matar por la noche junto al resto de amotinados, pero dispones de poderes especiales de líder (veto de grupo, robo de evento y robo de personalidad).
+						</div>
 					</div>
 					<button class="sub-accordion">Nathaniel 🌙</button>
 					<div class="sub-panel">
@@ -796,6 +1023,11 @@
 						<p>Bedel que llevado por el ansia de poder y promesas de recompensa en el exterior colabora con los amotinados. Sigues el plan de Daniel para destruirlos a todos y atacas con los amotinados cada noche.</p>
 						<h3>Despertar</h3>
 						<p>En el turno de los amotinados, y una sola vez, tras comunicar a tus compañeros que tienes el despertar, puedes matar a la mitad de las cartas del tablero que continúen con vida y no pertenezcan a un jugador que tenga una carta de amotinado.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Como en el modo normal de juego, te levantas a atacar con los amotinados cada noche.
+						</div>
 					</div>
 					<button class="sub-accordion">Richard Dadd 🌙</button>
 					<div class="sub-panel">
@@ -803,6 +1035,11 @@
 						<p>Ingresó en el manicomio convencido de que su padre es el diablo. En esta institución encontró su propio infierno. Finges que ayudas a los amotinados y atacas con ellos cada noche, pero tu verdadero plan es ser el único superviviente. Si Daniel cae, ocuparías su lugar atacando por separado después del ataque grupal.</p>
 						<h3>Despertar</h3>
 						<p>A la vista de todos, debes desvelar que eres Richard Dadd, enseñando a todos tu carta. Desde ese momento, únicamente podrás morir por ataques indirectos (infecto de rabia, compañeros de celda, juego de azar…) o por acción del leproso.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Como en el modo normal de juego, te levantas a atacar con los amotinados cada noche.
+						</div>
 					</div>
 					<button class="sub-accordion">Ali, “la muda” 🌙</button>
 					<div class="sub-panel">
@@ -810,6 +1047,11 @@
 						<p>Tienes un sueño ligero y si quieres puedes levantarte a espiar a los amotinados cada noche, pero si te descubren irán a por ti. Además, puedes levantarte una sola vez en el turno de un personaje principal o secundario (a elegir uno, excepto Siamesas) para descubrir su identidad, aunque no puedes dejarte ver.</p>
 						<h3>Despertar</h3>
 						<p>Puedes levantarte a espiar en todos los turnos de la noche, incluso estar despierta como si fueras el narrador. Además, el jugador que mate esta carta perderá el voto en los linchamientos el resto de la partida. Si esta carta muere por la acción de varios jugadores (varios amotinados la atacan o varias personas la linchan), entonces puedes decidir cuál de las personas que te han atacado perderá su voto.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Puedes levantarte y ver una carta de Personaje Principal de otro jugador.
+						</div>
 					</div>
 					<button class="sub-accordion">Larry Owls, “el sonámbulo” 🌙</button>
 					<div class="sub-panel">
@@ -817,6 +1059,11 @@
 						<p>Este personaje deambula cada noche por los pasillos de la institución y por ello es capaz de ver cosas. Cada noche en tu turno puedes ver la identidad de una carta del tablero a tu elección.</p>
 						<h3>Despertar</h3>
 						<p>En tu turno, levanta una carta de un jugador como cada noche. A la mañana siguiente, antes de revelar las muertes, anuncia que tienes el despertar de “el sonámbulo” y muestra ante todos los jugadores la carta que has visto por la noche. Además, si Larry Owls ha muerto por la noche, también lo hará la carta que has enseñado a todos. No puedes repetir jugador hasta que no hayas mostrado una carta de todos los demás jugadores, pero sí puedes repetir cartas que hubieras visto en rondas anteriores.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Puedes levantarte y ver una carta de Personaje Principal de otro jugador.
+						</div>
 					</div>
 					<button class="sub-accordion">Mary Firth 🌙</button>
 					<div class="sub-panel">
@@ -824,6 +1071,11 @@
 						<p>Carterista y maestra del disfraz. Durante tu turno elige a un jugador (el narrador le avisará sin decir su nombre y sin despertarle) y, si es un amotinado (Daniel, Nathaniel o Richard Dadd), te lo hará saber, asintiendo o negando con la cabeza, y no podrá levantarse con los amotinados esa noche. Además, podrás elegir si quieres levantarte en su lugar fingiendo ser un amotinado o no. Puedes suplantar una sola vez a cada amotinado.</p>
 						<h3>Despertar</h3>
 						<p>Si aciertas al señalar a un amotinado, además de poder suplantarle esa ronda, dicho amotinado no podrá volver a levantarse para matar el resto de la partida. Solo puedes usarlo una vez, pero puedes señalar a cualquier jugador, incluso si ya le habías señalado previamente. Para usarlo, debes anunciar en voz alta que tienes el despertar de Mary Firth.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Mary Firth es la <em>líder de los internos</em>. No puedes levantarte a usar tu poder por la noche, pero dispones de poderes especiales de líder (veto de grupo, robo de evento y robo de personalidad).
+						</div>
 					</div>
 					<button class="sub-accordion">Krugman “El Director” 🌙</button>
 					<div class="sub-panel">
@@ -831,6 +1083,12 @@
 						<p>Trata de evitar que reine el caos infiltrándose entre los presos. Para ello, cada noche puedes tomar el poder de una carta que ya esté muerta y emplearlo esa ronda, pero no podrás repetir carta. Usa la carta auxiliar del director para indicar de qué carta vas a coger el poder esa noche. El narrador te anunciará en la ronda correspondiente a la carta muerta para que te despiertes. Si tomas el poder de un amotinado, primero se despertarán los amotinados para matar y, después, se levantará el director para matar él solo. Si esta carta está con vida, debes conseguir que mueran todas las cartas de personajes principales del resto de jugadores para ganar. Si esta carta muere, aún puedes ganar si consigues que mueran todas las cartas de personaje secundario del resto de jugadores.</p>
 						<h3>Despertar</h3>
 						<p>Cada vez que tomes prestado un poder de una carta, podrás usar el despertar correspondiente a dicha carta.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							En tu turno, puedes recuperar una de las cartas consumibles del mazo de descartes para usarla esa noche. Además, en la segunda ronda, si esa carta
+							tiene sinergias con tus otras dos cartas de la mano, puedes activar el arco correspondiente, aunque tendrás que enseñar tus 3 cartas.
+						</div>
 					</div>
 				</div>
 				<button class="sub-accordion">Grupo Secundario</button>
@@ -841,6 +1099,11 @@
 						<p>Es uno de los encargados del manicomio y guarda la llave del archivo con las historias clínicas. Cada noche, puedes señalar a uno de los jugadores (el narrador le avisará sin decir su nombre y sin despertarle) y, si es un amotinado, debe indicarte la posición de su carta de amotinado con un número del 1 al 4 (de izquierda a derecha). En caso de fallar, el poder del archivo se pierde.</p>
 						<h3>Despertar</h3>
 						<p>Recuperas tu poder (en caso de que lo hubieras perdido) y no lo volverás a perder. Ahora, cada vez que selecciones a un jugador (sea amotinado o no) debe indicarte la posición de su carta de personaje principal. Además, dicho jugador no puede realizar ninguna acción contra ti a lo largo de toda esa ronda completa (incluido día y noche). Puedes seleccionar una vez a cada jugador desde que actives el despertar. Para usarlo debes anunciar en voz alta que tienes el despertar de El archivo.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Puedes ver una carta de Personaje Principal de otro jugador.
+						</div>
 					</div>
 					<button class="sub-accordion">John Flick 🌙</button>
 					<div class="sub-panel">
@@ -848,6 +1111,12 @@
 						<p>Actúa como un juez entre los presos del manicomio y puede influir en sus decisiones. Cada noche, puedes acusar a una carta para que tenga un voto adicional en el linchamiento al día siguiente. Para ello, emplea la carta auxiliar de John Flick.</p>
 						<h3>Despertar</h3>
 						<p>La carta que señales cada noche, será la que muera en el linchamiento en caso de que el jugador acusado tenga mayoría de votos en contra (no es necesario hacer una segunda votación para decidir qué carta del jugador muere). Además, John Flick se vuelve inmune a muerte por linchamiento el resto de la partida. Sin embargo, deberás anunciar que tienes el despertar para que surja efecto.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Al igual que en el modo normal de juego, puedes acusar a una carta para que tenga un voto adicional en el linchamiento al final de la ronda. 
+							Para ello, emplea la carta auxiliar de John Flick. El jugador no se ve afectado por este indicador durante linchamientos provocados por Amnesia.
+						</div>
 					</div>
 					<button class="sub-accordion">Arthur 🌙</button>
 					<div class="sub-panel">
@@ -855,6 +1124,12 @@
 						<p>Es un amable gigante con pocas luces, pero con un gran corazón. Te encerraron por tu aspecto grotesco, pero quien goza de tu amistad sabe que no eres ningún monstruo. Cada noche, pon una carta bajo tu protección (solamente el narrador y tú sabréis cuál es), pero no podrás repetir carta dos rondas consecutivas. Tras el turno de los amotinados, dicha carta no muere en el caso de haber sido atacada.</p>
 						<h3>Despertar</h3>
 						<p>Esta carta se vuelve inmune al ataque de los amotinados (protección constante). Además, puedes seguir protegiendo una carta adicional cada noche en tu turno.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Puedes poner un escudo sobre una carta de un jugador, que desaparecerá al ser atacado por primera vez o al finalizar la ronda. 
+							Para ello, usa la carta auxiliar de escudo.
+						</div>
 					</div>
 					<button class="sub-accordion">Wakerfield 🌙</button>
 					<div class="sub-panel">
@@ -862,6 +1137,13 @@
 						<p>Encerrada por su ideología, va contra el sistema y está dispuesta a sacrificarse ante una condena injusta. Si muere una carta del tablero, antes de que sea mostrada a todos puedes decidir si quedarte con ella y que muera Wakerfield en su lugar.</p>
 						<h3>Despertar</h3>
 						<p>Puedes mirar qué cartas son las que van a morir antes de decidir si quieres salvar una y que muera Wakerfield en su lugar. Además, al quedarte con una carta, puedes usar el despertar que tenga dicha carta.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Puedes copiar el efecto de otra carta que tengas en la mano (o hayas usado esa ronda) durante una vuelta. Se consume del mismo modo que cualquier otra carta e imita
+							perfectamente el poder de la carta que se quiera, pero debes enseñar al resto de jugadores la carta que quieres copiar. Además, es posible activar algunos arcos al copiar el
+							efecto de una de tus otras dos cartas.
+						</div>
 					</div>
 					<button class="sub-accordion">Siamesas (x2) 🌙</button>
 					<div class="sub-panel">
@@ -869,6 +1151,13 @@
 						<p>Unidas desde su nacimiento, son inseparables y se protegen mutuamente. Las siamesas solo pueden morir si ambas cartas son atacadas simultáneamente (el mismo día o la misma noche). Si solamente una de ellas es atacada, el ataque fracasa y continúa con vida. Los jugadores que tengan las siamesas se conocerán durante la primera noche, pero no sabrán qué carta del otro jugador es la siamesa.</p>
 						<h3>Despertar</h3>
 						<p>Para que una siamesa pueda morir, la carta que se encuentre en la misma posición del jugador que tenga la otra siamesa debe estar muerta. En caso contrario, la siamesa permanece con vida, incluso si ambas siamesas son atacadas simultáneamente.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Unidas desde su nacimiento, se conocen al comienzo de cada ronda. Puedes elegir entre dos poderes que se pueden aplicar a los
+							jugadores que cuenten con una carta de siamesas (incluyéndose a uno mismo): 
+							ver una carta de Personaje Principal, o curar una vida que se haya perdido esa ronda (retirar un icono auxiliar de muerte).
+						</div>
 					</div>
 					<button class="sub-accordion">La parca 🌙</button>
 					<div class="sub-panel">
@@ -876,6 +1165,13 @@
 						<p>La encarnación de la muerte, dedicada a cortar el hilo de la vida de los mortales. Cada noche, selecciona una carta (usando la carta auxiliar de la parca) y todos deberán tratar de acabar con ella, pero no podrás seleccionar la misma carta dos rondas consecutivas. Si desobedecen tus designios dos rondas seguidas, la siguiente noche te levantarás a matar a alguien y nadie más podrá quitar la vida esa noche.</p>
 						<h3>Despertar</h3>
 						<p>Si desobedecen tus designios una sola ronda (en vez de dos), la siguiente noche te levantarás a matar a alguien y nadie más podrá quitar la vida esa noche. Además, tienes un turno adicional al final de cada noche donde podrás comprobar si han obedecido tus designios. Cada noche que te desobedezcan, puedes cambiar la posición de las fichas de muerte que haya en el tablero, pero solo entre las cartas de los jugadores que han sido atacados (no puedes cambiar una muerte de un jugador a otro distinto). Sin embargo, deberás anunciar que tienes el despertar para que surja efecto.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Selecciona una carta (usando la carta auxiliar de la parca) y todos deberán tratar de acabar con ella. Si el jugador marcado por La parca no es atacado
+							durante toda la vuelta, puedes mover un icono auxiliar de muerte de cualquier carta a la que habías marcado. En caso de que nadie haya sido atacado esa vuelta, el jugador
+							marcado por la parca pierde una vida. A la hora de mover los iconos de daño, solo es posible modificar aquellos puestos durante esa misma vuelta.
+						</div>
 					</div>
 				</div>
 				<!-- El resto de "Cartas Personalizadas (Modo Alternativo)" -->
@@ -1071,6 +1367,12 @@
 						<p>Esta carta solo podrá morir si alguno de los jugadores que han vinculado sus destinos ha muerto previamente. Si solo queda en juego esta carta y las de los jugadores que comparten el vínculo, también se considera que han ganado la partida.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">Esta carta solo podrá morir si alguno de los jugadores que han vinculado sus destinos ha muerto previamente (no cambia su Despertar).</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Permite establecer un vínculo entre dos jugadores durante una vuelta. Durante esa vuelta, cualquier icono o efecto que se le aplique a
+							uno de los dos jugadores le afectará también al otro.
+						</div>
 					</div>
 					<button class="sub-accordion">Terapia – electroshock 🌙</button>
 					<div class="sub-panel">
@@ -1081,6 +1383,11 @@
 						<p>Puedes acabar con la vida de una de las cartas de un jugador de forma inevitable (no puede ser salvada). Para ello, emplea la carta auxiliar de muerte inevitable.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">Puedes salvar la vida a una de las cartas que estén muertas, incluso si murieron hace varias rondas.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Puedes acabar con una vida de la carta de un jugador. Para ello, emplea la carta auxiliar de muerte.
+						</div>
 					</div>
 					<button class="sub-accordion">Terapia – opio y barbitúricos 🌙</button>
 					<div class="sub-panel">
@@ -1091,6 +1398,11 @@
 						<p>Puedes salvar la vida a una de las cartas que estén muertas, incluso si murieron hace varias rondas. Para ello, emplea la carta auxiliar de resucitar.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">Puedes acabar con la vida de una de las cartas de un jugador de forma inevitable (no puede ser salvada).</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Puedes salvar la vida a una de las cartas que hayan sido atacadas esa ronda. Para ello, retira la carta auxiliar de muerte de una de las cartas.
+						</div>
 					</div>
 					<button class="sub-accordion">Terapia – Lobotomía 🌙</button>
 					<div class="sub-panel">
@@ -1101,6 +1413,12 @@
 						<p>El jugador que cambia de bando no pierde el derecho a voto en los linchamientos.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">El jugador que cambia de bando no pierde el derecho a voto en los linchamientos (no cambia su Despertar).</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Coloca la carta auxiliar de lobotomía sobre una carta de personaje de un jugador. Si el jugador afectado es un líder de uno de los bandos (o
+							el director), la siguiente noche el propietario de lobotomía se levanta en el turno de dicho líder en su lugar para usar sus poderes especiales.
+						</div>
 					</div>
 					<button class="sub-accordion">Infecto de rabia 🌙</button>
 					<div class="sub-panel">
@@ -1111,6 +1429,12 @@
 						<p>El amotinado más cercano por tu izquierda perderá la vida inmediatamente.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">El amotinado más cercano por tu derecha perderá la vida inmediatamente.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							En tu turno, coloca la carta auxiliar de infecto de rabia sobre un jugador cualquiera (incluido uno mismo). Si el jugador marcado sufre daño a lo largo
+							de la vuelta; al comienzo de la siguiente, el primer jugador por la izquierda perteneciente a un bando distinto al que tiene la marca de infecto de rabia pierde una vida.
+						</div>
 					</div>
 					<button class="sub-accordion">Manía persecutoria 🌙</button>
 					<div class="sub-panel">
@@ -1121,8 +1445,14 @@
 						<p>Puedes llevarte contigo a la tumba dos cartas del tablero a tu elección.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">Al morir, puedes salvar la vida a una de las cartas que estén muertas, incluso si murieron hace varias rondas (esta carta tiene prioridad al morir si varias cartas son atacadas a la vez).</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							En tu turno, coloca la carta auxiliar de manía persecutoria sobre un jugador cualquiera (incluido uno mismo). Si el jugador marcado
+							sufre daño a lo largo de la vuelta, al comienzo de la siguiente puede quitar una vida de una carta principal de cualquier jugador.
+						</div>
 					</div>
-					<button class="sub-accordion">Profeta 🌙</button>
+					<button class="sub-accordion">El profeta 🌙</button>
 					<div class="sub-panel">
 						<img src="https://dhueper.github.io/Diseños%20cartas/El profeta.jpg" alt="Profeta" class="card-image">
 						<p>Tienes poderes sobrenaturales y visiones divinas, pero nadie cree en tus palabras. Para demostrar tu poder, selecciona dos cartas de un mismo jugador, una viva y una muerta. Cuando la carta que aún vive muera, la que está muerta resucitará. Para seleccionar ambas cartas, usa las cartas auxiliares del profeta.</p>
@@ -1131,6 +1461,12 @@
 						<p>Las dos cartas que selecciones pueden pertenecer a jugadores diferentes.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">Las dos cartas que selecciones pueden pertenecer a jugadores diferentes (no cambia su Despertar).</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							En tu turno, coloca la carta auxiliar del profeta sobre un jugador cualquiera (incluido uno mismo). Si el jugador marcado sufre daño a lo largo
+							de la vuelta, al comienzo de la siguiente puede levantar a la vista de todos una carta principal de cualquier jugador.
+						</div>
 					</div>
 				</div>
 				<button class="sub-accordion">Grupo Secundario</button>
@@ -1144,6 +1480,11 @@
 						<p>La primera vez que maten esta carta durante la noche, devuélvela a la vida y mata una carta a tu elección del tablero.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">La primera vez que maten esta carta durante el día, devuélvela a la vida y mata una carta a tu elección del tablero.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Si eres atacado durante esta vuelta, puedes retirar una muerte de tu carta principal.
+						</div>
 					</div>
 					<button class="sub-accordion">Amnesia 🌙</button>
 					<div class="sub-panel">
@@ -1154,6 +1495,12 @@
 						<p>Al pedir que se realice un segundo linchamiento, puedes decidir qué jugador será el que deba perder una carta esa ronda y únicamente se linchará para decidir la carta que muere.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">Puedes pedir que se realice un segundo linchamiento, pero sólo podrá votarse a cartas muertas y la carta que sea elegida por mayoría resucitará.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Puedes pedir que se realice un linchamiento adicional al final de la vuelta. En este linchamiento, las cartas de personalidad 
+							(como responsabilidad y hostilidad) y otros modificadores (como la carta auxiliar de John Flick) no tienen efecto alguno.
+						</div>
 					</div>
 					<button class="sub-accordion">Muerte dulce 🌙</button>
 					<div class="sub-panel">
@@ -1164,6 +1511,11 @@
 						<p>Si ni la carta elegida ni esta carta son atacada en los próximos dos turnos, la tuya permanecerá con vida. Además, cuando esta carta muera, podrá llevarse a la tumba la carta que había seleccionado anteriormente.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">Si ni la carta elegida ni esta carta son atacada en los próximos dos turnos, la carta elegida permanecerá con vida. Además, cuando esta carta muera, podrá resucitar la carta que había seleccionado anteriormente.</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							En tu turno, puedes seleccionar a un jugador que perderá una vida inevitablemente al final de la vuelta.
+						</div>
 					</div>
 					<button class="sub-accordion">Compañeros de celda (x3) 🌙</button>
 					<div class="sub-panel">
@@ -1174,6 +1526,12 @@
 						<p>Cuando esta carta muera, puedes resucitar tus cartas que hayan muerto por el efecto de las otras cartas de compañeros de celda.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">Cuando esta carta muera, puedes resucitar tus cartas que hayan muerto por el efecto de las otras cartas de compañeros de celda (no cambia su Despertar).</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							Unidos por el destino o el azar en sus celdas, se conocen al comienzo de cada ronda. Puedes elegir entre dos poderes que se pueden aplicar a los jugadores que cuenten con una carta de compañeros de celda (incluyéndose a uno mismo):
+							ver una carta de Personaje Principal, o quitar una vida (poner un icono auxiliar de muerte).
+						</div>
 					</div>
 					<button class="sub-accordion">Juego de azar 🌙</button>
 					<div class="sub-panel">
@@ -1184,6 +1542,26 @@
 						<p>Cuando esta carta muera por primera vez, puedes hacer una suposición sobre a qué grupo pertenece la carta sobre la que se encuentra la “ficha de juego” (personaje principal, personaje secundario, acción principal o acción secundario). Si aciertas, esta carta permanecerá con vida y la ficha de juego continuará en movimiento.</p>
 						<h3>Despertar con Bipolaridad</h3>
 						<p class="bipolar-awakening">Cuando esta carta muera, puedes hacer una suposición sobre a qué grupo pertenece la carta sobre la que se encuentra la “ficha de juego” (personaje principal, personaje secundario, acción principal o acción secundario). Si aciertas, esta carta permanecerá con vida y la ficha de juego continuará en movimiento (no cambia su Despertar).</p>
+						<!-- NUEVO bloque para modo rápido -->
+						<div class="extra-power">
+							<h3>Modo rápido</h3>
+							En tu turno, coloca la carta auxiliar de juego de azar sobre un jugador. El jugador afectado debe hacer girar una ruleta (o tirar dados), con distintos efectos posibles: 
+							Ganar/perder una vida, mostrar tu carta, levantar una carta ajena, etc. Se tiran dos dados de 6 caras y el efecto depende del resultado de la suma:
+							<ol>
+								<li> No es posible. </li>
+								<li> Pierdes una vida permanentemente (2 en vez de 3). </li>
+								<li> No puedes actuar el resto de la ronda, incluidos linchamientos y poderes de líderes. </li>
+								<li> Se desvela tu carta de personaje a todos los jugadores. </li>
+								<li> Puedes quitar una vida a otro jugador. </li>
+								<li> Pierdes una vida. </li>
+								<li> No tiene ningún efecto. </li>
+								<li> Te puedes curar una vida que hayas perdido esa ronda. </li>
+								<li> Puedes curar una vida a cualquier jugador que se haya perdido esa ronda. </li>
+								<li> Puedes desvelar a la vista de todos la carta de personaje de un jugador. </li>
+								<li> Puedes activar el Arco de la suerte aunque no lo tengas. </li>
+								<li> Ganas una vida permanentemente (4 en vez de 3). </li>
+							</ol>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1476,6 +1854,31 @@
 					</div>
 				</div>
 			</div>
+			<!-- NUEVO acordeón de Arcos -->
+			<button class="accordion"><i class="fas fa-project-diagram icon"></i>Arcos (Modo Rápido)</button>
+			<div class="panel">
+				<p>Los arcos son sinergias que se producen al tener en la mano combinaciones concretas de cartas consumibles al inicio de una ronda. Permiten usar poderes adicionales, aunque para activarlos el jugador debe revelar sus cartas.</p>
+				<ul>
+					<li><strong>Arco de la Muerte:</strong> 3 cartas distintas del grupo muerte.</li>
+					<li><strong>Arco de la Vida:</strong> 3 cartas distintas del grupo protección.</li>
+					<li><strong>Arco de la Verdad:</strong> 3 cartas distintas del grupo adivinación.</li>
+					<li><strong>Arco de la Suerte:</strong> 3 cartas distintas del grupo plot-twist.</li>
+					<li><strong>Arco Completo:</strong> Juego de azar + 1 Compañero de celda + 1 Siamesa.</li>
+					<li><strong>Arco del Compañerismo:</strong> 3 cartas de Compañeros de celda.</li>
+					<li><strong>Arco de las Siamesas:</strong> 2 Siamesas + Wakerfield.</li>
+					<li><strong>Arco de la Venganza:</strong> Infecto de rabia + Manía persecutoria + El profeta.</li>
+					<li><strong>Arco de los Personajes:</strong> John Flick + Arthur + Wakerfield.</li>
+					<li><strong>Arco de los Vínculos:</strong> Pacto de sangre + 1 Compañero de celda + 1 Siamesa.</li>
+					<li><strong>Arco del Linchamiento:</strong> John Flick + Amnesia + Wakerfield.</li>
+					<li><strong>Arco de la Bruja:</strong> Terapia electroshock + Terapia opio y barbitúricos + Terapia lobotomía.</li>
+					<li><strong>Arco del Control:</strong> John Flick + La Parca + Pacto de sangre.</li>
+					<li><strong>Arco de la Enemistad:</strong> El archivo + Infecto de rabia + Terapia lobotomía.</li>
+					<li><strong>Arco del Perdedor:</strong> Amnesia + Muerte dulce + Juego de azar.</li>
+					<li><strong>Arco de la Inmortalidad:</strong> Solo con la carta de El cataléptico en mano.</li>
+				</ul>
+				<p><em>Nota:</em> Wakerfield puede copiar el poder de otra carta para activar algunos arcos. Consulta tu combinación concreta de cartas en la sección “Estado de la Partida (Modo Rápido)”.</p>
+			</div>
+
 		</div>
 		
 		<!-- Sección Preguntas Frecuentes -->
@@ -1541,9 +1944,11 @@
 			<div class="game-setup">
 				<label for="game-mode">Modo de Juego: </label>
 				<select id="game-mode">
-					<option value="normal">Normal</option>
-					<option value="personalizado">Personalizado</option>
+				  <option value="normal">Normal</option>
+				  <option value="personalizado">Personalizado</option>
+				  <option value="rapido">Rápido</option>
 				</select>
+
 				<label for="player-name">Tu Nombre: </label>
 				<input type="text" id="player-name" placeholder="Escribe tu nombre">
 			</div>
@@ -1576,6 +1981,39 @@
 					</div>
 				</div>
 				<div class="card-images"></div>
+				
+				<!-- UI solo para Modo Rápido -->
+				<div id="rapid-mode-ui" class="rapid-mode" style="display:none">
+				  <h4>Arcos disponibles</h4>
+				  <ul class="arcs-list"></ul>
+
+				  <!-- <details class="arcs-info" style="margin-top: .5rem;"> -->
+					<!-- <summary>Ver explicación de todos los arcos</summary> -->
+					<!-- <div style="margin-top:.5rem"> -->
+					  <!-- <p>Los arcos son sinergias que se producen al tener en la mano combinaciones concretas de cartas consumibles al inicio de una ronda. Permiten usar poderes adicionales, aunque para activarlos el jugador debe revelar sus cartas.</p> -->
+					  <!-- <ul> -->
+						<!-- <li><strong>Arco de la Muerte:</strong> 3 cartas distintas del grupo muerte.</li> -->
+						<!-- <li><strong>Arco de la Vida:</strong> 3 cartas distintas del grupo protección.</li> -->
+						<!-- <li><strong>Arco de la Verdad:</strong> 3 cartas distintas del grupo adivinación.</li> -->
+						<!-- <li><strong>Arco de la Suerte:</strong> 3 cartas distintas del grupo plot-twist.</li> -->
+						<!-- <li><strong>Arco Completo:</strong> Juego de azar + 1 Compañero de celda + 1 Siamesa.</li> -->
+						<!-- <li><strong>Arco del Compañerismo:</strong> 3 cartas de Compañeros de celda.</li> -->
+						<!-- <li><strong>Arco de las Siamesas:</strong> 2 Siamesas + Wakerfield.</li> -->
+						<!-- <li><strong>Arco de la Venganza:</strong> Infecto de rabia + Manía persecutoria + El profeta.</li> -->
+						<!-- <li><strong>Arco de los Personajes:</strong> John Flick + Arthur + Wakerfield.</li> -->
+						<!-- <li><strong>Arco de los Vínculos:</strong> Pacto de sangre + 1 Compañero de celda + 1 Siamesa.</li> -->
+						<!-- <li><strong>Arco del Linchamiento:</strong> John Flick + Amnesia + Wakerfield.</li> -->
+						<!-- <li><strong>Arco de la Bruja:</strong> Terapia electroshock + Terapia opio y barbitúricos + Terapia lobotomía.</li> -->
+						<!-- <li><strong>Arco del Control:</strong> John Flick + La Parca + Pacto de sangre.</li> -->
+						<!-- <li><strong>Arco Anti-rivales:</strong> El archivo + Infecto de rabia + Terapia lobotomía.</li> -->
+						<!-- <li><strong>Arco del Perdedor:</strong> Amnesia + Muerte dulce + Juego de azar.</li> -->
+						<!-- <li><strong>Arco de la Inmortalidad:</strong> Solo con la carta de El cataléptico en mano.</li> -->
+					  <!-- </ul> -->
+					  <!-- <p><em>Nota:</em> Wakerfield puede copiar el poder de otra carta para activar algunos arcos.</p> -->
+					<!-- </div> -->
+				  <!-- </details> -->
+				</div>
+
 				<div class="personality-objective">
 					<div class="personality">
 						<h4>Personalidad</h4>
@@ -1615,358 +2053,755 @@
     </div>
 
     <script>
-	document.addEventListener('DOMContentLoaded', function() {
-		// Navegación entre secciones (sin cambios)
-		document.querySelectorAll('nav a').forEach(link => {
-			link.addEventListener('click', function(e) {
-				e.preventDefault();
-				const sectionId = this.getAttribute('href').substring(1);
-				document.querySelectorAll('.section').forEach(section => {
-					section.classList.remove('active');
-				});
-				document.getElementById(sectionId).classList.add('active');
-			});
+	  document.addEventListener('DOMContentLoaded', function() {
+	  // Navegación entre secciones (sin cambios)
+	  document.querySelectorAll('nav a').forEach(link => {
+		link.addEventListener('click', function(e) {
+		  e.preventDefault();
+		  const sectionId = this.getAttribute('href').substring(1);
+		  document.querySelectorAll('.section').forEach(section => {
+			section.classList.remove('active');
+		  });
+		  document.getElementById(sectionId).classList.add('active');
 		});
+	  });
 
-		// Acordeones principales y sub-acordeones (sin cambios)
-		document.querySelectorAll('.accordion').forEach(button => {
-			button.addEventListener('click', function() {
-				this.classList.toggle('active');
-				const panel = this.nextElementSibling;
-				panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-			});
+	  // Acordeones principales y sub-acordeones (sin cambios)
+	  document.querySelectorAll('.accordion').forEach(button => {
+		button.addEventListener('click', function() {
+		  this.classList.toggle('active');
+		  const panel = this.nextElementSibling;
+		  panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
 		});
+	  });
 
-		document.querySelectorAll('.sub-accordion').forEach(button => {
-			button.addEventListener('click', function() {
-				this.classList.toggle('active');
-				const subPanel = this.nextElementSibling;
-				subPanel.style.display = subPanel.style.display === 'block' ? 'none' : 'block';
-			});
+	  document.querySelectorAll('.sub-accordion').forEach(button => {
+		button.addEventListener('click', function() {
+		  this.classList.toggle('active');
+		  const subPanel = this.nextElementSibling;
+		  subPanel.style.display = subPanel.style.display === 'block' ? 'none' : 'block';
 		});
+	  });
 
+	  document.querySelectorAll('#night-turns input[type="checkbox"]').forEach(checkbox => {
+		checkbox.addEventListener('change', function() {
+		  const li = this.closest('li');
+		  li.classList.toggle('disabled', !this.checked);
+		});
+	  });
+
+	  document.getElementById('reset-turns').addEventListener('click', function() {
 		document.querySelectorAll('#night-turns input[type="checkbox"]').forEach(checkbox => {
-			checkbox.addEventListener('change', function() {
-				const li = this.closest('li');
-				li.classList.toggle('disabled', !this.checked);
-			});
+		  checkbox.checked = true;
+		  checkbox.closest('li').classList.remove('disabled');
 		});
+	  });
 
-		document.getElementById('reset-turns').addEventListener('click', function() {
-			document.querySelectorAll('#night-turns input[type="checkbox"]').forEach(checkbox => {
-				checkbox.checked = true;
-				checkbox.closest('li').classList.remove('disabled');
-			});
+	  document.querySelectorAll('#night-turns-custom input[type="checkbox"]').forEach(checkbox => {
+		checkbox.addEventListener('change', function() {
+		  const li = this.closest('li');
+		  li.classList.toggle('disabled', !this.checked);
 		});
+	  });
 
+	  document.getElementById('reset-turns-custom').addEventListener('click', function() {
 		document.querySelectorAll('#night-turns-custom input[type="checkbox"]').forEach(checkbox => {
-			checkbox.addEventListener('change', function() {
-				const li = this.closest('li');
-				li.classList.toggle('disabled', !this.checked);
-			});
+		  checkbox.checked = true;
+		  checkbox.closest('li').classList.remove('disabled');
 		});
+	  });
 
-		document.getElementById('reset-turns-custom').addEventListener('click', function() {
-			document.querySelectorAll('#night-turns-custom input[type="checkbox"]').forEach(checkbox => {
-				checkbox.checked = true;
-				checkbox.closest('li').classList.remove('disabled');
-			});
-		});
+	  // =========================
+	  //  Configuración Estado Partida
+	  // =========================
+	  const cardImages = {
+		"Daniel": "https://dhueper.github.io/Diseños%20cartas/Daniel.jpg",
+		"Nathaniel": "https://dhueper.github.io/Diseños%20cartas/Nathaniel.jpg",
+		"Richard Dadd": "https://dhueper.github.io/Diseños%20cartas/Richard Dadd.jpg",
+		"Ali, “la muda”": "https://dhueper.github.io/Diseños%20cartas/Ali la muda.jpg",
+		"Larry Owls, “el sonámbulo”": "https://dhueper.github.io/Diseños%20cartas/Larry Owls el sonámbulo.jpg",
+		"Mary Firth": "https://dhueper.github.io/Diseños%20cartas/Mary Firth.png",
+		"Krugman “El Director”": "https://dhueper.github.io/Diseños%20cartas/El director.jpg",
+		"El archivo": "https://dhueper.github.io/Diseños%20cartas/El archivo.jpg",
+		"John Flick": "https://dhueper.github.io/Diseños%20cartas/John Flick.jpg",
+		"Arthur": "https://dhueper.github.io/Diseños%20cartas/Arthur.png",
+		"Wakerfield": "https://dhueper.github.io/Diseños%20cartas/Wakerfield.jpg",
+		"Siamesas (x2)": "https://dhueper.github.io/Diseños%20cartas/Siamesas.jpeg",
+		"La parca": "https://dhueper.github.io/Diseños%20cartas/La parca.jpg",
+		"Pacto de sangre": "https://dhueper.github.io/Diseños%20cartas/Pacto de sangre.png",
+		"Terapia – electroshock": "https://dhueper.github.io/Diseños%20cartas/Terapia - electroshock.jpg",
+		"Terapia – opio y barbitúricos": "https://dhueper.github.io/Diseños%20cartas/Terapia - opio y barbitúricos.jpg",
+		"Terapia – Lobotomía": "https://dhueper.github.io/Diseños%20cartas/Terapia - Lobotomía.jpg",
+		"Infecto de rabia": "https://dhueper.github.io/Diseños%20cartas/Infecto de rabia.jpg",
+		"Manía persecutoria": "https://dhueper.github.io/Diseños%20cartas/Manía persecutoria.jpg",
+		"El profeta": "https://dhueper.github.io/Diseños%20cartas/El profeta.jpg",
+		"El Cataléptico": "https://dhueper.github.io/Diseños%20cartas/El cataléptico.jpg",
+		"Amnesia": "https://dhueper.github.io/Diseños%20cartas/Amnesia.png",
+		"Muerte dulce": "https://dhueper.github.io/Diseños%20cartas/Muerte dulce.jpg",
+		"Compañeros de celda (x3)": "https://dhueper.github.io/Diseños%20cartas/Compañeros de celda.jpg",
+		"Juego de azar": "https://dhueper.github.io/Diseños%20cartas/Juego de azar.jpg",
+		"Pablo “El Arquitecto”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Pablo_el_arquitecto.jpg",
+		"Noe “Gas de la risa”": "",
+		"Clara “La Ludópata”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Clara_la_ludopata.jpg",
+		"Nerea “La Chef”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Nerea_la_chef.jpg",
+		"David “El Saltamundos”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/David_el_saltamundos.jpg",
+		"Ainhoa “La Médium”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Ainhoa_la_medium.jpg",
+		"David “El Cyborg”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/David_el_cyborg.jpg",
+		"Silvia “La Alquimista”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Silvia_la_alquimista.jpg",
+		"Edwin-kun “El Otaku”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Edwin_kun_el_otaku.jpg",
+		"Bea “La Maestra Vudú”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Bea_la_maestra_vudu.jpg",
+		"Aitor “El Último Superviviente”": "",
+		"Andrés “El Relojero”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Andres_el_relojero.jpg",
+		"María “La Médico”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Maria_la_medico.jpg",
+		"Responsabilidad": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Responsabilidad.jpg",
+		"Hostilidad": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Hostilidad.jpg",
+		"Melancolía": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Melancolia.jpg",
+		"Ansiedad social": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Ansiedad social.jpg",
+		"Neuroticismo": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Neuroticismo.png",
+		"Bipolaridad": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Bipolar.jpg",
+		"Paciencia": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Paciencia.jpg",
+		"Cuentacuentos": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Cuentacuentos.jpg"
+	  };
 
-		// Configuración del estado de la partida
-		const cardImages = {
-			"Daniel": "https://dhueper.github.io/Diseños%20cartas/Daniel.jpg",
-			"Nathaniel": "https://dhueper.github.io/Diseños%20cartas/Nathaniel.jpg",
-			"Richard Dadd": "https://dhueper.github.io/Diseños%20cartas/Richard Dadd.jpg",
-			"Ali, “la muda”": "https://dhueper.github.io/Diseños%20cartas/Ali la muda.jpg",
-			"Larry Owls, “el sonámbulo”": "https://dhueper.github.io/Diseños%20cartas/Larry Owls el sonámbulo.jpg",
-			"Mary Firth": "https://dhueper.github.io/Diseños%20cartas/Mary Firth.png",
-			"Krugman “El Director”": "https://dhueper.github.io/Diseños%20cartas/El director.jpg",
-			"El archivo": "https://dhueper.github.io/Diseños%20cartas/El archivo.jpg",
-			"John Flick": "https://dhueper.github.io/Diseños%20cartas/John Flick.jpg",
-			"Arthur": "https://dhueper.github.io/Diseños%20cartas/Arthur.png",
-			"Wakerfield": "https://dhueper.github.io/Diseños%20cartas/Wakerfield.jpg",
-			"Siamesas (x2)": "https://dhueper.github.io/Diseños%20cartas/Siamesas.jpeg",
-			"La parca": "https://dhueper.github.io/Diseños%20cartas/La parca.jpg",
-			"Pacto de sangre": "https://dhueper.github.io/Diseños%20cartas/Pacto de sangre.png",
-			"Terapia – electroshock": "https://dhueper.github.io/Diseños%20cartas/Terapia - electroshock.jpg",
-			"Terapia – opio y barbitúricos": "https://dhueper.github.io/Diseños%20cartas/Terapia - opio y barbitúricos.jpg",
-			"Terapia – Lobotomía": "https://dhueper.github.io/Diseños%20cartas/Terapia - Lobotomía.jpg",
-			"Infecto de rabia": "https://dhueper.github.io/Diseños%20cartas/Infecto de rabia.jpg",
-			"Manía persecutoria": "https://dhueper.github.io/Diseños%20cartas/Manía persecutoria.jpg",
-			"Profeta": "https://dhueper.github.io/Diseños%20cartas/El profeta.jpg",
-			"El Cataléptico": "https://dhueper.github.io/Diseños%20cartas/El cataléptico.jpg",
-			"Amnesia": "https://dhueper.github.io/Diseños%20cartas/Amnesia.png",
-			"Muerte dulce": "https://dhueper.github.io/Diseños%20cartas/Muerte dulce.jpg",
-			"Compañeros de celda (x3)": "https://dhueper.github.io/Diseños%20cartas/Compañeros de celda.jpg",
-			"Juego de azar": "https://dhueper.github.io/Diseños%20cartas/Juego de azar.jpg",
-			"Pablo “El Arquitecto”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Pablo_el_arquitecto.jpg",
-			"Noe “Gas de la risa”": "",
-			"Clara “La Ludópata”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Clara_la_ludopata.jpg",
-			"Nerea “La Chef”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Nerea_la_chef.jpg",
-			"David “El Saltamundos”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/David_el_saltamundos.jpg",
-			"Ainhoa “La Médium”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Ainhoa_la_medium.jpg",
-			"David “El Cyborg”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/David_el_cyborg.jpg",
-			"Silvia “La Alquimista”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Silvia_la_alquimista.jpg",
-			"Edwin-kun “El Otaku”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Edwin_kun_el_otaku.jpg",
-			"Bea “La Maestra Vudú”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Bea_la_maestra_vudu.jpg",
-			"Aitor “El Último Superviviente”": "",
-			"Andrés “El Relojero”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Andres_el_relojero.jpg",
-			"María “La Médico”": "https://dhueper.github.io/Dise%C3%B1os%20cartas/Cartas%20Personalizadas/Maria_la_medico.jpg",
-			"Responsabilidad": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Responsabilidad.jpg",
-			"Hostilidad": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Hostilidad.jpg",
-			"Melancolía": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Melancolia.jpg",
-			"Ansiedad social": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Ansiedad social.jpg",
-			"Neuroticismo": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Neuroticismo.png",
-			"Bipolaridad": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Bipolar.jpg",
-			"Paciencia": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Paciencia.jpg",
-			"Cuentacuentos": "https://dhueper.github.io/Diseños%20cartas/Cartas%20Personalidad/Cuentacuentos.jpg"
-		};
+	  const objectives = {
+		"normal": {
+		  "Daniel": { title: "Amotinado", description: "Acaba con todas las cartas del resto de jugadores que no sean amotinados." },
+		  "Nathaniel": { title: "Amotinado", description: "Acabar con todas las cartas del resto de jugadores que no sean amotinados." },
+		  "Richard Dadd": { title: "Renegado", description: "Finges ayudar a los amotinados, pero buscas ser el único superviviente." },
+		  "Ali, “la muda”": { title: "Interno", description: "Acaba con las cartas de los amotinados." },
+		  "Larry Owls, “el sonámbulo”": { title: "Interno", description: "Acaba con las cartas de los amotinados." },
+		  "Mary Firth": { title: "Interno", description: "Acaba con las cartas de los amotinados." },
+		  "Krugman “El Director”": { title: "Director", description: "Si vives, debes acabar con todos los personajes principales; si mueres, con los secundarios." }
+		},
+		"personalizado": {
+		  "Amotinado": { title: "Amotinado", description: "Acaba con todas las cartas del resto de jugadores que no sean amotinados." },
+		  "Interno": { title: "Interno", description: "Desvela a todos los amotinados (y al renegado si lo hay)." },
+		  "Renegado": { title: "Renegado", description: "Finges ayudar a los amotinados, pero buscas ser el último en pie." },
+		  "Traidor": { title: "Traidor", description: "Elige un bando (Internos/Amotinados) y haz que pierda." },
+		  "Inquisidor": { title: "Inquisidor", description: "Descubre los secretos del manicomio: Siamesas, Compañeros de celda, carta de Pacto de sangre y objetivos de todos." }
+		},
+		// RÁPIDO: objetivo en función del Personaje Principal elegido
+		"rapido": {
+		  // Reutilizamos las reglas del modo "normal" para los personajes base
+		  "Daniel": { title: "Amotinado", description: "Eres el líder de los amotinados. Acaba con todas las cartas del resto de jugadores que no sean amotinados." },
+		  "Nathaniel": { title: "Amotinado", description: "Acaba con todas las cartas del resto de jugadores que no sean amotinados. Daniel es el líder del equipo." },
+		  "Richard Dadd": { title: "Renegado", description: "Acaba con todas las cartas del resto de jugadores que no sean amotinados. Daniel es el líder del equipo." },
+		  "Ali, “la muda”": { title: "Interno", description: "Acaba con todas las cartas del resto de jugadores que no sean internos. Mary Firth es la líder del equipo." },
+		  "Larry Owls, “el sonámbulo”": { title: "Interno", description: "Acaba con todas las cartas del resto de jugadores que no sean internos. Mary Firth es la líder del equipo." },
+		  "Mary Firth": { title: "Interno", description: "Eres la líder de los internos. Acaba con todas las cartas del resto de jugadores que no sean internos." },
+		  "Krugman “El Director”": { title: "Director", description: "Buscas mantener el equilibrio. Acaba con los líderes de los otros bandos." }
+		  // Los personalizados quedarán como "Sin objetivo" salvo que quieras mapearlos.
+		}
+	  };
 
-		const objectives = {
-			"normal": {
-				"Daniel": { title: "Amotinado", description: "Acaba con todas las cartas del resto de jugadores que no sean amotinados." },
-				"Nathaniel": { title: "Amotinado", description: "Acabar con todas las cartas del resto de jugadores que no sean amotinados." },
-				"Richard Dadd": { title: "Renegado", description: "Finges ayudar a los amotinados, pero buscas ser el único superviviente." },
-				"Ali, “la muda”": { title: "Interno", description: "Acaba con las cartas de los amotinados." },
-				"Larry Owls, “el sonámbulo”": { title: "Interno", description: "Acaba con las cartas de los amotinados." },
-				"Mary Firth": { title: "Interno", description: "Acaba con las cartas de los amotinados." },
-				"Krugman “El Director”": { title: "Director", description: "Si vives, debes acabar con todos los personajes principales; si mueres, con los secundarios." }
-			},
-			"personalizado": {
-				"Amotinado": { title: "Amotinado", description: "Acaba con todas las cartas del resto de jugadores que no sean amotinados." },
-				"Interno": { title: "Interno", description: "Desvela a todos los amotinados (y al renegado si lo hay)." },
-				"Renegado": { title: "Renegado", description: "Finges ayudar a los amotinados, pero buscas ser el último en pie." },
-				"Traidor": { title: "Traidor", description: "Elige un bando (Internos/Amotinados) y haz que pierda." },
-				"Inquisidor": { title: "Inquisidor", description: "Descubre los secretos del manicomio: Siamesas, Compañeros de celda, carta de Pacto de sangre y objetivos de todos." }
-			}
-		};
+	  // === Nuevos conjuntos de cartas para facilitar el modo Rápido ===
+	  const NORMAL_P1 = ["Daniel","Nathaniel","Richard Dadd","Ali, “la muda”","Larry Owls, “el sonámbulo”","Mary Firth","Krugman “El Director”"];
+	  const CUSTOM_P1 = ["Pablo “El Arquitecto”","Noe “Gas de la risa”","Clara “La Ludópata”","Nerea “La Chef”","David “El Saltamundos”","Ainhoa “La Médium”","David “El Cyborg”","Silvia “La Alquimista”","Edwin-kun “El Otaku”","Bea “La Maestra Vudú”","Aitor “El Último Superviviente”","Andrés “El Relojero”","María “La Médico”"];
+	  const P2 = ["El archivo","John Flick","Arthur","Wakerfield","Siamesas (x2)","La parca"];
+	  const A1 = ["Pacto de sangre","Terapia – electroshock","Terapia – opio y barbitúricos","Terapia – Lobotomía","Infecto de rabia","Manía persecutoria","El profeta"];
+	  const A2 = ["El Cataléptico","Amnesia","Muerte dulce","Compañeros de celda (x3)","Juego de azar"];
 
-		const modeSelect = document.getElementById('game-mode');
-		const cardSelects = document.querySelectorAll('.card-select:not(#personality-select):not(.objective)');
-		const personalitySelect = document.getElementById('personality-select');
-		const objectiveSelect = document.querySelector('.card-select.objective'); // Ajustado para apuntar al <select>
-		const imagesDiv = document.querySelector('.card-images');
-		const personalityImageDiv = document.querySelector('.personality-image');
-		const objectiveTitle = document.querySelector('.objective-title');
-		const bloodPactSpan = document.querySelector('.blood-pact');
-		const objectiveDescription = document.querySelector('.objective-description');
-		const aliveCheckboxes = document.querySelectorAll('.card-alive');
+	  // Mapa tipo por nombre (p1, p2, a1, a2)
+	  const TYPE_OF = {};
+	  NORMAL_P1.forEach(n => TYPE_OF[n] = "p1");
+	  CUSTOM_P1.forEach(n => TYPE_OF[n] = "p1");
+	  P2.forEach(n => TYPE_OF[n] = "p2");
+	  A1.forEach(n => TYPE_OF[n] = "a1");
+	  A2.forEach(n => TYPE_OF[n] = "a2");
 
-		// Depuración inicial
-		console.log("Elementos encontrados al cargar:");
-		console.log("objectiveTitle:", objectiveTitle);
-		console.log("bloodPactSpan:", bloodPactSpan);
-		console.log("objectiveDescription:", objectiveDescription);
-		console.log("objectiveSelect:", objectiveSelect);
+	  // Grupos para arcos de "muerte / protección / adivinación / plot-twist"
+	  // (ajústalo si tus grupos canónicos difieren)
+	  const GROUPS = {
+		muerte: new Set(["John Flick","La parca","Terapia – electroshock","Muerte dulce","Infecto de rabia","Manía persecutoria","Compañeros de celda (x3)"]),
+		proteccion: new Set(["Arthur","Siamesas (x2)","Terapia – opio y barbitúricos","El Cataléptico"]),
+		adivinacion: new Set(["El archivo", "Siamesas (x2)","Compañeros de celda (x3)","El profeta"]),
+		plot: new Set(["Amnesia","Juego de azar","Wakerfield","Pacto de sangre","Terapia – Lobotomía"])
+	  };
+	  
+	  // === NUEVO: etiquetas legibles y utilidades de grupos ===
+	  const GROUP_LABELS = {
+	    muerte: "muerte",
+	    proteccion: "protección",
+	    adivinacion: "adivinación",
+	    plot: "plot-twist"
+	  };
+	  
+	  // === NUEVO: plantilla de descripciones de poderes de arcos ===
+	  // (Edita los textos a tu gusto; si falta alguno, se mostrará un placeholder)
+	  const ARC_POWERS = {
+	    "Arco de la Muerte": "Puedes usar tus poderes incluso si el líder del equipo rival ha vetado el grupo 'muerte'. Además, puedes cambiar el poder de una de tus 3 cartas por colocar una muerte inevitable, que no puede ser curada, a un jugador.",
+	    "Arco de la Vida": "Puedes usar tus poderes incluso si el líder del equipo rival ha vetado el grupo 'protección'. Además, puedes cambiar el poder de una de tus 3 cartas por curar una vida a un jugador que se perdió en rondas anteriores (calavera roja).",
+	    "Arco de la Verdad": "Puedes usar tus poderes incluso si el líder del equipo rival ha vetado el grupo 'adivinación'. Además, al activar tu arco, nadie podrá levantar tu carta de personaje para verla esa ronda. Además, una sola vez, cuando tú levantes una carta de otro jugador también podrás ver las cartas que tiene en la mano.",
+	    "Arco de la Suerte": "Puedes usar tus poderes incluso si el líder del equipo rival ha vetado el grupo 'plot-twist'. Además, una sola vez, puedes reunir todas las cartas que vayan usar todos los jugadores esa vuelta (incluída la tuya) y repartirlas como quieras.",
+	    "Arco Completo": "Puedes usar tus poderes independientemente de lo que haya vetado el líder del equipo rival. Además, puedes cambiar el poder de cualquiera de tus cartas (una o más veces) por (a elegir): matar una carta, curar una vida que se haya perdido esa ronda, levantar una carta de personaje para verla o hacer que un jugador pruebe suerte con la ruleta de Juego de azar.",
+	    "Arco del Compañerismo": "Los Compañeros de celda logran escapar del manicomio. Nadie podrá aplicar ningún efecto sobre ti en toda la ronda (estás fuera del manicomio), pero puedes espiar lo que está ocurriendo, por lo que cada vuelta en tu turno puedes levantar una carta de personaje de un jugador. Sin embargo, sí podrás linchar y también podrán lincharte al final de la ronda.",
+	    "Arco de las Siamesas": "Las siamesas actúan como dos cuerpos en uno solo. Al final de la ronda, solo perderás la mitad de las vidas que te hayan quitado. Además, tienes 3 poderes de un uso que puedes usar cada vez que uses una carta de siamesa: curar una vida a un jugador, ver una carta de personaje de un jugador o dar un efecto de x2 a un jugador (o a ti mismo), que duplicará el efecto de cualquier poder que use esa ronda.",
+	    "Arco de la Venganza": "Cuando uses cualquiera de sus tres cartas, se aplican a todo tu equipo y puedes usar el poder una vez por cada vida que hayan quitado a tu equipo entero esa ronda.",
+	    "Arco de los Personajes": "Se sienten menospreciados respecto al resto de personajes principales del manicomio. Al activar tu arco, y durante toda la ronda, los personajes principales no podrán levantarse y tú usarás el poder de todas las cartas de personaje secundario que fueran a usarse por cualquier jugador.",
+	    "Arco de los Vínculos": "Al usar tu carta de Pacto de sangre, puedes hacer un pacto original, vinculando durante toda la ronda a dos jugadores (no podrán atacarse entre ellos y si uno pierde todas las vidas, el otro también morirá).",
+	    "Arco del Linchamiento": "Esta ronda, en todas las vueltas habrá un linchamiento y a ti nunca podrán lincharte. Además, el poder de todas tus cartas se convierte en el de John Flick, que podrás usar cada vuelta.",
+	    "Arco de la Bruja": "Cada una de tus cartas adquiere su poder despertado: con electroshock puedes aplicar una muerte inevitable (no puede ser curada), con opio y barbitúricos puedes curar una muerte de una ronda anterior (calavera roja) y con lobotomía, si aciertas a un líder de un equipo o al director, se une automáticamente a tu bando el resto de la partida y pierde el voto en los linchamientos.",
+	    "Arco del Control": "Cada vuelta, puedes elegir una carta consumible que fuera a usar otro jugador y controlarle para usarla en su lugar. ",
+	    "Arco de la Enemistad": "Al activar este arco, puedes hacer que dos jugadores se odien sin remedio durante toda la ronda. Dichos jugadores, se verán obligados a emplear todas sus cartas del grupo 'muerte' en atacar al otro jugador. Además, no podrán curarse ni protegerse entre ellos (aunque sí a sí mismos).",
+	    "Arco del Perdedor": "Al activar este arco, al final de la ronda perderás todas tus vidas y morirás. A cambio, te puedes llevar a un jugador contigo a la tumba sin posibilidad de que se salve.",
+	    "Arco de la Inmortalidad (si solo te queda El cataléptico en la mano)": "Al activar este arco, al final de la ronda perderás todas tus vidas y morirás. A cambio, al morir podrás revivir a un jugador que haya muerto o curar todas las vidas a un jugador que siga con vida."
+	  };
 
-		if (!objectiveTitle || !bloodPactSpan || !objectiveDescription || !objectiveSelect) {
-			console.error("Uno o más elementos de objetivo no se encontraron en el DOM. Verifica el HTML.");
+
+	  // Cartas que pueden repetirse y su máximo en mano del jugador (modo Rápido)
+	  const CAN_REPEAT = {
+		"Siamesas (x2)": 2,
+		"Compañeros de celda (x3)": 3
+	  };
+
+	  const modeSelect = document.getElementById('game-mode');
+	  const cardSelects = document.querySelectorAll('.card-select:not(#personality-select):not(.objective)');
+	  const personalitySelect = document.getElementById('personality-select');
+	  const objectiveSelect = document.querySelector('.card-select.objective');
+	  const imagesDiv = document.querySelector('.card-images');
+	  const personalityImageDiv = document.querySelector('.personality-image');
+	  const objectiveTitle = document.querySelector('.objective-title');
+	  const bloodPactSpan = document.querySelector('.blood-pact');
+	  const objectiveDescription = document.querySelector('.objective-description');
+	  const aliveCheckboxes = document.querySelectorAll('.card-alive');
+
+	  // UI rápido
+	  const rapidBox = document.getElementById('rapid-mode-ui');
+	  const arcsList = rapidBox ? rapidBox.querySelector('.arcs-list') : null;
+
+	  // Depuración inicial
+	  console.log("Elementos encontrados al cargar:");
+	  console.log("objectiveTitle:", objectiveTitle);
+	  console.log("bloodPactSpan:", bloodPactSpan);
+	  console.log("objectiveDescription:", objectiveDescription);
+	  console.log("objectiveSelect:", objectiveSelect);
+
+	  if (!objectiveTitle || !bloodPactSpan || !objectiveDescription || !objectiveSelect) {
+		console.error("Uno o más elementos de objetivo no se encontraron en el DOM. Verifica el HTML.");
+	  }
+
+	  // Helpers
+	  const getCardAt = pos => {
+		const s = document.querySelector(`.card-select[data-position="${pos}"]`);
+		return s ? s.value : "";
+	  };
+
+	  function buildOptionsHtml(list, placeholder, typeTag) {
+		// list: array de nombres, typeTag se ignora pues el tipo lo metemos por data-type por carta
+		const options = list.map(card => {
+		  const t = TYPE_OF[card] || '';
+		  return `<option value="${card}" data-type="${t}">${card}</option>`;
+		}).join('');
+		return `<option value="">${placeholder}</option>` + options;
+	  }
+
+	  function loadCardOptions() {
+		const mode = modeSelect.value;
+
+		// Control de visibilidad del <select> de objetivos
+		if (mode === "personalizado") {
+		  objectiveSelect.classList.add('visible');
+		  objectiveSelect.disabled = false;
+		} else {
+		  objectiveSelect.classList.remove('visible');
+		  objectiveSelect.disabled = true;
 		}
 
-		function loadCardOptions() {
-			const mode = modeSelect.value;
-			const allCards = {
-				p1: mode === "normal" ? 
-					["Daniel", "Nathaniel", "Richard Dadd", "Ali, “la muda”", "Larry Owls, “el sonámbulo”", "Mary Firth", "Krugman “El Director”"] :
-					["Pablo “El Arquitecto”", "Noe “Gas de la risa”", "Clara “La Ludópata”", "Nerea “La Chef”", "David “El Saltamundos”", 
-					 "Ainhoa “La Médium”", "David “El Cyborg”", "Silvia “La Alquimista”", "Edwin-kun “El Otaku”", "Bea “La Maestra Vudú”", 
-					 "Aitor “El Último Superviviente”", "Andrés “El Relojero”", "María “La Médico”"],
-				p2: ["El archivo", "John Flick", "Arthur", "Wakerfield", "Siamesas (x2)", "La parca"],
-				a1: ["Pacto de sangre", "Terapia – electroshock", "Terapia – opio y barbitúricos", "Terapia – Lobotomía", "Infecto de rabia", "Manía persecutoria", "Profeta"],
-				a2: ["El Cataléptico", "Amnesia", "Muerte dulce", "Compañeros de celda (x3)", "Juego de azar"]
-			};
-
-			cardSelects.forEach(select => {
-				const position = select.dataset.position;
-				select.innerHTML = `<option value="">Posición ${parseInt(position) + 1}</option>` + 
-					Object.entries(allCards).map(([type, cards]) => 
-						cards.map(card => `<option value="${card}" data-type="${type}">${card}</option>`).join('')
-					).join('');
-			});
-
-			// Controlar visibilidad del <select> de objetivos
-			if (mode === "personalizado") {
-				objectiveSelect.classList.add('visible');
-				objectiveSelect.disabled = false;
+		// RELLENO DE SELECTS POR MODO
+		if (mode === "rapido") {
+		  // Posición 0 = Principal (obligatorio p1). Posiciones 1-3 = consumibles (cualquier grupo)
+		  cardSelects.forEach(select => {
+			const position = parseInt(select.dataset.position, 10);
+			if (position === 0) {
+			  // principal: todos los p1 (normales)
+			  const p1All = [...NORMAL_P1];
+			  select.innerHTML = buildOptionsHtml(p1All, "Principal (P1)");
 			} else {
-				objectiveSelect.classList.remove('visible');
-				objectiveSelect.disabled = true;
+			  // consumibles: cualquier grupo que no sea principal
+			  const anyGroup = [...P2, ...A1, ...A2];
+			  select.innerHTML = buildOptionsHtml(anyGroup, `Consumible ${position}`);
+			}
+		  });
+		} else {
+		  // Comportamiento original
+		  const allCards = {
+			p1: mode === "normal"
+			  ? [...NORMAL_P1]
+			  : [...CUSTOM_P1],
+			p2: [...P2],
+			a1: [...A1],
+			a2: [...A2]
+		  };
+
+		  cardSelects.forEach(select => {
+			const position = select.dataset.position;
+			const placeholder = `Posición ${parseInt(position) + 1}`;
+			select.innerHTML =
+			  `<option value="">${placeholder}</option>` +
+			  Object.entries(allCards).map(([type, cards]) =>
+				cards.map(card => `<option value="${card}" data-type="${type}">${card}</option>`).join('')
+			  ).join('');
+		  });
+		}
+	  }
+
+	  // Normalizador de nombres para comparaciones de arcos
+	  function canonName(name) {
+		const s = (name || "").toLowerCase()
+		  .normalize("NFD").replace(/\p{Diacritic}/gu, '')
+		  .replace(/[“”"']/g, '')
+		  .replace(/\s*–\s*/g, ' ')
+		  .trim();
+
+		const map = {
+		  "la parca": "La parca",
+		  "wakerfield": "Wakerfield",
+		  "john flick": "John Flick",
+		  "arthur": "Arthur",
+		  "el archivo": "El archivo",
+		  "amnesia": "Amnesia",
+		  "juego de azar": "Juego de azar",
+		  "muerte dulce": "Muerte dulce",
+		  "infecto de rabia": "Infecto de rabia",
+		  "mania persecutoria": "Manía persecutoria",
+		  "profeta": "El profeta",
+		  "el profeta": "El profeta",
+		  "pacto de sangre": "Pacto de sangre",
+		  "terapia electroshock": "Terapia – electroshock",
+		  "terapia opio y barbituricos": "Terapia – opio y barbitúricos",
+		  "terapia lobotomia": "Terapia – Lobotomía",
+		  "siamesas": "Siamesas (x2)",
+		  "siamesas (x2)": "Siamesas (x2)",
+		  "companeros de celda": "Compañeros de celda (x3)",
+		  "companeros de celda (x3)": "Compañeros de celda (x3)"
+		};
+		return map[s] || (name || "");
+	  }
+	  
+	  // === REEMPLAZO ROBUSTO de groupsOf (colocar DESPUÉS de canonName) ===
+		function groupsOf(cardName){
+		  if (!cardName) return [];
+		  const target = canonName(cardName);
+		  const order = ["muerte","proteccion","adivinacion","plot"];
+		  const res = [];
+
+		  for (const key of order){
+			const groupSet = GROUPS[key];
+			if (!groupSet) continue;
+			// comparar cada elemento del set con la forma canónica del cardName
+			for (const member of groupSet){
+			  try {
+				if (canonName(member) === target){
+				  res.push(key);
+				  break; // ya sabemos que pertenece a este grupo; pasar al siguiente grupo
+				}
+			  } catch (e) {
+				// no hacer nada; evitamos que un string raro rompa todo
+				console.warn("Error comparando grupo", key, member, e);
+			  }
+			}
+		  }
+		  return res;
+		}
+
+
+	  function belongsToGroup(card, groupKey) {
+		const g = GROUPS[groupKey];
+		return g && g.has(card);
+	  }
+
+	  function countBy(arr) {
+		return arr.reduce((m, x) => (m[x] = (m[x] || 0) + 1, m), {});
+	  }
+
+	  function detectArcs(consumables) {
+		// consumables: array de nombres (3), puede incluir duplicados
+		const names = consumables.map(canonName).filter(Boolean);
+		const baseSet = new Set(names);
+		const counts = countBy(names);
+		const has = (n) => counts[canonName(n)] > 0;
+
+		const wName = "Wakerfield";
+		const wPresent = has(wName);
+		const namesNoW = names.filter(n => n !== wName);
+		const countsNoW = countBy(namesNoW);
+		
+		const comp = "Compañeros de celda (x3)";
+
+		const arcs = new Set();
+
+		// --- Arcos por grupos (muerte/vida/verdad/suerte)
+		const groupKeys = [
+		  ["muerte", "Arco de la Muerte"],
+		  ["proteccion", "Arco de la Vida"],
+		  ["adivinacion", "Arco de la Verdad"],
+		  ["plot", "Arco de la Suerte"]
+		];
+		for (const [gk, label] of groupKeys) {
+		  //const countNoW = namesNoW.filter(n => belongsToGroup(n, gk)).length;
+		  //if (countNoW === 3) arcs.add(label);
+		  //else if (wPresent && countNoW === 2) arcs.add(label); // W copia una de las otras dos para completar 3
+		  
+		  // Modificamos los arcos de grupo para que solo se activen con 3 cartas distintas (Wakerfield no aplica)
+		  const count = names.filter(n => belongsToGroup(n, gk)).length;
+		  if (count === 3 && !has(comp) && !has("Siamesas (x2)")){
+			  arcs.add(label); 
+			} else if (count === 3 && has(comp) && counts[comp] <= 1){
+				if (!has("Siamesas (x2)")){
+					arcs.add(label);
+				} else if (counts["Siamesas (x2)"] <= 1){
+					arcs.add(label);
+				}
+			} else if (count === 3 && has("Siamesas (x2)") && counts["Siamesas (x2)"] <= 1){
+				if (!has(comp)){
+					arcs.add(label);
+				} else if (counts[comp] <= 1){
+					arcs.add(label);
+				}
 			}
 		}
 
+		// --- Arcos por tipo (3 de p2/a1/a2)
+		//const typeCountNoW = namesNoW.reduce((m, n) => {
+		//  const t = TYPE_OF[n] || "";
+		//  m[t] = (m[t] || 0) + 1;
+		//  return m;
+		//}, {});
+		//if (typeCountNoW["p2"] === 3 || (wPresent && typeCountNoW["p2"] === 2)) arcs.add("Arco de la Zarpa");
+		//if (typeCountNoW["a1"] === 3 || (wPresent && typeCountNoW["a1"] === 2)) arcs.add("Arco del Cuchillo");
+		//if (typeCountNoW["a2"] === 3 || (wPresent && typeCountNoW["a2"] === 2)) arcs.add("Arco de la Guadaña");
+
+		// --- Arcos por combinaciones exactas (W no sustituye cartas distintas salvo donde se menciona explícitamente)
+		// Completo: Juego de azar + 1 Compañero + 1 Siamesa
+		if (has("Juego de azar") && has("Compañeros de celda (x3)") && has("Siamesas (x2)")) arcs.add("Arco Completo");
+
+		// Compañerismo: 3 compañeros (W puede copiar para completar si hay 2 + W)
+		if (countsNoW[comp] === 3 || (wPresent && countsNoW[comp] === 2)) arcs.add("Arco del Compañerismo");
+
+		// Siamesas: 2 siamesas + W
+		if (wPresent && counts["Siamesas (x2)"] >= 2) arcs.add("Arco de las Siamesas");
+
+		// Venganza: Infecto + Manía + Profeta (tres distintas; W no ayuda aquí)
+		if (has("Infecto de rabia") && has("Manía persecutoria") && has("El profeta")) arcs.add("Arco de la Venganza");
+
+		// Personajes: John Flick + Arthur + W
+		if (wPresent && has("John Flick") && has("Arthur")) arcs.add("Arco de los Personajes");
+
+		// Vínculos: Pacto + 1 Compañero + 1 Siamesa
+		if (has("Pacto de sangre") && has("Compañeros de celda (x3)") && has("Siamesas (x2)")) arcs.add("Arco de los Vínculos");
+
+		// Linchamiento: John Flick + Amnesia + W
+		if (wPresent && has("John Flick") && has("Amnesia")) arcs.add("Arco del Linchamiento");
+
+		// Bruja: 3 terapias
+		const t1 = "Terapia – electroshock";
+		const t2 = "Terapia – opio y barbitúricos";
+		const t3 = "Terapia – Lobotomía";
+		if (has(t1) && has(t2) && has(t3)) arcs.add("Arco de la Bruja");
+
+		// Control: John Flick + La parca + Pacto
+		if (has("John Flick") && has("La parca") && has("Pacto de sangre")) arcs.add("Arco del Control");
+
+		// Anti-rivales: El archivo + Infecto + Lobotomía
+		if (has("El archivo") && has("Infecto de rabia") && has("Terapia – Lobotomía")) arcs.add("Arco Anti-rivales");
+
+		// Perdedor: Amnesia + Muerte dulce + Juego de azar
+		if (has("Amnesia") && has("Muerte dulce") && has("Juego de azar")) arcs.add("Arco del Perdedor");
+
+		// Wakerfield solo (no aplicable aquí normalmente porque siempre hay 3 consumibles)
+		// //if (names.length === 1 && names[0] === wName) arcs.add("Arco de Wakerfield");
+		//if (wPresent)  arcs.add("Arco de Wakerfield");
+		
+		// Cataléptico solo
+		if (has("El Cataléptico")) arcs.add("Arco de la Inmortalidad (si solo te queda El cataléptico en la mano)");
+
+		return Array.from(arcs);
+	  }
+
+	  function renderArcs(arcs) {
+		  if (!arcsList) return;
+		  arcsList.innerHTML = "";
+
+		  if (!arcs || arcs.length === 0) {
+			arcsList.innerHTML = `<li>— Ningún arco activable con las 3 cartas consumibles actuales.</li>`;
+			return;
+		  }
+
+		  arcs.forEach(a => {
+			const li = document.createElement('li');
+
+			// Cada arco activo se muestra como un <details> desplegable
+			const details = document.createElement('details');
+			details.className = 'arc-detail';
+
+			const summary = document.createElement('summary');
+			summary.textContent = a;
+
+			const desc = document.createElement('div');
+			desc.className = 'arc-power';
+			desc.innerHTML = ARC_POWERS[a] || `<em>Descripción pendiente. Edita <code>ARC_POWERS["${a}"]</code> en el JS.</em>`;
+
+			details.appendChild(summary);
+			details.appendChild(desc);
+			li.appendChild(details);
+			arcsList.appendChild(li);
+		  });
+		}
+
+
+	  function validateRapidSelection(changedSelect) {
+		// Reglas:
+		//  - Pos 0 debe ser p1
+		//  - Repeticiones de nombre NO permitidas salvo:
+		//       * "Siamesas (x2)" máx. 2
+		//       * "Compañeros de celda (x3)" máx. 3
+		//  - Las 3 consumibles pueden ser de cualquier grupo (se permiten grupos repetidos)
+		const pos = parseInt(changedSelect.dataset.position, 10);
+		const picks = Array.from(cardSelects).map(s => s.value).filter(Boolean);
+
+		// Validar principal p1
+		if (pos === 0) {
+		  const v = changedSelect.value;
+		  if (v && TYPE_OF[v] !== "p1") {
+			alert("En Modo Rápido la carta principal debe ser un Personaje Principal (P1).");
+			changedSelect.value = "";
+			return false;
+		  }
+		} else {
+		  // Si el jugador metió un P1 como consumible, lo permitimos (regla: consumibles de cualquier grupo)
+		  // (no se restringe grupo aquí)
+		}
+
+		// Repeticiones por nombre
+		const counts = countBy(Array.from(cardSelects).map(s => s.value).filter(Boolean));
+		for (const [name, c] of Object.entries(counts)) {
+		  const allowed = CAN_REPEAT[name] || 1;
+		  if (c > allowed) {
+			alert(`No puedes repetir "${name}" más de ${allowed} vez/veces en Modo Rápido.`);
+			changedSelect.value = "";
+			return false;
+		  }
+		}
+
+		return true;
+	  }
+
+	  function validateCards() {
+		// (Modo original) Debe haber exactamente un tipo de cada (p1, p2, a1, a2) y sin duplicados
+		const selectedTypes = Array.from(cardSelects).map(select => select.selectedOptions[0]?.dataset.type).filter(Boolean);
+		const requiredTypes = ["p1", "p2", "a1", "a2"];
+		return requiredTypes.every(type => selectedTypes.includes(type)) && selectedTypes.length === 4;
+	  }
+
+	  function determineObjective(cards, mode) {
+		// cards: array de TODOS los selects (4)
+		if (mode === "normal") {
+		  if (cards.includes("Daniel") || cards.includes("Nathaniel")) return "Daniel";
+		  if (cards.includes("Richard Dadd")) return "Richard Dadd";
+		  if (cards.includes("Ali, “la muda”") || cards.includes("Larry Owls, “el sonámbulo”") || cards.includes("Mary Firth")) return "Ali, “la muda”";
+		  if (cards.includes("Krugman “El Director”")) return "Krugman “El Director”";
+		  return "";
+		} else if (mode === "rapido") {
+		  // Objetivo definido EXCLUSIVAMENTE por la carta principal (posición 0)
+		  const principal = getCardAt(0);
+		  return principal || "";
+		} else {
+		  // personalizado
+		  const selectedObjective = objectiveSelect.value;
+		  return selectedObjective;
+		}
+	  }
+
+	  function updateDisplay() {
+		const mode = modeSelect.value;
+		// === NUEVO: ocultar el bloque de personalidad en modo Rápido ===
+		const personalityBox = document.querySelector('.personality');
+		if (personalityBox) {
+		  personalityBox.style.display = (mode === "rapido") ? "none" : "";
+		}
+
+		const cards = Array.from(cardSelects).map(select => select.value).filter(Boolean);
+		const personality = personalitySelect.value;
+		const hasBloodPact = cards.includes("Pacto de sangre");
+		const objectiveKey = determineObjective(cards, mode);
+
+		// Mostrar/ocultar caja de Arcos en Modo Rápido
+		if (rapidBox) {
+		  rapidBox.style.display = (mode === "rapido") ? "block" : "none";
+		}
+
+		// === RENDER ROBUSTO DE IMAGENES + ETIQUETAS (poner dentro de updateDisplay) ===
+		imagesDiv.innerHTML = '';
+
+		Array.from(cardSelects).forEach((select, index) => {
+		  const cardName = select.value;
+		  if (!cardName) return; // nada seleccionado
+		  
+		  //console.log("DEBUG", {mode, index, cardName});
+
+		  const wrapper = document.createElement('div');
+		  wrapper.className = 'card-wrapper';
+
+		  // 1) Imagen o placeholder
+		  if (cardImages[cardName]) {
+			const img = document.createElement('img');
+			img.src = cardImages[cardName];
+			img.alt = cardName;
+			const alive = document.querySelector(`.card-alive[data-position="${index}"]`);
+			if (alive && !alive.checked) img.classList.add('dead');
+			wrapper.appendChild(img);
+		  } else {
+			// Placeholder visible si no hay imagen: así las etiquetas siempre aparecen debajo
+			const ph = document.createElement('div');
+			ph.className = 'card-placeholder';
+			ph.textContent = cardName;
+			wrapper.appendChild(ph);
+		  }
+
+		  // 2) Etiquetas de grupo: SOLO en modo rápido y SOLO para consumibles (posiciones 1..3)
+		  if (mode === "rapido" && index >= 1) {
+			const tags = groupsOf(cardName); // función robusta arriba
+			if (tags.length > 0) {
+			  const tagsDiv = document.createElement('div');
+			  tagsDiv.className = 'card-groups';
+			  tags.forEach(gk => {
+			    console.log("Inside if block", {mode, index, cardName, gk});
+				const span = document.createElement('span');
+				span.className = `group-badge group-${gk}`; // .group-muerte, .group-proteccion, etc.
+				span.textContent = GROUP_LABELS[gk] || gk;
+				tagsDiv.appendChild(span);
+			  });
+			  wrapper.appendChild(tagsDiv);
+			} else {
+			  // Para debug temporal (opcional): ver qué carta no se reconoce
+			  console.log("Sin grupos detectados para", cardName, "-> canon:", canonName(cardName));
+			}
+		  }
+
+		  imagesDiv.appendChild(wrapper);
+		});
+
+
+
+		// Imagen de personalidad
+		personalityImageDiv.innerHTML = '';
+		if (personality && cardImages[personality]) {
+		  const wrapper = document.createElement('div');
+		  wrapper.className = 'card-wrapper';
+		  const img = document.createElement('img');
+		  img.src = cardImages[personality];
+		  img.alt = personality;
+		  wrapper.appendChild(img);
+		  personalityImageDiv.appendChild(wrapper);
+		}
+
+		// Objetivo
+		if (mode === "normal" || mode === "rapido") {
+		  if (objectiveKey) {
+			const objData = (mode === "rapido" ? objectives.rapido[objectiveKey] : objectives.normal[objectiveKey]) ||
+			  { title: "Sin objetivo", description: mode === "rapido" ? "No hay objetivo definido para este principal." : "No se ha determinado un objetivo válido." };
+
+			if (objectiveTitle) objectiveTitle.textContent = objData.title;
+			if (bloodPactSpan) bloodPactSpan.textContent = (hasBloodPact && mode === "normal") ? "(Pacto de Sangre)" : "";
+			if (objectiveDescription) objectiveDescription.textContent = objData.description;
+		  } else {
+			if (objectiveTitle) objectiveTitle.textContent = "";
+			if (bloodPactSpan) bloodPactSpan.textContent = "";
+			if (objectiveDescription) objectiveDescription.textContent = cards.length === 4 ? "Selecciona un objetivo válido" : "Selecciona todas las cartas para ver tu objetivo";
+		  }
+		} else {
+		  // personalizado (igual que antes)
+		  if (cards.length > 0 && objectiveKey) {
+			const objData = objectives.personalizado[objectiveKey] || { title: "Sin objetivo", description: "Selecciona un objetivo en el modo personalizado." };
+			if (objectiveTitle) objectiveTitle.textContent = objData.title;
+			if (bloodPactSpan) bloodPactSpan.textContent = hasBloodPact ? "(Pacto de Sangre)" : "";
+			if (objectiveDescription) objectiveDescription.textContent = objData.description;
+		  } else {
+			if (objectiveTitle) objectiveTitle.textContent = "";
+			if (bloodPactSpan) bloodPactSpan.textContent = "";
+			if (objectiveDescription) objectiveDescription.textContent = cards.length === 4 ? "Selecciona un objetivo válido" : "Selecciona todas las cartas para ver tu objetivo";
+		  }
+		}
+
+		// Detección de Arcos (Modo Rápido)
+		if (mode === "rapido") {
+		  const c1 = getCardAt(1), c2 = getCardAt(2), c3 = getCardAt(3);
+		  const consumibles = [c1, c2, c3].filter(Boolean);
+		  if (consumibles.length === 3) {
+			renderArcs(detectArcs(consumibles));
+		  } else {
+			renderArcs([]);
+		  }
+		}
+
+		const playerState = {
+		  mode: mode,
+		  name: document.getElementById('player-name').value,
+		  cards: Array.from(cardSelects).map(s => s.value),
+		  alive: Array.from(aliveCheckboxes).map(cb => cb.checked),
+		  personality: personality,
+		  objective: mode === "personalizado" ? objectiveSelect.value : null
+		};
+		localStorage.setItem('playerState', JSON.stringify(playerState));
+	  }
+
+	  // Inicialización
+	  loadCardOptions();
+
+	  modeSelect.addEventListener('change', function() {
 		loadCardOptions();
-
-		modeSelect.addEventListener('change', function() {
-			loadCardOptions();
-			updateDisplay();
-		});
-		cardSelects.forEach(select => {
-			select.addEventListener('change', function() {
-				const selectedTypes = Array.from(cardSelects).map(s => s.selectedOptions[0]?.dataset.type).filter(Boolean);
-				const hasDuplicates = new Set(selectedTypes).size !== selectedTypes.length;
-				if (hasDuplicates) {
-					alert("No puedes seleccionar dos cartas del mismo tipo.");
-					this.value = "";
-				}
-				updateDisplay();
-			});
-		});
-		personalitySelect.addEventListener('change', updateDisplay);
-		objectiveSelect.addEventListener('change', updateDisplay);
-		aliveCheckboxes.forEach(checkbox => {
-			checkbox.addEventListener('change', updateDisplay);
-		});
-
-		function validateCards() {
-			const selectedTypes = Array.from(cardSelects).map(select => select.selectedOptions[0]?.dataset.type).filter(Boolean);
-			const requiredTypes = ["p1", "p2", "a1", "a2"];
-			return requiredTypes.every(type => selectedTypes.includes(type)) && selectedTypes.length === 4;
-		}
-
-		function determineObjective(cards, mode) {
-			console.log("Determinando objetivo para cartas:", cards, "Modo:", mode);
-			if (mode === "normal") {
-				if (cards.includes("Daniel") || cards.includes("Nathaniel")) {
-					console.log("Objetivo: Amotinado");
-					return "Daniel";
-				}
-				if (cards.includes("Richard Dadd")) {
-					console.log("Objetivo: Renegado");
-					return "Richard Dadd";
-				}
-				if (cards.includes("Ali, “la muda”") || cards.includes("Larry Owls, “el sonámbulo”") || cards.includes("Mary Firth")) {
-					console.log("Objetivo: Interno");
-					return "Ali, “la muda”";
-				}
-				if (cards.includes("Krugman “El Director”")) {
-					console.log("Objetivo: Director");
-					return "Krugman “El Director”";
-				}
-				console.log("No se encontró carta con objetivo en modo normal");
-				return "";
-			} else {
-				const selectedObjective = objectiveSelect.value;
-				console.log("Objetivo seleccionado en modo personalizado:", selectedObjective);
-				return selectedObjective;
-			}
-		}
-
-		function updateDisplay() {
-			const mode = modeSelect.value;
-			const cards = Array.from(cardSelects).map(select => select.value).filter(Boolean);
-			const personality = personalitySelect.value;
-			const hasBloodPact = cards.includes("Pacto de sangre");
-			const objectiveKey = determineObjective(cards, mode);
-
-			console.log("Modo actual:", mode);
-			console.log("Cartas seleccionadas:", cards);
-			console.log("Objetivo determinado:", objectiveKey);
-
-			// Actualización de imágenes de cartas principales
-			imagesDiv.innerHTML = '';
-			cards.forEach((cardName, index) => {
-				if (cardName && cardImages[cardName]) {
-					const wrapper = document.createElement('div');
-					wrapper.className = 'card-wrapper';
-					const img = document.createElement('img');
-					img.src = cardImages[cardName];
-					img.alt = cardName;
-					img.className = document.querySelector(`.card-alive[data-position="${index}"]`).checked ? '' : 'dead';
-					wrapper.appendChild(img);
-					imagesDiv.appendChild(wrapper);
-				}
-			});
-
-			// Actualización de la imagen de personalidad
-			personalityImageDiv.innerHTML = '';
-			if (personality && cardImages[personality]) {
-				const wrapper = document.createElement('div');
-				wrapper.className = 'card-wrapper';
-				const img = document.createElement('img');
-				img.src = cardImages[personality];
-				img.alt = personality;
-				wrapper.appendChild(img);
-				personalityImageDiv.appendChild(wrapper);
-			}
-
-			// Actualización del objetivo
-			if (cards.length > 0 && objectiveKey) {
-				let objData;
-				if (mode === "normal") {
-					objData = objectives.normal[objectiveKey] || { title: "Sin objetivo", description: "No se ha determinado un objetivo válido." };
-				} else {
-					objData = objectives.personalizado[objectiveKey] || { title: "Sin objetivo", description: "Selecciona un objetivo en el modo personalizado." };
-				}
-				console.log("Datos del objetivo:", objData);
-				console.log("Actualizando objectiveTitle a:", objData.title);
-				console.log("Actualizando bloodPactSpan a:", hasBloodPact ? "(Pacto de Sangre)" : "");
-				console.log("Actualizando objectiveDescription a:", objData.description);
-
-				if (objectiveTitle) {
-					objectiveTitle.textContent = objData.title;
-					console.log("objectiveTitle actualizado, nuevo contenido:", objectiveTitle.textContent);
-				} else {
-					console.error("objectiveTitle no encontrado en el DOM");
-				}
-				if (bloodPactSpan) {
-					bloodPactSpan.textContent = hasBloodPact ? "(Pacto de Sangre)" : "";
-					console.log("bloodPactSpan actualizado, nuevo contenido:", bloodPactSpan.textContent);
-				} else {
-					console.error("bloodPactSpan no encontrado en el DOM");
-				}
-				if (objectiveDescription) {
-					objectiveDescription.textContent = objData.description;
-					console.log("objectiveDescription actualizado, nuevo contenido:", objectiveDescription.textContent);
-				} else {
-					console.error("objectiveDescription no encontrado en el DOM");
-				}
-			} else {
-				console.log("Sin cartas o sin objetivo, limpiando campos");
-				if (objectiveTitle) {
-					objectiveTitle.textContent = "";
-					console.log("objectiveTitle limpiado");
-				}
-				if (bloodPactSpan) {
-					bloodPactSpan.textContent = "";
-					console.log("bloodPactSpan limpiado");
-				}
-				if (objectiveDescription) {
-					objectiveDescription.textContent = cards.length === 4 ? "Selecciona un objetivo válido" : "Selecciona todas las cartas para ver tu objetivo";
-					console.log("objectiveDescription limpiado, nuevo contenido:", objectiveDescription.textContent);
-				}
-			}
-
-			const playerState = {
-				mode: mode,
-				name: document.getElementById('player-name').value,
-				cards: cards,
-				alive: Array.from(aliveCheckboxes).map(cb => cb.checked),
-				personality: personality,
-				objective: mode === "personalizado" ? objectiveSelect.value : null
-			};
-			localStorage.setItem('playerState', JSON.stringify(playerState));
-		}
-
-		// Cargar estado guardado
-		if (localStorage.getItem('playerState')) {
-			const state = JSON.parse(localStorage.getItem('playerState'));
-			modeSelect.value = state.mode;
-			loadCardOptions();
-			document.getElementById('player-name').value = state.name || "";
-			cardSelects.forEach((select, index) => {
-				select.value = state.cards[index] || "";
-				aliveCheckboxes[index].checked = state.alive[index];
-			});
-			personalitySelect.value = state.personality || "";
-			if (state.mode === "personalizado" && state.objective) objectiveSelect.value = state.objective;
-			updateDisplay();
-		}
-
-		document.getElementById('contenidos').classList.add('active');
 		updateDisplay();
+	  });
+
+	  cardSelects.forEach(select => {
+		select.addEventListener('change', function() {
+		  const mode = modeSelect.value;
+
+		  if (mode === "rapido") {
+			if (!validateRapidSelection(this)) return; // si invalida, ya reseteamos el select
+			// (en rápido permitimos grupos repetidos; solo controlamos las repeticiones por nombre)
+		  } else {
+			// Lógica original: no permitir dos cartas del mismo TIPO p1/p2/a1/a2
+			const selectedTypes = Array.from(cardSelects).map(s => s.selectedOptions[0]?.dataset.type).filter(Boolean);
+			const hasDuplicates = new Set(selectedTypes).size !== selectedTypes.length;
+			if (hasDuplicates) {
+			  alert("No puedes seleccionar dos cartas del mismo tipo.");
+			  this.value = "";
+			}
+		  }
+
+		  updateDisplay();
+		});
+	  });
+
+	  personalitySelect.addEventListener('change', updateDisplay);
+	  objectiveSelect.addEventListener('change', updateDisplay);
+	  aliveCheckboxes.forEach(checkbox => {
+		checkbox.addEventListener('change', updateDisplay);
+	  });
+
+	  // Cargar estado guardado
+	  if (localStorage.getItem('playerState')) {
+		const state = JSON.parse(localStorage.getItem('playerState'));
+		modeSelect.value = state.mode || "normal";
+		loadCardOptions();
+		document.getElementById('player-name').value = state.name || "";
+		cardSelects.forEach((select, index) => {
+		  select.value = state.cards && state.cards[index] || "";
+		  if (aliveCheckboxes[index]) aliveCheckboxes[index].checked = state.alive ? state.alive[index] : true;
+		});
+		personalitySelect.value = state.personality || "";
+		if (state.mode === "personalizado" && state.objective) objectiveSelect.value = state.objective;
+		updateDisplay();
+	  }
+
+	  document.getElementById('contenidos').classList.add('active');
+	  updateDisplay();
 	});
+
 	</script>
+
+
 	
 </body>
 </html>
